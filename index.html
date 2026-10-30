@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Utility Dashboard</title>
+    <style>
+        :root {
+            --bg-dark: #0d1117;
+            --panel-dark: #161b22;
+            --border-color: #30363d;
+            --text-main: #c9d1d9;
+            --accent-blue: #58a6ff;
+            --accent-green: #238636;
+            --accent-red: #da3633;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); padding: 20px; display: flex; flex-direction: column; height: 100vh; }
+        header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; }
+        h1 { font-size: 1.5rem; color: #fff; }
+        .stats { font-size: 0.85rem; color: #8b949e; background: var(--panel-dark); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border-color); }
+        
+        .workspace { display: grid; grid-template-columns: 1fr 200px 1fr; gap: 15px; flex: 1; min-height: 0; }
+        @media (max-width: 900px) { .workspace { grid-template-columns: 1fr; height: auto; } }
+        
+        .pane { display: flex; flex-direction: column; background: var(--panel-dark); border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden; }
+        .pane-header { background: #21262d; padding: 10px 15px; font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; }
+        textarea { flex: 1; background: transparent; border: none; padding: 15px; color: var(--text-main); font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace; font-size: 0.9rem; resize: none; outline: none; }
+        
+        .controls { display: flex; flex-direction: column; gap: 10px; justify-content: center; }
+        button { background-color: #21262d; border: 1px solid var(--border-color); color: var(--accent-blue); padding: 10px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 0.85rem; text-align: left; transition: all 0.2s; }
+        button:hover { background-color: #30363d; border-color: #8b949e; }
+        button.danger { color: var(--accent-red); }
+        button.success { background-color: var(--accent-green); color: #fff; text-align: center; }
+        button.success:hover { background-color: #2ea44f; }
+        
+        .toast { position: fixed; bottom: 20px; right: 20px; background: var(--accent-green); color: white; padding: 10px 20px; border-radius: 6px; display: none; font-size: 0.9rem; z-index: 10; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>UtilityApp Engine</h1>
+        <div class="stats" id="metrics">Chars: 0 | Words: 0</div>
+    </header>
+
+    <div class="workspace">
+        <!-- Input Block -->
+        <div class="pane">
+            <div class="pane-header">Input Source <button onclick="clearAll()" class="danger" style="padding: 2px 6px; font-size: 0.75rem;">Clear</button></div>
+            <textarea id="inputBox" placeholder="Paste raw text string data here..." oninput="updateMetrics()"></textarea>
+        </div>
+
+        <!-- Action Control Center -->
+        <div class="controls">
+            <button onclick="transformText('upper')">▲ UPPERCASE</button>
+            <button onclick="transformText('lower')">▼ lowercase</button>
+            <button onclick="transformText('clean')">⚡ Clean Extra Spaces</button>
+            <button onclick="transformText('slugify')">🔗 URL Slugify</button>
+            <button onclick="transformText('json_format')">📦 Format JSON</button>
+            <button onclick="transformText('strip_html')">✂️ Strip HTML Tags</button>
+        </div>
+
+        <!-- Output Block -->
+        <div class="pane">
+            <div class="pane-header">Processed Result <button onclick="copyOutput()" class="success" style="padding: 2px 10px; font-size: 0.75rem;">Copy Output</button></div>
+            <textarea id="outputBox" readonly placeholder="Transformation renders here..."></textarea>
+        </div>
+    </div>
+
+    <div class="toast" id="toastBox">Copied successfully!</div>
+
+    <script>
+        const input = document.getElementById('inputBox');
+        const output = document.getElementById('outputBox');
+        const metrics = document.getElementById('metrics');
+        const toast = document.getElementById('toastBox');
+
+        function updateMetrics() {
+            const text = input.value;
+            const chars = text.length;
+            const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+            metrics.innerText = `Chars: ${chars} | Words: ${words}`;
+        }
+
+        function transformText(action) {
+            const rawData = input.value;
+            if(!rawData) return;
+
+            switch(action) {
+                case 'upper':
+                    output.value = rawData.toUpperCase();
+                    break;
+                case 'lower':
+                    output.value = rawData.toLowerCase();
+                    break;
+                case 'clean':
+                    output.value = rawData.replace(/\s+/g, ' ').trim();
+                    break;
+                case 'slugify':
+                    output.value = rawData.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+                    break;
+                case 'json_format':
+                    try {
+                        output.value = JSON.stringify(JSON.parse(rawData), null, 4);
+                    } catch (e) {
+                        output.value = "Error: Invalid JSON Data Structure.";
+                    }
+                    break;
+                case 'strip_html':
+                    output.value = rawData.replace(/<\/?[^>]+(>|$)/g, "");
+                    break;
+            }
+        }
+
+        function clearAll() {
+            input.value = '';
+            output.value = '';
+            updateMetrics();
+        }
+
+        function copyOutput() {
+            if(!output.value) return;
+            navigator.clipboard.writeText(output.value);
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+        }
+    </script>
+</body>
+</html>
