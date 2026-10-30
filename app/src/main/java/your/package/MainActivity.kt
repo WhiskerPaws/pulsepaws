@@ -22,6 +22,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            // Force pure, fallback material dark theme values inline without external XML resource maps
             MaterialTheme(colorScheme = darkColorScheme()) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -62,7 +63,7 @@ fun UtilityDashboard() {
             color = MaterialTheme.colorScheme.secondary
         )
 
-        // Input Box
+        // Input Box Window Container
         OutlinedTextField(
             value = inputText,
             onValueChange = { inputText = it },
@@ -71,7 +72,7 @@ fun UtilityDashboard() {
             textStyle = TextStyle(fontFamily = FontFamily.Monospace)
         )
 
-        // Utility Buttons (Arranged neatly in linear rows for bulletproof compilation)
+        // Functional Conversion Row Panels
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -107,7 +108,7 @@ fun UtilityDashboard() {
             Text("Clear All")
         }
 
-        // Output Box
+        // Output Result Box Window Container
         OutlinedTextField(
             value = outputText,
             onValueChange = {},
