@@ -21,8 +21,33 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - name: Auto Detect Gradle Root Directory
+      id: locate
+      run: |
+        # Search for settings.gradle anywhere in the checked-out workspace folder
+        SETTING_FILE=$(find . -name "settings.gradle" -o -name "settings.gradle.kts" | head -n 1)
+        if [ -z "$SETTING_FILE" ]; then
+          echo "Error: settings.gradle not found anywhere in the repository structure!"
+          exit 1
+        fi
+        DIR=$(dirname "$SETTING_FILE")
+        echo "Found your Gradle configuration files inside: $DIR"
+        echo "BUILD_DIR=$DIR" >> $GITHUB_OUTPUT
+
     - name: Setup Gradle Environment
       uses: gradle/actions/setup-gradle@v4
+      with:
+        build-root-directory: ${{ steps.locate.outputs.BUILD_DIR }}
 
     - name: Compile Debug APK
       run: gradle assembleDebug --info
+      working-directory: ${{ steps.locate.outputs.BUILD_DIR }}
+
+    - name: Upload APK Installer Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: UtilityApp-Installer
+        path: |
+          **/build/outputs/apk/debug/*.apk
+        if-no-files-found: error
+        retention-days: 7
