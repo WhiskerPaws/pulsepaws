@@ -1,13 +1,13 @@
-name: Build Android APK
+name: Build signed release (AAB for Play Store)
 on:
   workflow_dispatch:
 
 env:
-  # Google TEST app id. Replace with your own AdMob app id before publishing.
+  # Replace with your real AdMob app id before publishing.
   ADMOB_APP_ID: ca-app-pub-3940256099942544~3347511713
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,11 +23,22 @@ jobs:
       - name: Add AdMob app id to manifest
         run: |
           sed -i "s#</application>#    <meta-data android:name=\"com.google.android.gms.ads.APPLICATION_ID\" android:value=\"$ADMOB_APP_ID\"/>\n    </application>#" android/app/src/main/AndroidManifest.xml
+      - name: Bump version code
+        run: sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/" android/app/build.gradle
       - run: npx cap sync android
-      - name: Build APK
+      - name: Build release bundle
         working-directory: android
-        run: ./gradlew assembleDebug
+        run: ./gradlew bundleRelease
+      - name: Sign bundle
+        id: sign
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: android/app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.KEYSTORE_BASE64 }}
+          alias: ${{ secrets.KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
       - uses: actions/upload-artifact@v4
         with:
-          name: handy-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: handy-aab
+          path: ${{ steps.sign.outputs.signedReleaseFile }}
