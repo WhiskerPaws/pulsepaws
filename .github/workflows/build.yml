@@ -21,17 +21,39 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # Automatically resolves, initializes, and caches Gradle builds without local gradlew files
+    # Dynamically locates where settings.gradle.kts is hiding in your repo
+    - name: Detect and Fix Working Directory
+      id: locate
+      run: |
+        SETTING_FILE=$(find . -name "settings.gradle.kts" -o -name "settings.gradle" | head -n 1)
+        if [ -z "$SETTING_FILE" ]; then
+          echo "No settings file found! Writing a fallback layout to the root..."
+          echo 'rootProject.name = "TextUtility"' > settings.gradle
+          echo 'include(":app")' >> settings.gradle
+          echo 'plugins { id("com.android.application") version "8.2.2" apply false; id("org.jetbrains.kotlin.android") version "1.9.22" apply false }' > build.gradle
+          echo "DIR=." >> $GITHUB_OUTPUT
+        else
+          DIR=$(dirname "$SETTING_FILE")
+          echo "Found project scaffolding in directory: $DIR"
+          echo "DIR=$DIR" >> $GITHUB_OUTPUT
+        fi
+
+    # Configures the build pipeline inside the detected folder path
     - name: Setup Gradle Environment
       uses: gradle/actions/setup-gradle@v4
+      with:
+        build-root-directory: ${{ steps.locate.outputs.DIR }}
 
     - name: Compile Debug APK
       run: gradle assembleDebug
+      working-directory: ${{ steps.locate.outputs.DIR }}
 
     - name: Upload APK Installer Artifact
       uses: actions/upload-artifact@v4
       with:
         name: UtilityApp-Installer
-        path: app/build/outputs/apk/debug/app-debug.apk
+        path: |
+          **/build/outputs/apk/debug/app-debug.apk
+          **/build/outputs/apk/debug/*-debug.apk
         if-no-files-found: error
         retention-days: 7
