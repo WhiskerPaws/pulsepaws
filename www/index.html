@@ -1,308 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Handy: Convert &amp; Split</title>
-<style>
-:root{--bg:#eef3f4;--card:#fff;--ink:#12282b;--mute:#5b7174;--line:#d5e0e2;--brand:#0f5257;--on:#fff;--accent:#f2a33a;--r:14px}
-@media (prefers-color-scheme:dark){:root{--bg:#0d1b1d;--card:#142729;--ink:#e8f1f2;--mute:#8fa8ab;--line:#244043;--brand:#4fb8bf;--on:#062022;--accent:#f2a33a}}
-:root{color-scheme:light dark}
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%}
-body{background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-main{max-width:480px;margin:0 auto;padding:16px 16px 90px}
-h1{font-size:22px;margin:4px 0 14px;letter-spacing:-.01em}
-.tabs{display:flex;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:4px;margin-bottom:14px}
-.tabs button{flex:1;border:0;background:none;color:var(--mute);font:inherit;font-size:13px;font-weight:600;padding:10px 0;border-radius:10px;cursor:pointer}
-.tabs button[aria-selected=true]{background:var(--brand);color:var(--on)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
-.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;margin-bottom:4px}
-.chips button{flex:none;border:1px solid var(--line);background:none;color:var(--ink);font:inherit;padding:8px 14px;border-radius:99px;cursor:pointer}
-.chips button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-label{display:block;font-size:14px;color:var(--mute);margin:10px 0 4px}
-input,select{width:100%;font:inherit;font-size:20px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px}
-select{font-size:16px}
-input:focus,select:focus,button:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
-.row{display:flex;gap:10px;align-items:flex-end}
-.row>div{flex:1}
-.swap{flex:none;width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:20px;cursor:pointer}
-.result{margin-top:16px;padding:16px;border-radius:10px;background:var(--brand);color:var(--on)}
-.result small{opacity:.85;display:block}
-.result strong{font-size:30px;display:block;word-break:break-all}
-.tips{display:flex;gap:8px;margin:4px 0}
-.tips button{flex:1;padding:10px 0;border:1px solid var(--line);border-radius:10px;background:none;color:var(--ink);font:inherit;cursor:pointer}
-.tips button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#2a1a00;font-weight:700}
-.stepper{display:flex;align-items:center;gap:12px}
-.stepper button{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:22px;cursor:pointer}
-.stepper output{min-width:32px;text-align:center;font-size:22px;font-weight:700}
-dl{margin:14px 0 0;display:grid;grid-template-columns:1fr auto;gap:6px 10px}
-dt{color:var(--mute)}dd{margin:0;text-align:right;font-weight:600}
-.big dt,.big dd{font-size:18px;color:var(--ink)}
-.cdisp{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:16px;font-size:34px;text-align:right;min-height:72px;word-break:break-all;margin-bottom:12px}
-.keys{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.keys button{height:58px;font:inherit;font-size:22px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);cursor:pointer}
-.keys .op{background:var(--bg);color:var(--brand);font-weight:700}
-.keys .eq{background:var(--accent);border-color:var(--accent);color:#2a1a00;font-weight:700}
-.keys .z{grid-column:span 2}
-.btn{height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:15px;cursor:pointer}
-.btn.pri{background:var(--brand);color:var(--on);border-color:var(--brand)}
-.laps{list-style:none;margin:10px 0 0;padding:0;color:var(--mute);max-height:120px;overflow:auto}
-[hidden]{display:none!important}
-/* Ad slot: replace with your AdMob / AppLovin / Unity banner view */
-#ad{position:fixed;left:0;right:0;bottom:0;padding-bottom:env(safe-area-inset-bottom);background:var(--card);border-top:1px solid var(--line);text-align:center;color:var(--mute);font-size:12px}
-#ad div{height:50px;display:flex;align-items:center;justify-content:center}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Utility Dashboard</title>
+    <style>
+        :root {
+            --bg-dark: #0d1117;
+            --panel-dark: #161b22;
+            --border-color: #30363d;
+            --text-main: #c9d1d9;
+            --accent-blue: #58a6ff;
+            --accent-green: #238636;
+            --accent-red: #da3633;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); padding: 20px; display: flex; flex-direction: column; height: 100vh; }
+        header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; }
+        h1 { font-size: 1.5rem; color: #fff; }
+        .stats { font-size: 0.85rem; color: #8b949e; background: var(--panel-dark); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border-color); }
+        
+        .workspace { display: grid; grid-template-columns: 1fr 200px 1fr; gap: 15px; flex: 1; min-height: 0; }
+        @media (max-width: 900px) { .workspace { grid-template-columns: 1fr; height: auto; } }
+        
+        .pane { display: flex; flex-direction: column; background: var(--panel-dark); border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden; }
+        .pane-header { background: #21262d; padding: 10px 15px; font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; }
+        textarea { flex: 1; background: transparent; border: none; padding: 15px; color: var(--text-main); font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace; font-size: 0.9rem; resize: none; outline: none; }
+        
+        .controls { display: flex; flex-direction: column; gap: 10px; justify-content: center; }
+        button { background-color: #21262d; border: 1px solid var(--border-color); color: var(--accent-blue); padding: 10px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 0.85rem; text-align: left; transition: all 0.2s; }
+        button:hover { background-color: #30363d; border-color: #8b949e; }
+        button.danger { color: var(--accent-red); }
+        button.success { background-color: var(--accent-green); color: #fff; text-align: center; }
+        button.success:hover { background-color: #2ea44f; }
+        
+        .toast { position: fixed; bottom: 20px; right: 20px; background: var(--accent-green); color: white; padding: 10px 20px; border-radius: 6px; display: none; font-size: 0.9rem; z-index: 10; }
+    </style>
 </head>
 <body>
-<main>
-<h1>Handy</h1>
-<div class="tabs" role="tablist">
-  <button role="tab" id="t1" aria-selected="true" aria-controls="p1">Convert</button>
-  <button role="tab" id="t2" aria-selected="false" aria-controls="p2">Split</button>
-  <button role="tab" id="t3" aria-selected="false" aria-controls="p3">Calc</button>
-  <button role="tab" id="t4" aria-selected="false" aria-controls="p4">Dates</button>
-  <button role="tab" id="t5" aria-selected="false" aria-controls="p5">Timer</button>
-</div>
 
-<section id="p1" role="tabpanel" class="card" aria-labelledby="t1">
-  <div class="chips" id="cats"></div>
-  <label for="val">Amount</label>
-  <input id="val" type="number" inputmode="decimal" value="1">
-  <div class="row">
-    <div><label for="from">From</label><select id="from"></select></div>
-    <button class="swap" id="swap" aria-label="Swap units">⇅</button>
-    <div><label for="to">To</label><select id="to"></select></div>
-  </div>
-  <div class="result" aria-live="polite"><small id="eq"></small><strong id="out">0</strong><small id="rate"></small></div>
-  <button class="btn" id="star" hidden style="margin-top:12px"></button>
-  <div class="chips" id="favs" hidden style="margin-top:12px"></div>
-</section>
+    <header>
+        <h1>UtilityApp Engine</h1>
+        <div class="stats" id="metrics">Chars: 0 | Words: 0</div>
+    </header>
 
-<section id="p2" role="tabpanel" class="card" aria-labelledby="t2" hidden>
-  <label for="bill">Bill total</label>
-  <input id="bill" type="number" inputmode="decimal" placeholder="0.00">
-  <label>Tip</label>
-  <div class="tips" id="tips"></div>
-  <label for="tipc">Custom tip %</label>
-  <input id="tipc" type="number" inputmode="decimal" placeholder="e.g. 12">
-  <label>People</label>
-  <div class="stepper"><button id="m" aria-label="Fewer people">−</button><output id="n">2</output><button id="p" aria-label="More people">+</button></div>
-  <dl>
-    <dt>Tip</dt><dd id="rt">0.00</dd>
-    <dt>Total</dt><dd id="rtot">0.00</dd>
-  </dl>
-  <div class="result"><small>Each person pays</small><strong id="each">0.00</strong></div>
-</section>
-<section id="p3" role="tabpanel" class="card" aria-labelledby="t3" hidden style="margin-top:0">
-  <div class="cdisp" id="cd" aria-live="polite">0</div>
-  <div class="keys" id="ck"></div>
-</section>
-<section id="p4" role="tabpanel" class="card" aria-labelledby="t4" hidden>
-  <label for="dob">Date of birth</label>
-  <input id="dob" type="date">
-  <div class="result"><small>Age</small><strong id="ageout" style="font-size:22px">Pick a date</strong><small id="bday"></small></div>
-  <label style="margin-top:20px">Days between two dates</label>
-  <div class="row"><div><input id="d1" type="date" aria-label="From date" style="font-size:15px"></div><div><input id="d2" type="date" aria-label="To date" style="font-size:15px"></div></div>
-  <div class="result"><strong id="dayout" style="font-size:22px">Pick two dates</strong></div>
-</section>
-<section id="p5" role="tabpanel" class="card" aria-labelledby="t5" hidden>
-  <div class="cdisp" id="sw">00:00.00</div>
-  <div class="row"><button class="btn pri" id="s1" style="flex:1">Start</button><button class="btn" id="s2" style="flex:1">Reset</button></div>
-  <ul class="laps" id="laps"></ul>
-  <label for="cmin" style="margin-top:20px">Countdown (minutes)</label>
-  <div class="row"><div><input id="cmin" type="number" inputmode="decimal" value="5"></div><button class="btn pri" id="c1">Start</button></div>
-  <div class="cdisp" id="ct" style="margin:12px 0 0">05:00</div>
-</section>
-</main>
+    <div class="workspace">
+        <!-- Input Block -->
+        <div class="pane">
+            <div class="pane-header">Input Source <button onclick="clearAll()" class="danger" style="padding: 2px 6px; font-size: 0.75rem;">Clear</button></div>
+            <textarea id="inputBox" placeholder="Paste raw text string data here..." oninput="updateMetrics()"></textarea>
+        </div>
 
-<div id="ad"><div>Ad banner placeholder (320×50)</div></div>
+        <!-- Action Control Center -->
+        <div class="controls">
+            <button onclick="transformText('upper')">▲ UPPERCASE</button>
+            <button onclick="transformText('lower')">▼ lowercase</button>
+            <button onclick="transformText('clean')">⚡ Clean Extra Spaces</button>
+            <button onclick="transformText('slugify')">🔗 URL Slugify</button>
+            <button onclick="transformText('json_format')">📦 Format JSON</button>
+            <button onclick="transformText('strip_html')">✂️ Strip HTML Tags</button>
+        </div>
 
-<script>
-const RATES={USD:1,EUR:.92,GBP:.78,JPY:150,PHP:57,CAD:1.37,AUD:1.52,NZD:1.65,INR:84,CNY:7.2,KRW:1350,SGD:1.34,HKD:7.8,AED:3.67,SAR:3.75,MXN:18.5,BRL:5.4,CHF:.88,THB:35};
-const U={
- Length:{base:'m',u:{mm:.001,cm:.01,m:1,km:1000,inch:.0254,ft:.3048,yd:.9144,mile:1609.344}},
- Weight:{base:'kg',u:{g:.001,kg:1,lb:.45359237,oz:.028349523}},
- Volume:{base:'L',u:{mL:.001,L:1,'cup (US)':.2365882,'fl oz (US)':.0295735,'gal (US)':3.785411784}},
- Speed:{base:'m/s',u:{'km/h':1/3.6,mph:.44704,'m/s':1,knot:.514444}},
- Area:{base:'m²',u:{'cm²':1e-4,'m²':1,'ha':1e4,'km²':1e6,'ft²':.09290304,acre:4046.8564}},
- Temp:{temp:true,u:{'°C':1,'°F':1,K:1}},
- Currency:{cur:true,u:RATES}
-};
-let cat='Length';
-const $=id=>document.getElementById(id);
-const fmt=n=>{if(!isFinite(n))return '—';const a=Math.abs(n);return (a!==0&&(a<1e-4||a>=1e12))?n.toExponential(4):(+n.toPrecision(10)).toLocaleString(undefined,{maximumFractionDigits:8})};
-function temp(v,f,t){let c=f==='°C'?v:f==='°F'?(v-32)*5/9:v-273.15;return t==='°C'?c:t==='°F'?c*9/5+32:c+273.15}
-function fillUnits(){
- const keys=Object.keys(U[cat].u);
- [$('from'),$('to')].forEach((s,i)=>{s.innerHTML=keys.map(k=>`<option>${k}</option>`).join('');s.selectedIndex=Math.min(i,keys.length-1)});
- if(keys.length>2)$('to').selectedIndex=2;
- if(cat==='Currency'){$('from').value='USD';$('to').value='PHP'}
- conv();
-}
-function conv(){
- drawFavs();
- const v=parseFloat($('val').value),f=$('from').value,t=$('to').value,c=U[cat];
- if(isNaN(v)){$('out').textContent='—';$('eq').textContent='Enter an amount';return}
- const r=c.temp?temp(v,f,t):c.cur?v/c.u[f]*c.u[t]:v*c.u[f]/c.u[t];
- $('out').textContent=fmt(r)+' '+t;
- $('eq').textContent=fmt(v)+' '+f+' =';
- $('rate').textContent=c.cur?rateNote:'';
-}
-$('cats').innerHTML=Object.keys(U).map(k=>`<button aria-pressed="${k===cat}" data-c="${k}">${k}</button>`).join('');
-$('cats').onclick=e=>{const k=e.target.dataset.c;if(!k)return;cat=k;[...$('cats').children].forEach(b=>b.setAttribute('aria-pressed',b.dataset.c===k));fillUnits()};
-['val','from','to'].forEach(id=>$(id).addEventListener('input',conv));
-$('swap').onclick=()=>{const a=$('from').selectedIndex;$('from').selectedIndex=$('to').selectedIndex;$('to').selectedIndex=a;conv()};
+        <!-- Output Block -->
+        <div class="pane">
+            <div class="pane-header">Processed Result <button onclick="copyOutput()" class="success" style="padding: 2px 10px; font-size: 0.75rem;">Copy Output</button></div>
+            <textarea id="outputBox" readonly placeholder="Transformation renders here..."></textarea>
+        </div>
+    </div>
 
-// Split bill
-let tip=15,ppl=2;
-$('tips').innerHTML=[10,15,18,20].map(x=>`<button aria-pressed="${x===tip}" data-t="${x}">${x}%</button>`).join('');
-$('tips').onclick=e=>{const t=e.target.dataset.t;if(!t)return;tip=+t;$('tipc').value='';split()};
-$('tipc').oninput=()=>{const v=parseFloat($('tipc').value);if(!isNaN(v))tip=v;split()};
-$('bill').oninput=split;
-$('m').onclick=()=>{ppl=Math.max(1,ppl-1);split()};
-$('p').onclick=()=>{ppl=Math.min(50,ppl+1);split()};
-function split(){
- const b=parseFloat($('bill').value)||0,t=b*tip/100,tot=b+t;
- [...$('tips').children].forEach(x=>x.setAttribute('aria-pressed',$('tipc').value===''&&+x.dataset.t===tip));
- $('n').textContent=ppl;
- $('rt').textContent=t.toFixed(2);$('rtot').textContent=tot.toFixed(2);
- $('each').textContent=(tot/ppl).toFixed(2);
-}
+    <div class="toast" id="toastBox">Copied successfully!</div>
 
-// Currency rates: cached 6h, live from open.er-api.com, offline estimates as fallback
-let rateNote='Offline estimates only. Connect to the internet to update.';
-function applyRates(r){Object.keys(RATES).forEach(k=>{if(r[k])RATES[k]=r[k]})}
-async function loadRates(){
- try{const o=JSON.parse(localStorage.getItem('rates')||'null');
-  if(o&&Date.now()-o.t<216e5){applyRates(o.r);rateNote='Rates updated '+new Date(o.t).toLocaleString();conv();return}}catch(e){}
- try{const r=await fetch('https://open.er-api.com/v6/latest/USD'),d=await r.json();
-  if(d&&d.rates){applyRates(d.rates);rateNote='Live rates updated '+new Date().toLocaleString();
-   try{localStorage.setItem('rates',JSON.stringify({t:Date.now(),r:RATES}))}catch(e){}}}catch(e){}
- conv();
-}
+    <script>
+        const input = document.getElementById('inputBox');
+        const output = document.getElementById('outputBox');
+        const metrics = document.getElementById('metrics');
+        const toast = document.getElementById('toastBox');
 
-// Calculator
-let ex='';
-const OPS={'÷':'/','×':'*','−':'-'};
-$('ck').innerHTML=['C','⌫','%','÷','7','8','9','×','4','5','6','−','1','2','3','+','0','.','='].map(k=>`<button data-k="${k}" class="${'C⌫%÷×−+'.includes(k)?'op':''}${k==='='?'eq':''}${k==='0'?' z':''}">${k}</button>`).join('');
-function calc(s){
- try{const e=s.replace(/[÷×−]/g,m=>OPS[m]).replace(/%/g,'/100');
-  if(!/^[0-9+\-*/.() ]+$/.test(e))return s;
-  const r=Function('"use strict";return ('+e+')')();
-  return isFinite(r)?String(+r.toPrecision(12)):'Error'}catch(x){return s}
-}
-$('ck').onclick=e=>{const k=e.target.dataset.k;if(!k)return;
- if(ex==='Error')ex='';
- if(k==='C')ex='';
- else if(k==='⌫')ex=ex.slice(0,-1);
- else if(k==='=')ex=calc(ex);
- else{const isOp=/[÷×−+]/.test(k);
-  if(isOp&&/[÷×−+]$/.test(ex))ex=ex.slice(0,-1);
-  if(!(ex===''&&/[÷×+]/.test(k)))ex+=k}
- $('cd').textContent=ex||'0';
-};
+        function updateMetrics() {
+            const text = input.value;
+            const chars = text.length;
+            const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+            metrics.innerText = `Chars: ${chars} | Words: ${words}`;
+        }
 
-// Interstitial hook: shows every 3rd tab switch, at most once per 60s.
-// Connect your ad SDK by setting window.adHooks.showInterstitial in the native wrapper.
-window.adHooks=window.adHooks||{showInterstitial(){console.log('interstitial would show here')}};
-let switches=0,lastAd=0;
-function maybeInterstitial(){
- switches++;const now=Date.now();
- if(switches%3===0&&now-lastAd>6e4){lastAd=now;try{window.adHooks.showInterstitial()}catch(e){}}
-}
+        function transformText(action) {
+            const rawData = input.value;
+            if(!rawData) return;
 
-// Saved currency pairs
-let favs=[];try{favs=JSON.parse(localStorage.getItem('favs')||'[]')}catch(e){}
-const fi=()=>favs.findIndex(p=>p[0]===$('from').value&&p[1]===$('to').value);
-function drawFavs(){
- const on=cat==='Currency';$('star').hidden=!on;$('favs').hidden=!on;
- if(!on)return;
- $('star').textContent=fi()>=0?'★ Saved (tap to remove)':'☆ Save this pair';
- $('favs').innerHTML=favs.map((p,i)=>`<button data-i="${i}">${p[0]} → ${p[1]}</button>`).join('');
-}
-$('star').onclick=()=>{const i=fi();if(i>=0)favs.splice(i,1);else favs.push([$('from').value,$('to').value]);try{localStorage.setItem('favs',JSON.stringify(favs))}catch(e){}drawFavs()};
-$('favs').onclick=e=>{const i=e.target.dataset.i;if(i==null)return;$('from').value=favs[i][0];$('to').value=favs[i][1];conv()};
+            switch(action) {
+                case 'upper':
+                    output.value = rawData.toUpperCase();
+                    break;
+                case 'lower':
+                    output.value = rawData.toLowerCase();
+                    break;
+                case 'clean':
+                    output.value = rawData.replace(/\s+/g, ' ').trim();
+                    break;
+                case 'slugify':
+                    output.value = rawData.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+                    break;
+                case 'json_format':
+                    try {
+                        output.value = JSON.stringify(JSON.parse(rawData), null, 4);
+                    } catch (e) {
+                        output.value = "Error: Invalid JSON Data Structure.";
+                    }
+                    break;
+                case 'strip_html':
+                    output.value = rawData.replace(/<\/?[^>]+(>|$)/g, "");
+                    break;
+            }
+        }
 
-// Dates: age + days between
-function age(){
- const v=$('dob').value;if(!v){$('ageout').textContent='Pick a date';$('bday').textContent='';return}
- const b=new Date(v+'T00:00:00'),n=new Date();n.setHours(0,0,0,0);
- if(b>n){$('ageout').textContent='That date is in the future';$('bday').textContent='';return}
- let y=n.getFullYear()-b.getFullYear(),m=n.getMonth()-b.getMonth(),d=n.getDate()-b.getDate();
- if(d<0){m--;d+=new Date(n.getFullYear(),n.getMonth(),0).getDate()}
- if(m<0){y--;m+=12}
- const nb=new Date(n.getFullYear(),b.getMonth(),b.getDate());if(nb<n)nb.setFullYear(n.getFullYear()+1);
- $('ageout').textContent=y+' yrs, '+m+' mo, '+d+' days';
- $('bday').textContent='Next birthday in '+Math.round((nb-n)/864e5)+' days';
-}
-function between(){
- const a=$('d1').value,b=$('d2').value;
- if(!a||!b){$('dayout').textContent='Pick two dates';return}
- const n=Math.round((new Date(b)-new Date(a))/864e5),x=Math.abs(n);
- $('dayout').textContent=x.toLocaleString()+' days ('+(x/7).toFixed(1)+' weeks)'+(n<0?' earlier':'');
-}
-$('dob').oninput=age;$('d1').oninput=between;$('d2').oninput=between;
+        function clearAll() {
+            input.value = '';
+            output.value = '';
+            updateMetrics();
+        }
 
-// Stopwatch + countdown
-const mmss=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
-const ft=ms=>mmss(Math.floor(ms/1000))+'.'+String(Math.floor(ms/10)%100).padStart(2,'0');
-let sw={run:false,t0:0,acc:0,laps:[]};
-const swT=()=>sw.acc+(sw.run?performance.now()-sw.t0:0);
-function swDraw(){$('sw').textContent=ft(swT());if(sw.run)requestAnimationFrame(swDraw)}
-function drawLaps(){$('laps').innerHTML=sw.laps.map((l,i)=>`<li>Lap ${sw.laps.length-i}: ${l}</li>`).join('')}
-$('s1').onclick=()=>{
- if(sw.run){sw.acc=swT();sw.run=false}else{sw.t0=performance.now();sw.run=true;swDraw()}
- $('s1').textContent=sw.run?'Pause':'Start';$('s2').textContent=sw.run?'Lap':'Reset';
-};
-$('s2').onclick=()=>{
- if(sw.run)sw.laps.unshift(ft(swT()));
- else{sw={run:false,t0:0,acc:0,laps:[]};$('sw').textContent='00:00.00'}
- drawLaps();
-};
-let cd={end:0,id:null};
-function beep(){try{navigator.vibrate&&navigator.vibrate([300,150,300]);const a=new(window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator();o.connect(a.destination);o.frequency.value=880;o.start();setTimeout(()=>{o.stop();a.close()},700)}catch(e){}}
-function cdTick(){
- const left=Math.max(0,cd.end-Date.now());$('ct').textContent=mmss(Math.ceil(left/1000));
- if(!left){clearInterval(cd.id);cd.id=null;$('c1').textContent='Start';beep()}
-}
-$('c1').onclick=()=>{
- if(cd.id){clearInterval(cd.id);cd.id=null;$('c1').textContent='Start';return}
- const m=parseFloat($('cmin').value);if(!(m>0))return;
- cd.end=Date.now()+m*6e4;cd.id=setInterval(cdTick,250);cdTick();$('c1').textContent='Stop';
-};
-$('cmin').oninput=()=>{if(!cd.id)$('ct').textContent=mmss(Math.round((parseFloat($('cmin').value)||0)*60))};
-
-// Tabs
-let cur='t1';
-['1','2','3','4','5'].forEach(n=>$('t'+n).onclick=()=>{
- if('t'+n!==cur){cur='t'+n;maybeInterstitial()}
- ['1','2','3','4','5'].forEach(x=>{$('t'+x).setAttribute('aria-selected',x===n);$('p'+x).hidden=x!==n});
-});
-fillUnits();split();loadRates();
-
-// ===== AdMob (runs only inside the Android app) =====
-// Google TEST ids below. Before publishing: set ADS_TEST=false and use your own ad unit ids.
-const ADS_TEST=true;
-const BANNER_ID='ca-app-pub-3940256099942544/6300978111';
-const INTERSTITIAL_ID='ca-app-pub-3940256099942544/1033173712';
-(async()=>{
- const AdMob=window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.AdMob;
- if(!AdMob)return; // normal browser: keep the placeholder banner
- try{
-  await AdMob.initialize();
-  try{ // consent form for regions that require it
-   const info=await AdMob.requestConsentInfo();
-   if(info.isConsentFormAvailable&&info.status==='REQUIRED')await AdMob.showConsentForm();
-  }catch(e){}
-  const ad=document.getElementById('ad');if(ad)ad.style.display='none';
-  await AdMob.showBanner({adId:BANNER_ID,adSize:'ADAPTIVE_BANNER',position:'BOTTOM_CENTER',margin:0,isTesting:ADS_TEST});
-  window.adHooks.showInterstitial=async()=>{
-   await AdMob.prepareInterstitial({adId:INTERSTITIAL_ID,isTesting:ADS_TEST});
-   await AdMob.showInterstitial();
-  };
- }catch(e){console.log('Ads unavailable',e)}
-})();
-</script>
+        function copyOutput() {
+            if(!output.value) return;
+            navigator.clipboard.writeText(output.value);
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+        }
+    </script>
 </body>
 </html>
