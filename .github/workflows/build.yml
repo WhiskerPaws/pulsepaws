@@ -21,38 +21,121 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Auto Detect Gradle Root Directory
-      id: locate
+    - name: Construct Compliant App Structure
       run: |
-        SETTING_FILE=$(find . -name "settings.gradle" -o -name "settings.gradle.kts" | head -n 1)
-        if [ -z "$SETTING_FILE" ]; then
-          echo "Error: settings.gradle not found anywhere in the repository structure!"
+        # 1. Clear out any previous layout configuration files
+        rm -f settings.gradle settings.gradle.kts build.gradle build.gradle.kts
+        
+        # 2. Locate your MainActivity.kt wherever it is stored in the repo
+        MAIN_ACT=$(find . -name "MainActivity.kt" | head -n 1)
+        if [ -z "$MAIN_ACT" ]; then
+          echo "Error: MainActivity.kt not found anywhere in the repository!"
           exit 1
         fi
-        DIR=$(dirname "$SETTING_FILE")
-        echo "BUILD_DIR=$DIR" >> $GITHUB_OUTPUT
+        
+        # 3. Create a pristine, standard Android project sandbox directory
+        mkdir -p sandbox/app/src/main/java/com/example/textutility
+        
+        # 4. Copy your source code into the new sandbox paths
+        cp "$MAIN_ACT" sandbox/app/src/main/java/com/example/textutility/MainActivity.kt
 
+        # 5. Write the required AndroidManifest file
+        cat << 'EOF' > sandbox/app/src/main/AndroidManifest.xml
+        <manifest xmlns:android="http://android.com">
+            <application
+                android:allowBackup="true"
+                android:label="TextUtility"
+                android:supportsRtl="true">
+                <activity
+                    android:name="com.example.textutility.MainActivity"
+                    android:exported="true"
+                    android:theme="@android:style/Theme.NoTitleBar">
+                    <intent-filter>
+                        <action android:name="android.intent.action.MAIN" />
+                        <category android:name="android.intent.category.LAUNCHER" />
+                    </intent-filter>
+                </activity>
+            </application>
+        </manifest>
+        EOF
+
+        # 6. Write the root settings file
+        echo 'rootProject.name = "TextUtility"' > sandbox/settings.gradle.kts
+        echo 'include(":app")' >> sandbox/settings.gradle.kts
+
+        # 7. Write the root build configuration file
+        cat << 'EOF' > sandbox/build.gradle.kts
+        plugins {
+            id("com.android.application") version "8.2.2" apply false
+            id("org.jetbrains.kotlin.android") version "1.9.22" apply false
+        }
+        EOF
+
+        # 8. Write the app module build file with modern Compose layouts enabled
+        cat << 'EOF' > sandbox/app/build.gradle.kts
+        plugins {
+            id("com.android.application")
+            id("org.jetbrains.kotlin.android")
+        }
+
+        android {
+            namespace = "com.example.textutility"
+            compileSdk = 34
+
+            defaultConfig {
+                applicationId = "com.example.textutility"
+                minSdk = 24
+                targetSdk = 34
+                versionCode = 1
+                versionName = "1.0"
+            }
+
+            buildTypes {
+                release {
+                    isMinifyEnabled = false
+                }
+            }
+            compileOptions {
+                sourceCompatibility = JavaVersion.VERSION_17
+                targetCompatibility = JavaVersion.VERSION_17
+            }
+            kotlinOptions {
+                jvmTarget = "17"
+            }
+            buildFeatures {
+                compose = true
+            }
+            composeOptions {
+                kotlinCompilerExtensionVersion = "1.5.8"
+            }
+        }
+
+        dependencies {
+            implementation("androidx.core:core-ktx:1.12.0")
+            implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+            implementation("androidx.activity:activity-compose:1.8.2")
+            implementation(platform("androidx.compose:compose-bom:2024.02.00"))
+            implementation("androidx.compose.ui:ui")
+            implementation("androidx.compose.ui:ui-graphics")
+            implementation("androidx.compose.ui:ui-tooling-preview")
+            implementation("androidx.compose.material3:material3")
+        }
+        EOF
+
+    # Configures the build pipeline inside our clean sandbox folder structure
     - name: Setup Gradle Environment
       uses: gradle/actions/setup-gradle@v4
       with:
-        build-root-directory: ${{ steps.locate.outputs.BUILD_DIR }}
+        build-root-directory: sandbox
 
-    # Runs the compilation and catches errors to print them cleanly
     - name: Compile Debug APK
-      run: |
-        gradle assembleDebug --no-daemon > build_log.txt 2>&1 || {
-          echo "=================== CRITICAL COMPILATION ERRORS ==================="
-          grep -i -E "error:|e:|exception|failed" build_log.txt | head -n 40
-          echo "==================================================================="
-          exit 1
-        }
-      working-directory: ${{ steps.locate.outputs.BUILD_DIR }}
+      run: gradle :app:assembleDebug
+      working-directory: sandbox
 
     - name: Upload APK Installer Artifact
       uses: actions/upload-artifact@v4
       with:
         name: UtilityApp-Installer
-        path: |
-          **/build/outputs/apk/debug/*.apk
+        path: sandbox/app/build/outputs/apk/debug/*.apk
         if-no-files-found: error
         retention-days: 7
