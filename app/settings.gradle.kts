@@ -12,6 +12,4 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-
 rootProject.name = "TextUtility"
-include(":app")
