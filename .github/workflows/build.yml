@@ -59,9 +59,25 @@ jobs:
         </manifest>
         EOF
 
-        # 6. Write the root settings file
-        echo 'rootProject.name = "TextUtility"' > sandbox/settings.gradle.kts
-        echo 'include(":app")' >> sandbox/settings.gradle.kts
+        # 6. Write the root settings file with the missing plugin repositories block!
+        cat << 'EOF' > sandbox/settings.gradle.kts
+        pluginManagement {
+            repositories {
+                google()
+                mavenCentral()
+                gradlePluginPortal()
+            }
+        }
+        dependencyResolutionManagement {
+            repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+            repositories {
+                google()
+                mavenCentral()
+            }
+        }
+        rootProject.name = "TextUtility"
+        include(":app")
+        EOF
 
         # 7. Write the root build configuration file
         cat << 'EOF' > sandbox/build.gradle.kts
