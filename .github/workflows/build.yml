@@ -39,17 +39,17 @@ jobs:
         # 4. Copy your source code into the new sandbox paths
         cp "$MAIN_ACT" sandbox/app/src/main/java/com/example/textutility/MainActivity.kt
 
-        # 5. Write the required AndroidManifest file
+        # 5. Write the required AndroidManifest file with a bulletproof universal device theme
         cat << 'EOF' > sandbox/app/src/main/AndroidManifest.xml
         <manifest xmlns:android="http://android.com">
             <application
                 android:allowBackup="true"
                 android:label="TextUtility"
-                android:supportsRtl="true">
+                android:supportsRtl="true"
+                android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
                 <activity
                     android:name="com.example.textutility.MainActivity"
-                    android:exported="true"
-                    android:theme="@android:style/Theme.NoTitleBar">
+                    android:exported="true">
                     <intent-filter>
                         <action android:name="android.intent.action.MAIN" />
                         <category android:name="android.intent.category.LAUNCHER" />
@@ -59,7 +59,7 @@ jobs:
         </manifest>
         EOF
 
-        # 6. Write the root settings file with the missing plugin repositories block!
+        # 6. Write the root settings file
         cat << 'EOF' > sandbox/settings.gradle.kts
         pluginManagement {
             repositories {
