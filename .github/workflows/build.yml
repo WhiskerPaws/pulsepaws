@@ -21,58 +21,8 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Dynamically Locate Source Code
-      id: locate
-      run: |
-        MAIN_ACTIVITY=$(find . -name "MainActivity.kt" | head -n 1)
-        if [ -z "$MAIN_ACTIVITY" ]; then
-          echo "Error: MainActivity.kt not found anywhere in the repository!"
-          exit 1
-        fi
-        SRC_DIR=$(echo "$MAIN_ACTIVITY" | grep -o ".*src/")
-        BASE_DIR=$(dirname "${SRC_DIR%?}")
-        BASE_DIR=$(dirname "$BASE_DIR")
-        echo "Found Android source root at: $BASE_DIR"
-        echo "BASE_DIR=$BASE_DIR" >> $GITHUB_OUTPUT
-
-    - name: Inject Clean Flat Scaffold Configuration
-      run: |
-        CDIR="${{ steps.locate.outputs.BASE_DIR }}"
-        
-        # 1. Create flat settings.gradle
-        echo 'rootProject.name = "TextUtility"' > "$CDIR/settings.gradle"
-        
-        # 2. Create flat build.gradle with lintOptions to ignore non-critical layout warnings
-        echo 'buildscript { repositories { google(); mavenCentral() }; dependencies { classpath "com.android.tools.build:gradle:8.2.2"; classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22" } }' > "$CDIR/build.gradle"
-        echo 'allprojects { repositories { google(); mavenCentral() } }' >> "$CDIR/build.gradle"
-        echo 'apply plugin: "com.android.application"' >> "$CDIR/build.gradle"
-        echo 'apply plugin: "kotlin-android"' >> "$CDIR/build.gradle"
-        echo 'android { namespace "com.example.textutility"; compileSdk 34' >> "$CDIR/build.gradle"
-        echo 'defaultConfig { applicationId "com.example.textutility"; minSdk 24; targetSdk 34; versionCode 1; versionName "1.0" }' >> "$CDIR/build.gradle"
-        echo 'lintOptions { abortOnError false; checkReleaseBuilds false }' >> "$CDIR/build.gradle"
-        echo 'buildTypes { release { minifyEnabled false } }; compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }; kotlinOptions { jvmTarget = "17" }; buildFeatures { compose true }; composeOptions { kotlinCompilerExtensionVersion "1.5.8" } }' >> "$CDIR/build.gradle"
-        echo 'dependencies { implementation "androidx.core:core-ktx:1.12.0"; implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.7.0"; implementation "androidx.activity:activity-compose:1.8.2"; implementation platform("androidx.compose:compose-bom:2024.02.00"); implementation "androidx.compose.ui:ui"; implementation "androidx.compose.ui:ui-graphics"; implementation "androidx.compose.ui:ui-tooling-preview"; implementation "androidx.compose.material3:material3" }' >> "$CDIR/build.gradle"
-
-        # 3. Create basic AndroidManifest.xml if missing
-        mkdir -p "$CDIR/src/main"
-        if [ ! -f "$CDIR/src/main/AndroidManifest.xml" ]; then
-          echo '<manifest xmlns:android="http://android.com"><application android:allowBackup="true" android:label="UtilityApp" android:supportsRtl="true" android:theme="@android:style/Theme.Material.NoActionBar"><activity android:name=".MainActivity" android:exported="true"><intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter></activity></application></manifest>' > "$CDIR/src/main/AndroidManifest.xml"
-        fi
-
     - name: Setup Gradle Environment
       uses: gradle/actions/setup-gradle@v4
-      with:
-        build-root-directory: ${{ steps.locate.outputs.BASE_DIR }}
 
     - name: Compile Debug APK
-      run: gradle assembleDebug --stacktrace
-      working-directory: ${{ steps.locate.outputs.BASE_DIR }}
-
-    - name: Upload APK Installer Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: UtilityApp-Installer
-        path: |
-          **/build/outputs/apk/debug/*.apk
-        if-no-files-found: error
-        retention-days: 7
+      run: gradle assembleDebug --info
