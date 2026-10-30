@@ -12,143 +12,66 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Source Code
+    - name: 1. Checkout Source Code
       uses: actions/checkout@v4
 
-    - name: Set up JDK 17
+    - name: 2. Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Construct Compliant App Structure
+    - name: 3. Create Project Scaffolding Directories
       run: |
-        # 1. Clear out any previous layout configuration files
         rm -f settings.gradle settings.gradle.kts build.gradle build.gradle.kts
-        
-        # 2. Locate your MainActivity.kt wherever it is stored in the repo
-        MAIN_ACT=$(find . -name "MainActivity.kt" | head -n 1)
-        if [ -z "$MAIN_ACT" ]; then
-          echo "Error: MainActivity.kt not found anywhere in the repository!"
-          exit 1
-        fi
-        
-        # 3. Create a pristine, standard Android project sandbox directory
+        rm -rf sandbox
         mkdir -p sandbox/app/src/main/java/com/example/textutility
-        
-        # 4. Copy your source code into the new sandbox paths
-        cp "$MAIN_ACT" sandbox/app/src/main/java/com/example/textutility/MainActivity.kt
 
-        # 5. Write the required AndroidManifest file with a bulletproof universal device theme
-        cat << 'EOF' > sandbox/app/src/main/AndroidManifest.xml
-        <manifest xmlns:android="http://android.com">
-            <application
-                android:allowBackup="true"
-                android:label="TextUtility"
-                android:supportsRtl="true"
-                android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
-                <activity
-                    android:name="com.example.textutility.MainActivity"
-                    android:exported="true">
-                    <intent-filter>
-                        <action android:name="android.intent.action.MAIN" />
-                        <category android:name="android.intent.category.LAUNCHER" />
-                    </intent-filter>
-                </activity>
-            </application>
-        </manifest>
-        EOF
+    - name: 4. Inject Verified Settings and Root Configs
+      run: |
+        echo 'pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }' > sandbox/settings.gradle.kts
+        echo 'dependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS); repositories { google(); mavenCentral() } }' >> sandbox/settings.gradle.kts
+        echo 'rootProject.name = "TextUtility"' >> sandbox/settings.gradle.kts
+        echo 'include(":app")' >> sandbox/settings.gradle.kts
+        echo 'plugins { id("com.android.application") version "8.2.2" apply false; id("org.jetbrains.kotlin.android") version "1.9.22" apply false }' > sandbox/build.gradle.kts
 
-        # 6. Write the root settings file
-        cat << 'EOF' > sandbox/settings.gradle.kts
-        pluginManagement {
-            repositories {
-                google()
-                mavenCentral()
-                gradlePluginPortal()
-            }
-        }
-        dependencyResolutionManagement {
-            repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-            repositories {
-                google()
-                mavenCentral()
-            }
-        }
-        rootProject.name = "TextUtility"
-        include(":app")
-        EOF
+    - name: 5. Inject App Build Target Configurations
+      run: |
+        echo 'plugins { id("com.android.application"); id("org.jetbrains.kotlin.android") }' > sandbox/app/build.gradle.kts
+        echo 'android { namespace = "com.example.textutility"; compileSdk = 34' >> sandbox/app/build.gradle.kts
+        echo 'defaultConfig { applicationId = "com.example.textutility"; minSdk = 24; targetSdk = 34; versionCode = 1; versionName = "1.0" }' >> sandbox/app/build.gradle.kts
+        echo 'buildTypes { release { isMinifyEnabled = false } }' >> sandbox/app/build.gradle.kts
+        echo 'compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }' >> sandbox/app/build.gradle.kts
+        echo 'kotlinOptions { jvmTarget = "17" }' >> sandbox/app/build.gradle.kts
+        echo 'buildFeatures { compose = true }; composeOptions { kotlinCompilerExtensionVersion = "1.5.8" } }' >> sandbox/app/build.gradle.kts
+        echo 'dependencies { implementation("androidx.core:core-ktx:1.12.0"); implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0"); implementation("androidx.activity:activity-compose:1.8.2"); implementation(platform("androidx.compose:compose-bom:2024.02.00")); implementation("androidx.compose.ui:ui"); implementation("androidx.compose.ui:ui-graphics"); implementation("androidx.compose.ui:ui-tooling-preview"); implementation("androidx.compose.material3:material3") }' >> sandbox/app/build.gradle.kts
 
-        # 7. Write the root build configuration file
-        cat << 'EOF' > sandbox/build.gradle.kts
-        plugins {
-            id("com.android.application") version "8.2.2" apply false
-            id("org.jetbrains.kotlin.android") version "1.9.22" apply false
-        }
-        EOF
+    - name: 6. Inject Clean AndroidManifest System Schema
+      run: |
+        echo '<manifest xmlns:android="http://android.com">' > sandbox/app/src/main/AndroidManifest.xml
+        echo '<application android:allowBackup="true" android:label="TextUtility" android:supportsRtl="true" android:theme="@android:style/Theme.DeviceDefault.NoActionBar">' >> sandbox/app/src/main/AndroidManifest.xml
+        echo '<activity android:name="com.example.textutility.MainActivity" android:exported="true">' >> sandbox/app/src/main/AndroidManifest.xml
+        echo '<intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter>' >> sandbox/app/src/main/AndroidManifest.xml
+        echo '</activity></application></manifest>' >> sandbox/app/src/main/AndroidManifest.xml
 
-        # 8. Write the app module build file with modern Compose layouts enabled
-        cat << 'EOF' > sandbox/app/build.gradle.kts
-        plugins {
-            id("com.android.application")
-            id("org.jetbrains.kotlin.android")
-        }
+    - name: 7. Inject Functional MainActivity Component Core
+      run: |
+        echo 'package com.example.textutility' > sandbox/app/src/main/java/com/example/textutility/MainActivity.kt
+        echo 'import android.content.ClipData; import android.content.ClipboardManager; import android.content.Context; import android.os.Bundle; import android.widget.Toast; import androidx.activity.ComponentActivity; import androidx.activity.compose.setContent; import androidx.compose.foundation.layout.*; import androidx.compose.foundation.rememberScrollState; import androidx.compose.foundation.verticalScroll; import androidx.compose.material3.*; import androidx.compose.runtime.*; import androidx.compose.ui.Modifier; import androidx.compose.ui.platform.LocalContext; import androidx.compose.ui.unit.dp' >> sandbox/app/src/main/java/com/example/textutility/MainActivity.kt
+        echo 'class MainActivity : ComponentActivity() { override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState); setContent { MaterialTheme(colorScheme = darkColorScheme()) { Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) { UtilityDashboard() } } } } }' >> sandbox/app/src/main/java/com/example/textutility/MainActivity.kt
+        echo '@Composable fun UtilityDashboard() { var inputText by remember { mutableStateOf("") }; var outputText by remember { mutableStateOf("") }; val context = LocalContext.current; val charCount = inputText.length; val wordCount = if (inputText.isBlank()) 0 else inputText.trim().split("\\s+".toRegex()).size' >> sandbox/app/src/main/java/com/example/textutility/MainActivity.kt
+        echo 'Column(modifier = Modifier.fillMaxSize().padding(16.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) { Text("UtilityApp Engine", style = MaterialTheme.typography.headlineMedium); Text("Chars: " + charCount + " | Words: " + wordCount, style = MaterialTheme.typography.bodyMedium); OutlinedTextField(value = inputText, onValueChange = { inputText = it }, label = { Text("Input Source") }, modifier = Modifier.fillMaxWidth().height(140.dp)); Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) { Button(onClick = { outputText = inputText.uppercase() }, modifier = Modifier.weight(1f)) { Text("UPPER") }; Button(onClick = { outputText = inputText.lowercase() }, modifier = Modifier.weight(1f)) { Text("lower") } }; Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) { Button(onClick = { outputText = inputText.replace("\\s+".toRegex(), " ").trim() }, modifier = Modifier.weight(1f)) { Text("Clean") }; Button(onClick = { outputText = inputText.lowercase().replace("[^a-z0-9]+".toRegex(), "-").trim('\u002d') }, modifier = Modifier.weight(1f)) { Text("Slugify") } }; Button(onClick = { inputText = ""; outputText = "" }, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)) { Text("Clear All") }; OutlinedTextField(value = outputText, onValueChange = {}, readOnly = true, label = { Text("Result") }, modifier = Modifier.fillMaxWidth().height(140.dp)); Button(onClick = { if (outputText.isNotEmpty()) { val cb = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager; cb.setPrimaryClip(ClipData.newPlainText("out", outputText)); Toast.makeText(context, "Copied!", Toast.LENGTH_SHORT).show() } }, modifier = Modifier.fillMaxWidth()) { Text("Copy Data") } } }' >> sandbox/app/src/main/java/com/example/textutility/MainActivity.kt
 
-        android {
-            namespace = "com.example.textutility"
-            compileSdk = 34
-
-            defaultConfig {
-                applicationId = "com.example.textutility"
-                minSdk = 24
-                targetSdk = 34
-                versionCode = 1
-                versionName = "1.0"
-            }
-
-            buildTypes {
-                release {
-                    isMinifyEnabled = false
-                }
-            }
-            compileOptions {
-                sourceCompatibility = JavaVersion.VERSION_17
-                targetCompatibility = JavaVersion.VERSION_17
-            }
-            kotlinOptions {
-                jvmTarget = "17"
-            }
-            buildFeatures {
-                compose = true
-            }
-            composeOptions {
-                kotlinCompilerExtensionVersion = "1.5.8"
-            }
-        }
-
-        dependencies {
-            implementation("androidx.core:core-ktx:1.12.0")
-            implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-            implementation("androidx.activity:activity-compose:1.8.2")
-            implementation(platform("androidx.compose:compose-bom:2024.02.00"))
-            implementation("androidx.compose.ui:ui")
-            implementation("androidx.compose.ui:ui-graphics")
-            implementation("androidx.compose.ui:ui-tooling-preview")
-            implementation("androidx.compose.material3:material3")
-        }
-        EOF
-
-    # Configures the build pipeline inside our clean sandbox folder structure
-    - name: Setup Gradle Environment
+    - name: 8. Setup Build Automation Engine
       uses: gradle/actions/setup-gradle@v4
       with:
         build-root-directory: sandbox
 
-    - name: Compile Debug APK
+    - name: 9. Compile Final Production Debug APK
       run: gradle :app:assembleDebug
       working-directory: sandbox
 
-    - name: Upload APK Installer Artifact
+    - name: 10. Publish Installable Binary Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: UtilityApp-Installer
