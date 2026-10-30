@@ -42,8 +42,9 @@ jobs:
         # 1. Create flat settings.gradle
         echo 'rootProject.name = "TextUtility"' > "$CDIR/settings.gradle"
         
-        # 2. Create flat build.gradle line by line to prevent syntax errors
+        # 2. Create flat build.gradle with global repositories block included
         echo 'buildscript { repositories { google(); mavenCentral() }; dependencies { classpath "com.android.tools.build:gradle:8.2.2"; classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22" } }' > "$CDIR/build.gradle"
+        echo 'allprojects { repositories { google(); mavenCentral() } }' >> "$CDIR/build.gradle"
         echo 'apply plugin: "com.android.application"' >> "$CDIR/build.gradle"
         echo 'apply plugin: "kotlin-android"' >> "$CDIR/build.gradle"
         echo 'android { namespace "com.example.textutility"; compileSdk 34' >> "$CDIR/build.gradle"
