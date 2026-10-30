@@ -21,39 +21,131 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # Dynamically locates where settings.gradle.kts is hiding in your repo
-    - name: Detect and Fix Working Directory
+    - name: Dynamically Locate Source Code
       id: locate
       run: |
-        SETTING_FILE=$(find . -name "settings.gradle.kts" -o -name "settings.gradle" | head -n 1)
-        if [ -z "$SETTING_FILE" ]; then
-          echo "No settings file found! Writing a fallback layout to the root..."
-          echo 'rootProject.name = "TextUtility"' > settings.gradle
-          echo 'include(":app")' >> settings.gradle
-          echo 'plugins { id("com.android.application") version "8.2.2" apply false; id("org.jetbrains.kotlin.android") version "1.9.22" apply false }' > build.gradle
-          echo "DIR=." >> $GITHUB_OUTPUT
-        else
-          DIR=$(dirname "$SETTING_FILE")
-          echo "Found project scaffolding in directory: $DIR"
-          echo "DIR=$DIR" >> $GITHUB_OUTPUT
+        # Find where MainActivity.kt is stored in your repo
+        MAIN_ACTIVITY=$(find . -name "MainActivity.kt" | head -n 1)
+        if [ -z "$MAIN_ACTIVITY" ]; then
+          echo "Error: MainActivity.kt not found anywhere in the repository!"
+          exit 1
+        fi
+        
+        # Get the base directory containing the src folder
+        SRC_DIR=$(echo "$MAIN_ACTIVITY" | grep -o ".*src/")
+        BASE_DIR=$(dirname "${SRC_DIR%?}")
+        BASE_DIR=$(dirname "$BASE_DIR")
+        
+        echo "Found Android source root at: $BASE_DIR"
+        echo "BASE_DIR=$BASE_DIR" >> $GITHUB_OUTPUT
+
+    - name: Inject Clean Flat Scaffold Configuration
+      run: |
+        CDIR="${{ steps.locate.outputs.BASE_DIR }}"
+        
+        # 1. Create a flat settings.gradle (No sub-modules, root is the app)
+        echo 'rootProject.name = "TextUtility"' > "$CDIR/settings.gradle"
+        
+        # 2. Create a flat build.gradle
+        cat << 'EOF' > "$CDIR/build.gradle"
+        buildscript {
+            repositories {
+                google()
+                mavenCentral()
+            }
+            dependencies {
+                classpath "com.android.tools.build:gradle:8.2.2"
+                classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22"
+            }
+        }
+
+        apply plugin: 'com.android.application'
+        apply plugin: 'kotlin-android'
+
+        android {
+            namespace 'com.example.textutility'
+            compileSdk 34
+
+            defaultConfig {
+                applicationId "com.example.textutility"
+                minSdk 24
+                targetSdk 34
+                versionCode 1
+                versionName "1.0"
+            }
+
+            buildTypes {
+                release {
+                    minifyEnabled false
+                }
+            }
+            compileOptions {
+                sourceCompatibility JavaVersion.VERSION_17
+                targetCompatibility JavaVersion.VERSION_17
+            }
+            kotlinOptions {
+                jvmTarget = '17'
+            }
+            buildFeatures {
+                compose true
+            }
+            composeOptions {
+                kotlinCompilerExtensionVersion '1.5.8'
+            }
+        }
+
+        dependencies {
+            implementation "androidx.core:core-ktx:1.12.0"
+            implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.7.0"
+            implementation "androidx.activity:activity-compose:1.8.2"
+            implementation platform("androidx.compose:compose-bom:2024.02.00")
+            implementation "androidx.compose.ui:ui"
+            implementation "androidx.compose.ui:ui-graphics"
+            implementation "androidx.compose.ui:ui-tooling-preview"
+            implementation "androidx.compose.material3:material3"
+        }
+        EOF
+
+        # 3. Create a basic AndroidManifest.xml if missing
+        if [ ! -d "$CDIR/src/main" ]; then
+          mkdir -p "$CDIR/src/main"
+        fi
+        
+        if [ ! -f "$CDIR/src/main/AndroidManifest.xml" ]; then
+          cat << 'EOF' > "$CDIR/src/main/AndroidManifest.xml"
+          <manifest xmlns:android="http://android.com">
+              <application
+                  android:allowBackup="true"
+                  android:label="UtilityApp"
+                  android:supportsRtl="true"
+                  android:theme="@android:style/Theme.Material.NoActionBar">
+                  <activity
+                      android:name=".MainActivity"
+                      android:exported="true">
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN" />
+                          <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+                  </activity>
+              </application>
+          </manifest>
+          EOF
         fi
 
-    # Configures the build pipeline inside the detected folder path
     - name: Setup Gradle Environment
       uses: gradle/actions/setup-gradle@v4
       with:
-        build-root-directory: ${{ steps.locate.outputs.DIR }}
+        build-root-directory: ${{ steps.locate.outputs.BASE_DIR }}
 
     - name: Compile Debug APK
       run: gradle assembleDebug
-      working-directory: ${{ steps.locate.outputs.DIR }}
+      working-directory: ${{ steps.locate.outputs.BASE_DIR }}
 
     - name: Upload APK Installer Artifact
       uses: actions/upload-artifact@v4
       with:
         name: UtilityApp-Installer
         path: |
-          **/build/outputs/apk/debug/app-debug.apk
-          **/build/outputs/apk/debug/*-debug.apk
+          **/build/outputs/apk/debug/*.apk
         if-no-files-found: error
         retention-days: 7
