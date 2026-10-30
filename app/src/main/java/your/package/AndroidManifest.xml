@@ -1,12 +1,12 @@
 <manifest xmlns:android="http://android.com">
     <application
         android:allowBackup="true"
-        android:label="UtilityApp"
-        android:supportsRtl="true"
-        android:theme="@android:style/Theme.Material.NoActionBar">
+        android:label="TextUtility"
+        android:supportsRtl="true">
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
