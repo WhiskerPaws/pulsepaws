@@ -34,23 +34,21 @@ jobs:
           cp app.js public/
           npm install
 
-      - name: Inject Android Platform Dependencies
+      - name: Force Template Initialization
         run: |
           npx cap init WhiskerPaws com.mycompany.whiskerpaws --web-dir=public || true
-          npx cap add android || true
-          npx cap sync android
+          rm -rf android
+          npx cap add android
 
       - name: Resolve Duplicate Kotlin Dependency Clashes
         run: |
-          if [ -d "android" ]; then
-            echo "configurations.all {
-                resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-                    if (details.requested.group == 'org.jetbrains.kotlin') {
-                        details.useVersion '1.9.20'
-                    }
-                }
-            }" >> android/build.gradle
-          fi
+          echo "configurations.all {
+              resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+                  if (details.requested.group == 'org.jetbrains.kotlin') {
+                      details.useVersion '1.9.20'
+                  }
+              }
+          }" >> android/build.gradle
 
       - name: Setup Java Development Kit (JDK)
         uses: actions/setup-java@v4
@@ -60,13 +58,7 @@ jobs:
 
       - name: Compile Standalone Android APK
         run: |
-          if [ -d "android" ]; then
-            cd android && ./gradlew assembleDebug
-          else
-            echo "Android directory fallback template initialization"
-            npx cap add android
-            cd android && ./gradlew assembleDebug
-          fi
+          cd android && chmod +x gradlew && ./gradlew assembleDebug
 
       - name: Archive Production APK Artifact
         uses: actions/upload-artifact@v4
