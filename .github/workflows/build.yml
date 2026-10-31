@@ -41,7 +41,7 @@ jobs:
         with open("sandbox/build.gradle.kts", "w") as f:
             f.write('plugins { id("com.android.application") version "8.2.2" apply false }\n')
             
-        # 3. Write app/build.gradle.kts (Zero heavy Compose dependencies)
+        # 3. Write app/build.gradle.kts
         with open("sandbox/app/build.gradle.kts", "w") as f:
             f.write(
                 'plugins { id("com.android.application") }\n'
@@ -85,7 +85,6 @@ jobs:
     </div>
     <textarea id="o" readonly placeholder="Result displays here..."></textarea>
     <button class="copy" onclick="cpy()">Copy Result Data</button>
-
     <script>
         function run(a) {
             let v = document.getElementById('i').value;
@@ -118,7 +117,7 @@ jobs:
                 '</manifest>\n'
             )
 
-        # 6. Write simple Android MainActivity.java (Bypasses Kotlin compiler entirely)
+        # 6. Write simple Android MainActivity.java
         with open("sandbox/app/src/main/java/com/example/textutility/MainActivity.java", "w") as f:
             f.write(
                 'package com.example.textutility;\n'
