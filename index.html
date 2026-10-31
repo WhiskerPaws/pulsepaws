@@ -2,209 +2,244 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhiskerPaws Dashboard</title>
-    <!-- Tailwind CSS for mobile-first layout -->
-    <script src="https://jsdelivr.net"></script>
-    <!-- Premium Google Fonts Integration -->
-    <link href="https://googleapis.com" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WhiskerPaws Mobile</title>
+    <!-- EMBEDDED OFFLINE MOBILE CSS STYLING ENGINE -->
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
-        .ad-placeholder { background: repeating-linear-stripes(-45deg, #e2e8f0, #e2e8f0 10px, #f1f5f9 10px, #f1f5f9 20px); border: 2px dashed #cbd5e1; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background-color: #f8fafc; 
+            color: #1e293b;
+            max-width: 100%;
+            min-h: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 70px;
+            overflow-x: hidden;
+        }
+        /* Mobile Header Mechanics */
+        header {
+            background-color: #ffffff;
+            border-b: 1px solid #f1f5f9;
+            padding: 12px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .header-brand { display: flex; items-center: center; gap: 8px; }
+        .header-title { font-size: 18px; font-weight: 700; color: #0f172a; letter-spacing: -0.5px; }
+        /* Ticker Animation Engines */
+        .ticker-wrap { background-color: #312e81; color: #e0e7ff; font-size: 12px; padding: 6px 0; overflow: hidden; position: sticky; top: 45px; z-index: 40; }
+        .ticker { inline-block; padding-left: 100%; animation: marquee 25s linear infinite; }
+        @keyframes marquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+        /* Layout Card Containers */
+        main { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+        .card { background-color: #ffffff; border-radius: 16px; padding: 16px; border: 1px solid #f1f5f9; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02); }
+        .card-title { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 12px; display: flex; items-center: center; gap: 6px; }
+        /* Buttons Components */
+        .btn-primary { width: 100%; background-color: #4f46e5; color: #ffffff; border: none; padding: 12px; border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; transition: transform 0.1s; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.1); }
+        .btn-primary:active { transform: scale(0.98); background-color: #4338ca; }
+        .btn-secondary { width: 100%; background-color: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; padding: 10px; border-radius: 12px; font-weight: 600; font-size: 12px; cursor: pointer; }
+        .btn-spin { width: 100%; background-color: #059669; color: #ffffff; border: none; padding: 12px; border-radius: 12px; font-weight: 700; font-size: 14px; box-shadow: 0 4px 6px -1px rgba(5, 95, 105, 0.1); }
+        /* Form Components */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .input-field { width: 100%; background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 12px; border-radius: 12px; font-size: 14px; outline: none; }
+        .input-field:focus { border-color: #4f46e5; background-color: #ffffff; }
+        /* Checkbox Task Rows */
+        .task-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; background-color: #f8fafc; border: 1px solid #f1f5f9; border-radius: 12px; margin-bottom: 8px; }
+        .task-left { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: #334155; }
+        .task-coin { font-size: 12px; font-weight: 700; color: #059669; }
+        /* Fixed Ad Blocks Style */
+        .ad-box { background: repeating-linear-stripes(-45deg, #e2e8f0, #e2e8f0 10px, #f1f5f9 10px, #f1f5f9 20px); border: 2px dashed #cbd5e1; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 11px; font-weight: 500; text-align: center; }
+        .footer-ads { position: fixed; bottom: 0; left: 0; right: 0; background-color: #ffffff; border-top: 1px solid #f1f5f9; padding: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; z-index: 100; box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.03); }
+        /* Streak Grid Map */
+        .streak-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 12px; }
+        .streak-day { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 6px 4px; text-align: center; }
+        .streak-day-active { background-color: #ecfdf5; border-color: #10b981; color: #065f46; font-weight: 600; box-shadow: 0 2px 4px rgba(16,185,129,0.05); }
+        .streak-day-current { border: 2px dashed #6366f1; background-color: #f5f3ff; }
+        .streak-lbl { font-size: 9px; color: #94a3b8; display: block; margin-bottom: 2px; }
+        .streak-val { font-size: 11px; font-weight: 700; }
+        /* Step Tracker Metrics */
+        .progress-bar { width: 100%; background-color: #f1f5f9; h: 10px; border-radius: 9999px; overflow: hidden; margin: 8px 0; }
+        .progress-fill { background-color: #4f46e5; h: 100%; width: 72%; border-radius: 9999px; }
     </style>
 </head>
-<body class="max-w-md mx-auto min-h-screen flex flex-col justify-between pb-24 shadow-xl bg-slate-50">
+<body>
 
-    <!-- PRODUCTION HEADER WITH AUTH INTERFACE -->
-    <header class="bg-white border-b border-slate-100 px-4 py-3 sticky top-0 z-50 flex justify-between items-center shadow-xs">
-        <div class="flex items-center gap-2">
-            <svg class="w-7 h-7 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 5c.67 0 1.35.09 2 .26 1.78-1.56 3.34-1.11 3.34-1.11.5.88.18 2.29.18 2.29a7.35 7.35 0 0 1 2.48 5.56c0 4.42-4 5-9 5s-9-.58-9-5a7.35 7.35 0 0 1 2.48-5.56s-.32-1.41.18-2.29c0 0 1.56-.45 3.34 1.11.65-.17 1.33-.26 2-.26z"/>
-                <path d="M9 14c.5 0 1-.5 1-1s-.5-1-1-1-1 .5-1 1 .5 1 1 1z"/>
-                <path d="M15 14c.5 0 1-.5 1-1s-.5-1-1-1-1 .5-1 1 .5 1 1 1z"/>
-                <path d="M12 17c-.5 0-1-.5-1-1h2c0 .5-.5 1-1 1z"/>
-            </svg>
-            <h1 class="text-lg font-bold text-slate-900 tracking-tight">WhiskerPaws</h1>
+    <!-- COMPACT MOBILE MAIN HEADER -->
+    <header>
+        <div class="header-brand">
+            <span style="font-size: 22px;">🐱</span>
+            <h1 class="header-title">WhiskerPaws</h1>
         </div>
-        
-        <div id="auth-ui-container" class="flex gap-1.5">
-            <button onclick="handleAuth('login')" class="text-xs bg-slate-50 hover:bg-slate-100 text-slate-700 px-2.5 py-1.5 rounded-xl font-semibold border border-slate-200/60 transition active:scale-95">Log In</button>
-            <button onclick="handleAuth('signup')" class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1.5 rounded-xl font-semibold shadow-xs shadow-indigo-100 transition active:scale-95">Join</button>
+        <div id="auth-ui-container" style="display: flex; gap: 6px;">
+            <button onclick="handleAuth('login')" style="background-color:#f1f5f9; border:1px solid #e2e8f0; color:#334155; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:600;">Log In</button>
+            <button onclick="handleAuth('signup')" style="background-color:#4f46e5; border:none; color:#ffffff; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:600;">Join</button>
         </div>
     </header>
 
-    <!-- NEW SLIDING MARQUEE TICKER ANNOUNCEMENT -->
-    <div class="bg-indigo-900 text-indigo-100 text-xs py-2 overflow-hidden whitespace-nowrap sticky top-[53px] z-40 border-b border-indigo-950">
-        <div class="inline-block animate-[marquee_22s_linear_infinite] pl-[100%]">
-            🐾 Welcome to WhiskerPaws! • 🎰 Spin the Wheel 5x daily for massive bonus rewards! • ⚡ Start Passive Mining to secure constant Pawcoins! • 💳 Payout threshold is 1,000 Coins ($1.00) via local GCash, Maya, or ONE Wallet standard options. •
-        </div>
-    </div>
-    <style>
-        @keyframes marquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
-    </style>
-
-    <!-- AD SPACE 1: TOP BANNER -->
-    <div class="px-4 pt-3">
-        <div class="ad-placeholder h-14 rounded-lg flex items-center justify-center text-xs font-medium text-slate-400">
-            [ AdMob Banner #1 - Top Dashboard ]
+    <!-- OFFLINE-READY TEXT MARQUEE NOTIFICATION RUNNER -->
+    <div class="ticker-wrap">
+        <div class="ticker">
+            🐾 Welcome to WhiskerPaws Mobile! • 🎡 Spin the Lucky Wheel 5x daily for massive bonus rewards! • ⚡ Start Passive Mining to secure constant Pawcoins! • 💳 Payout threshold is 1,000 Coins ($1.00) via local GCash, Maya, or ONE Wallet standard economics. •
         </div>
     </div>
 
-    <!-- MAIN SCROLLABLE APP CONTENT AREA -->
-    <main class="flex-1 px-4 py-4 space-y-5 overflow-y-auto">
+    <!-- NATIVE AD CONTAINER #1: TOP DISPATCH BANNER -->
+    <div style="padding: 16px 16px 0 16px;">
+        <div class="ad-box" style="height: 50px;">[ AdMob Banner #1 - Native Mobile Header Unit ]</div>
+    </div>
 
-        <!-- NEW FEATURE: 7-DAY LOGIN STREAK REWARDS INTERFACE -->
-        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-xs">
-            <div class="flex justify-between items-center mb-2.5">
-                <h2 class="text-sm font-bold text-slate-800 flex items-center gap-1.5">🎁 Daily Check-in Streak</h2>
-                <span class="text-xs font-bold text-indigo-600">Streak: <span id="streak-days-count">0</span> Days</span>
+    <!-- MAIN APP WRAPPER CONTAINER -->
+    <main>
+        <!-- NATIVE COMPONENT: 7-DAY LOGIN STREAK REWARDS -->
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-size: 14px; font-weight: 700; color: #1e293b;">🎁 Daily Check-in Streak</span>
+                <span style="font-size: 12px; font-weight: 700; color: #4f46e5;">Streak: <span id="streak-days-count">0</span> Days</span>
             </div>
-            <!-- Grid displaying the weekly days map -->
-            <div class="grid grid-cols-7 gap-1.5 mb-3 text-center">
-                <div id="streak-d1" class="bg-slate-50 border border-slate-100 rounded-xl p-1.5"><span class="text-[10px] text-slate-400 block font-medium">D1</span><span class="text-xs font-bold text-slate-700">+10</span></div>
-                <div id="streak-d2" class="bg-slate-50 border border-slate-100 rounded-xl p-1.5"><span class="text-[10px] text-slate-400 block font-medium">D2</span><span class="text-xs font-bold text-slate-700">+20</span></div>
-                <div id="streak-d3" class="bg-slate-50 border border-slate-100 rounded-xl p-1.5"><span class="text-[10px] text-slate-400 block font-medium">D3</span><span class="text-xs font-bold text-slate-700">+30</span></div>
-                <div id="streak-d4" class="bg-slate-50 border border-slate-100 rounded-xl p-1.5"><span class="text-[10px] text-slate-400 block font-medium">D4</span><span class="text-xs font-bold text-slate-700">+40</span></div>
-                <div id="streak-d5" class="bg-slate-50 border border-slate-100 rounded-xl p-1.5"><span class="text-[10px] text-slate-400 block font-medium">D5</span><span class="text-xs font-bold text-slate-700">+50</span></div>
-                <div id="streak-d6" class="bg-slate-50 border border-slate-100 rounded-xl p-1.5"><span class="text-[10px] text-slate-400 block font-medium">D6</span><span class="text-xs font-bold text-slate-700">+60</span></div>
-                <div id="streak-d7" class="bg-slate-100 border border-slate-200 rounded-xl p-1.5 bg-amber-50/50 border-amber-200"><span class="text-[10px] text-amber-600 block font-bold">🔥</span><span class="text-xs font-bold text-amber-700">+100</span></div>
+            <div class="streak-grid">
+                <div id="streak-d1" class="streak-day"><span class="streak-lbl">D1</span><span class="streak-val">+10</span></div>
+                <div id="streak-d2" class="streak-day"><span class="streak-lbl">D2</span><span class="streak-val">+20</span></div>
+                <div id="streak-d3" class="streak-day"><span class="streak-lbl">D3</span><span class="streak-val">+30</span></div>
+                <div id="streak-d4" class="streak-day"><span class="streak-lbl">D4</span><span class="streak-val">+40</span></div>
+                <div id="streak-d5" class="streak-day"><span class="streak-lbl">D5</span><span class="streak-val">+50</span></div>
+                <div id="streak-d6" class="streak-day"><span class="streak-lbl">D6</span><span class="streak-val">+60</span></div>
+                <div id="streak-d7" class="streak-day" style="background-color: #fffbeb; border-color: #f59e0b;"><span class="streak-lbl" style="color: #b45309;">🔥</span><span class="streak-val" style="color: #b45309;">+100</span></div>
             </div>
-            <div class="grid grid-cols-2 gap-2">
-                <button onclick="claimDailyStreak(false)" id="streak-claim-btn" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold py-2.5 rounded-xl transition">
-                    Claim Today
-                </button>
-                <button onclick="claimDailyStreak(true)" id="streak-double-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 rounded-xl transition shadow-xs flex items-center justify-center gap-1">
-                    🎬 Double Reward
-                </button>
+            <div class="grid-2">
+                <button onclick="claimDailyStreak(false)" id="streak-claim-btn" class="btn-secondary">Claim Today</button>
+                <button onclick="claimDailyStreak(true)" id="streak-double-btn" class="btn-primary" style="padding: 10px; font-size: 12px;">🎬 Double Up</button>
             </div>
         </div>
 
-        <!-- WALKING STEPS & BALANCES CARD -->
-        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-xs">
-            <div class="flex justify-between items-center mb-3">
-                <span class="text-sm font-medium text-slate-500">Wallet Account</span>
-                <span class="bg-amber-50 text-amber-700 text-xs px-2 py-1 rounded-full font-bold">1,000 Coins = $1.00</span>
+        <!-- ACCOUNT WALLET BALANCES CARD -->
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 12px; font-weight: 600; color: #64748b;">Wallet Account</span>
+                <span style="font-size: 11px; font-weight: 700; color: #b45309; background-color: #fffbeb; padding: 2px 6px; border-radius: 9999px;">1,000 Coins = $1.00</span>
             </div>
-            <div class="text-3xl font-extrabold text-slate-900 mb-4 flex items-center gap-1.5">
-                🪙 <span id="coin-balance">120</span> <span class="text-xs font-semibold text-slate-400 self-end mb-1">Pawcoins (~₱<span id="php-balance">6.00</span>)</span>
+            <div style="font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 12px; display: flex; align-items: baseline; gap: 6px;">
+                🪙 <span id="coin-balance">120</span> <span style="font-size: 12px; font-weight: 600; color: #94a3b8;">Pawcoins (~₱<span id="php-balance">6.00</span>)</span>
             </div>
-            <button onclick="triggerRewardedAd('Mining')" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-98 transition text-white py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 shadow-sm shadow-indigo-100">
+            <button onclick="triggerRewardedAd('Mining')" class="btn-primary">
                 ⚡ Start Passive Mining (Earn Coins)
             </button>
         </div>
-        <!-- HIGH-RETENTION DAILY LUCKY WHEEL -->
-        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-xs">
-            <div class="flex justify-between items-center mb-2">
-                <h2 class="text-sm font-bold text-slate-800 flex items-center gap-2">🎡 Lucky Paws Spin</h2>
-                <span class="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">Spins Left: <span id="spins-count">5</span>/5</span>
+
+        <!-- HIGH-RETENTION LUCKY WHEEL MECHANIC -->
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span class="card-title">🎡 Lucky Paws Spin</span>
+                <span style="font-size: 10px; font-weight: 700; color: #64748b; background-color: #f1f5f9; padding: 2px 8px; border-radius: 9999px;">Spins Left: <span id="spins-count">5</span>/5</span>
             </div>
-            <p class="text-xs text-slate-400 mb-3">Watch an ad break to spin the wheel and win up to 100 bonus Pawcoins!</p>
-            <button onclick="playLuckySpin()" id="spin-btn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 rounded-xl transition shadow-xs shadow-emerald-100">
+            <p style="font-size: 12px; color: #64748b; margin-bottom: 12px; line-height: 1.4;">Watch an ad break to spin the wheel and win up to 100 bonus Pawcoins!</p>
+            <button onclick="playLuckySpin()" id="spin-btn" class="btn-spin" style="cursor: pointer;">
                 🎰 Watch Ad & Spin Wheel
             </button>
         </div>
 
-        <!-- DAILY ROUTINE CHECKLIST -->
-        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-xs">
-            <h2 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">📋 Daily Routine Tasks</h2>
-            <div class="space-y-2.5">
-                <label class="flex items-center justify-between p-3 rounded-xl border border-slate-50 bg-slate-50/50 cursor-pointer hover:bg-slate-50 transition">
-                    <div class="flex items-center gap-3">
-                        <input type="checkbox" onchange="completeTask(this, 10)" class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
-                        <span class="text-sm font-medium text-slate-700">Log a complete Pomodoro slot</span>
-                    </div>
-                    <span class="text-xs font-bold text-emerald-600">+10 Coins</span>
-                </label>
-                <label class="flex items-center justify-between p-3 rounded-xl border border-slate-50 bg-slate-50/50 cursor-pointer hover:bg-slate-50 transition">
-                    <div class="flex items-center gap-3">
-                        <input type="checkbox" onchange="completeTask(this, 5)" class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
-                        <span class="text-sm font-medium text-slate-700">Track current daily expenses</span>
-                    </div>
-                    <span class="text-xs font-bold text-emerald-600">+5 Coins</span>
-                </label>
-                <label class="flex items-center justify-between p-3 rounded-xl border border-slate-50 bg-slate-50/50 cursor-pointer hover:bg-slate-50 transition">
-                    <div class="flex items-center gap-3">
-                        <input type="checkbox" onchange="completeTask(this, 5)" class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
-                        <span class="text-sm font-medium text-slate-700">Record water intake (8 glasses)</span>
-                    </div>
-                    <span class="text-xs font-bold text-emerald-600">+5 Coins</span>
-                </label>
+        <!-- DAILY CHECKLIST HUB -->
+        <div class="card">
+            <span class="card-title">📋 Daily Routine Tasks</span>
+            <div class="task-row">
+                <div class="task-left">
+                    <input type="checkbox" onchange="completeTask(this, 10)" style="width: 16px; h: 16px; accent-color: #4f46e5;">
+                    <span>Log a complete Pomodoro slot</span>
+                </div>
+                <span class="task-coin">+10 Coins</span>
+            </div>
+            <div class="task-row">
+                <div class="task-left">
+                    <input type="checkbox" onchange="completeTask(this, 5)" style="width: 16px; h: 16px; accent-color: #4f46e5;">
+                    <span>Track current daily expenses</span>
+                </div>
+                <span class="task-coin">+5 Coins</span>
+            </div>
+            <div class="task-row">
+                <div class="task-left">
+                    <input type="checkbox" onchange="completeTask(this, 5)" style="width: 16px; h: 16px; accent-color: #4f46e5;">
+                    <span>Record water intake (8 glasses)</span>
+                </div>
+                <span class="task-coin">+5 Coins</span>
             </div>
         </div>
 
-        <!-- AD SPACE 2: MID-CONTENT AD BREAK -->
-        <div class="ad-placeholder h-20 rounded-xl flex flex-col items-center justify-center p-2 text-center">
-            <span class="text-xs font-medium text-slate-400">[ AdMob Banner #2 - Utility Break ]</span>
-            <button onclick="triggerRewardedAd('Bonus Multiplier')" class="text-xs font-bold text-indigo-600 underline mt-1">Watch video for +20 Instant Coins</button>
+        <!-- NATIVE AD CONTAINER #2: INTERSTITIAL BANNER OVERLAY -->
+        <div class="ad-box" style="height: 75px; flex-direction: column; p: 8px;">
+            <span>[ AdMob Banner #2 - Utility Interstitial Break ]</span>
+            <span onclick="triggerRewardedAd('Bonus Multiplier')" style="font-size: 11px; font-weight: 700; color: #4f46e5; text-decoration: underline; margin-top: 4px; cursor: pointer;">Watch video for +20 Instant Coins</span>
         </div>
 
-        <!-- MOBILE MILESTONE PASOMETER STEP COUNTER -->
-        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-xs">
-            <div class="flex justify-between items-center mb-2">
-                <h2 class="text-sm font-bold text-slate-800 flex items-center gap-1.5">🚶 Daily Step Tracker</h2>
-                <span class="text-xs font-bold text-indigo-600">Goal: 5,000</span>
+        <!-- PASSIVE PASOMETER STEP COUNTER UNIT -->
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="card-title" style="margin-bottom: 0;">🚶 Daily Step Tracker</span>
+                <span style="font-size: 12px; font-weight: 700; color: #4f46e5;">Goal: 5,000</span>
             </div>
-            <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mb-3">
-                <div class="bg-indigo-600 h-full" style="width: 72%;"></div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
             </div>
-            <div class="flex justify-between items-center text-xs font-medium text-slate-500 mb-2">
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 10px; color: #475569;">
                 <span>Current: <b>3,600 steps</b></span>
-                <span class="text-emerald-600 font-bold">+15 Coins Available</span>
+                <span style="color: #059669; font-weight: 700;">+15 Coins Available</span>
             </div>
-            <button onclick="triggerRewardedAd('Claim Step Bonus')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold py-2 rounded-xl transition">
+            <button onclick="triggerRewardedAd('Claim Step Bonus')" class="btn-secondary" style="font-size: 12px; padding: 8px;">
                 Claim Milestone Pawcoins
             </button>
         </div>
 
-        <!-- FINANCIAL UTILITY SUITE -->
-        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-xs">
-            <h2 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">🧮 Fast Expense Tracker</h2>
-            <div class="space-y-3">
-                <div class="grid grid-cols-2 gap-2">
-                    <input type="text" id="expense-name" placeholder="Item (e.g., Coffee)" class="w-full text-sm p-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:outline-indigo-500">
-                    <input type="number" id="expense-amount" placeholder="Amount (₱)" class="w-full text-sm p-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:outline-indigo-500">
+        <!-- REVENUE GENERATING FINANCIAL UTILITY SUITE -->
+        <div class="card">
+            <span class="card-title">🧮 Fast Expense Tracker</span>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px;">
+                <div class="grid-2">
+                    <input type="text" id="expense-name" placeholder="Item (e.g., Coffee)" class="input-field">
+                    <input type="number" id="expense-amount" placeholder="Amount (₱)" class="input-field">
                 </div>
-                <button onclick="addExpense()" class="w-full bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold py-2.5 rounded-xl transition">
+                <button onclick="addExpense()" class="btn-secondary" style="background-color: #1e293b; color: #ffffff; border: none; padding: 10px; font-size: 12px;">
                     Add Expense Element
                 </button>
-                <div class="pt-2 border-t border-slate-100 flex justify-between items-center text-sm font-semibold text-slate-700">
-                    <span>Total Outflow Today:</span>
-                    <span class="text-rose-600">₱<span id="total-expenses">0.00</span></span>
-                </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 700; padding-top: 8px; border-top: 1px solid #f1f5f9; color: #334155;">
+                <span>Total Outflow Today:</span>
+                <span style="color: #e11d48;">₱<span id="total-expenses">0.00</span></span>
             </div>
         </div>
 
-        <!-- HEALTH & VITALS LOG -->
-        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-xs">
-            <h2 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">🍏 Vitals & Healthy Logging</h2>
-            <div class="grid grid-cols-2 gap-3 mb-3">
-                <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl">
-                    <span class="text-xs font-medium text-slate-400 block mb-1">Blood Sugar</span>
-                    <input type="text" placeholder="e.g., 95 mg/dL" class="w-full text-xs font-bold bg-transparent text-slate-800 border-b border-slate-200 focus:outline-none focus:border-indigo-500 pb-1">
+        <!-- REVENUE GENERATING HEALTH COMPONENT -->
+        <div class="card">
+            <span class="card-title">🍏 Vitals & Healthy Logging</span>
+            <div class="grid-2" style="margin-bottom: 10px;">
+                <div style="background-color: #f8fafc; border: 1px solid #f1f5f9; padding: 8px 12px; border-radius: 12px;">
+                    <span style="font-size: 10px; color: #94a3b8; font-weight: 500; display: block; margin-bottom: 2px;">Blood Sugar</span>
+                    <input type="text" placeholder="e.g., 95 mg/dL" style="width: 100%; border: none; background: transparent; font-size: 13px; font-weight: 700; outline: none; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px;">
                 </div>
-                <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl">
-                    <span class="text-xs font-medium text-slate-400 block mb-1">Cholesterol</span>
-                    <input type="text" placeholder="e.g., 180 mg/dL" class="w-full text-xs font-bold bg-transparent text-slate-800 border-b border-slate-200 focus:outline-none focus:border-indigo-500 pb-1">
+                <div style="background-color: #f8fafc; border: 1px solid #f1f5f9; padding: 8px 12px; border-radius: 12px;">
+                    <span style="font-size: 10px; color: #94a3b8; font-weight: 500; display: block; margin-bottom: 2px;">Cholesterol</span>
+                    <input type="text" placeholder="e.g., 180 mg/dL" style="width: 100%; border: none; background: transparent; font-size: 13px; font-weight: 700; outline: none; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px;">
                 </div>
             </div>
-            <button onclick="triggerRewardedAd('Health Summary Unlock')" class="w-full border border-dashed border-indigo-200 hover:bg-indigo-50/50 text-indigo-600 text-xs font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-1.5">
+            <button onclick="triggerRewardedAd('Health Summary Unlock')" class="btn-secondary" style="border-style: dashed; border-color: #cbd5e1; color: #4f46e5; font-size: 12px; padding: 8px;">
                 🔒 Watch Ad to Calculate BMI Index
             </button>
         </div>
 
-        <div class="ad-placeholder h-24 rounded-xl flex items-center justify-center text-xs font-medium text-slate-400">
-            [ AdMob Banner #3 - Mid Content Block ]
-        </div>
+        <!-- NATIVE AD CONTAINER #3: MID CONTENT BANNER BLOCK -->
+        <div class="ad-box" style="height: 60px; margin-bottom: 16px;">[ AdMob Banner #3 - Mid Content Block ]</div>
 
     </main>
 
-    <!-- FIXED STICKY FOOTER AD UNITS -->
-    <footer class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t border-slate-100 shadow-lg p-2 z-50 space-y-1">
-        <div class="grid grid-cols-2 gap-1.5">
-            <div class="ad-placeholder h-11 rounded-md flex items-center justify-center text-[10px] text-slate-400">[ Banner #4 - Footer Left ]</div>
-            <div class="ad-placeholder h-11 rounded-md flex items-center justify-center text-[10px] text-slate-400">[ Banner #5 - Footer Right ]</div>
-        </div>
-    </footer>
+    <!-- FIXED NATIVE STICKY FOOTER AD UNITS -->
+    <div class="footer-ads">
+        <div class="ad-box" style="height: 48px; font-size: 9px;">[ Banner #4 - Footer Left ]</div>
+        <div class="ad-box" style="height: 48px; font-size: 9px;">[ Banner #5 - Footer Right ]</div>
+    </div>
     <!-- DATABASE CDN SCRIPTS -->
     <script src="https://jsdelivr.net"></script>
 
@@ -263,18 +298,18 @@
                 const dayEl = document.getElementById(`streak-d${i}`);
                 if (dayEl) {
                     if (i <= currentStreak) {
-                        dayEl.className = "bg-emerald-50 border border-emerald-200 rounded-xl p-1.5 text-emerald-700 font-semibold shadow-2xs";
+                        dayEl.className = "streak-day streak-day-active";
                     } else if (i === currentStreak + 1) {
-                        dayEl.className = "bg-indigo-50 border-2 border-dashed border-indigo-400 rounded-xl p-1.5 animate-pulse";
+                        dayEl.className = "streak-day streak-day-current";
                     } else {
-                        dayEl.className = "bg-slate-50 border border-slate-100 rounded-xl p-1.5 text-slate-700";
+                        dayEl.className = "streak-day";
                     }
                 }
             }
 
             const authContainer = document.getElementById('auth-ui-container');
             if (currentUser && authContainer) {
-                authContainer.innerHTML = `<span class="text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-3 py-1.5 rounded-xl flex items-center gap-1">✨ User: ${currentUser.email.split('@')[0]}</span>`;
+                authContainer.innerHTML = `<span style="font-size:11px; font-weight:700; color:#4f46e5; background-color:#f5f3ff; border:1px solid #ddd6fe; padding:6px 10px; border-radius:8px;">✨ Active</span>`;
             }
         }
 
@@ -369,7 +404,7 @@
             document.getElementById('spins-count').innerText = 5 - dailySpinsUsed;
             if (dailySpinsUsed >= 5) {
                 document.getElementById('spin-btn').disabled = true;
-                document.getElementById('spin-btn').classList.replace('bg-emerald-600', 'bg-slate-300');
+                document.getElementById('spin-btn').style.backgroundColor = '#cbd5e1';
             }
             
             alert(`🎉 Congratulations! The wheel landed on +${wonPrize} Pawcoins!`);
