@@ -21,30 +21,127 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: 3. Fetch Bulletproof Engine Scaffolding
+    - name: 3. Generate Pristine Android Structural Files via Python
+      shell: python
       run: |
-        rm -rf sandbox settings.gradle settings.gradle.kts build.gradle build.gradle.kts
-        mkdir -p sandbox/app/src/main/java/com/example/textutility
+        import os
         
-        curl -s https://github.com -o sandbox/settings.gradle.kts
-        curl -s https://github.com -o sandbox/build.gradle.kts
-        curl -s https://github.com -o sandbox/app/build.gradle.kts
+        # Create standard directory trees
+        os.makedirs("sandbox/app/src/main/java/com/example/textutility", exist_ok=True)
         
-        mkdir -p sandbox/app/src/main
-        curl -s https://github.com -o sandbox/app/src/main/AndroidManifest.xml
-        curl -s https://github.com -o sandbox/app/src/main/java/com/example/textutility/MainActivity.kt
+        # 1. Write settings.gradle.kts (Minimalist & Clean)
+        with open("sandbox/settings.gradle.kts", "w") as f:
+            f.write(
+                'pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }\n'
+                'dependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS); repositories { google(); mavenCentral() } }\n'
+                'rootProject.name = "TextUtility"\n'
+                'include(":app")\n'
+            )
+            
+        # 2. Write root build.gradle.kts
+        with open("sandbox/build.gradle.kts", "w") as f:
+            f.write(
+                'plugins { id("com.android.application") version "8.2.2" apply false; id("org.jetbrains.kotlin.android") version "1.9.22" apply false }\n'
+            )
+            
+        # 3. Write app/build.gradle.kts (Optimized for low-RAM compilation profiles)
+        with open("sandbox/app/build.gradle.kts", "w") as f:
+            f.write(
+                'plugins { id("com.android.application"); id("org.jetbrains.kotlin.android") }\n'
+                'android {\n'
+                '    namespace = "com.example.textutility"\n'
+                '    compileSdk = 34\n'
+                '    defaultConfig { applicationId = "com.example.textutility"; minSdk = 24; targetSdk = 34; versionCode = 1; versionName = "1.0" }\n'
+                '    buildTypes { release { isMinifyEnabled = false } }\n'
+                '    compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }\n'
+                '    kotlinOptions { jvmTarget = "17" }\n'
+                '    buildFeatures { compose = true }\n'
+                '    composeOptions { kotlinCompilerExtensionVersion = "1.5.8" }\n'
+                '}\n'
+                'dependencies {\n'
+                '    implementation("androidx.core:core-ktx:1.12.0")\n'
+                '    implementation("androidx.activity:activity-compose:1.8.2")\n'
+                '    implementation("androidx.compose.ui:ui:1.6.1")\n'
+                '    implementation("androidx.compose.material3:material3:1.2.0")\n'
+                '}\n'
+            )
 
-    - name: 4. Setup Gradle Environments & Dependency Resolution
+        # 4. Write Manifest Schema
+        with open("sandbox/app/src/main/AndroidManifest.xml", "w") as f:
+            f.write(
+                '<manifest xmlns:android="http://android.com">\n'
+                '    <application android:allowBackup="true" android:label="TextUtility" android:supportsRtl="true" android:theme="@android:style/Theme.DeviceDefault.NoActionBar">\n'
+                '        <activity android:name="com.example.textutility.MainActivity" android:exported="true">\n'
+                '            <intent-filter>\n'
+                '                <action android:name="android.intent.action.MAIN" />\n'
+                '                <category android:name="android.intent.category.LAUNCHER" />\n'
+                '            </intent-filter>\n'
+                '        </activity>\n'
+            '    </application>\n'
+            '</manifest>\n'
+            )
+
+        # 5. Write pure MainActivity.kt Core Engine
+        with open("sandbox/app/src/main/java/com/example/textutility/MainActivity.kt", "w") as f:
+            f.write(
+                'package com.example.textutility\n'
+                'import android.content.ClipData\n'
+                'import android.content.ClipboardManager\n'
+                'import android.content.Context\n'
+                'import android.os.Bundle\n'
+                'import android.widget.Toast\n'
+                'import androidx.activity.ComponentActivity\n'
+                'import androidx.activity.compose.setContent\n'
+                'import androidx.compose.foundation.layout.*\n'
+                'import androidx.compose.material3.*\n'
+                'import androidx.compose.runtime.*\n'
+                'import androidx.compose.ui.Modifier\n'
+                'import androidx.compose.ui.platform.LocalContext\n'
+                'import androidx.compose.ui.unit.dp\n'
+                'class MainActivity : ComponentActivity() {\n'
+                '    override fun onCreate(savedInstanceState: Bundle?) {\n'
+                '        super.onCreate(savedInstanceState)\n'
+                '        setContent {\n'
+                '            MaterialTheme(colorScheme = darkColorScheme()) {\n'
+                '                Surface(modifier = Modifier.fillMaxSize()) {\n'
+                '                    var text by remember { mutableStateOf("") }\n'
+                '                    var out by remember { mutableStateOf("") }\n'
+                '                    val ctx = LocalContext.current\n'
+                '                    Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {\n'
+                '                        Text("TextUtility Engine", style = MaterialTheme.typography.headlineMedium)\n'
+                '                        Text("Chars: " + text.length)\n'
+                '                        OutlinedTextField(value = text, onValueChange = { text = it }, label = { Text("Input") }, modifier = Modifier.fillMaxWidth().height(120.dp))\n'
+                '                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {\n'
+                '                            Button(onClick = { out = text.uppercase() }) { Text("UPPER") }\n'
+                '                            Button(onClick = { out = text.lowercase() }) { Text("LOWER") }\n'
+                '                            Button(onClick = { out = text.replace("\\\\s+".toRegex(), " ").trim() }) { Text("CLEAN") }\n'
+                '                        }\n'
+                '                        OutlinedTextField(value = out, onValueChange = {}, readOnly = true, label = { Text("Result") }, modifier = Modifier.fillMaxWidth().height(120.dp))\n'
+                '                        Button(onClick = {\n'
+                '                            if(out.isNotEmpty()) {\n'
+                '                                val cb = ctx.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager\n'
+                '                                cb.setPrimaryClip(ClipData.newPlainText("out", out))\n'
+                '                                Toast.makeText(ctx, "Copied!", Toast.LENGTH_SHORT).show()\n'
+                '                            }\n'
+                '                        }, modifier = Modifier.fillMaxWidth()) { Text("Copy Data") }\n'
+                '                    }\n'
+                '                }\n'
+                '            }\n'
+                '        }\n'
+                '    }\n'
+                '}\n'
+            )
+
+    - name: 4. Setup Gradle Build Automation Environment
       uses: gradle/actions/setup-gradle@v4
       with:
         build-root-directory: sandbox
 
-    - name: 5. Execute Final Production APK Compilation
+    - name: 5. Compile Low-Memory Production Debug APK
       run: gradle :app:assembleDebug --no-daemon
       working-directory: sandbox
       env:
-        # Restricts memory usage to a safe 2GB ceiling with optimized garbage collection configuration parameters
-        GRADLE_OPTS: "-Xmx2048m -XX:MaxMetaspaceSize=512m -XX:+UseParallelGC"
+        GRADLE_OPTS: "-Xmx2560m -XX:MaxMetaspaceSize=512m -XX:+UseParallelGC"
 
     - name: 6. Output Signed Application Package Binary
       uses: actions/upload-artifact@v4
