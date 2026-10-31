@@ -27,21 +27,15 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Initialize Web Directory Environment
+      - name: Initialize Web Directory Deployment
         run: |
           mkdir -p public
           cp index.html public/
-          npm init -y
-          npm install @capacitor/core@6 @capacitor/cli@6
-
-      - name: Configure Capacitor Project
-        run: |
-          npx cap init WhiskerPaws com.mycompany.whiskerpaws --web-dir=public
+          npm install
 
       - name: Inject Android Platform Dependencies
         run: |
-          npm install @capacitor/android@6
-          npx cap add android
+          npx cap add android || true
           npx cap sync android
 
       - name: Resolve Duplicate Kotlin Dependency Clashes
