@@ -32,7 +32,7 @@ jobs:
           mkdir -p public
           cp index.html public/
           npm init -y
-          npm install @capacitor/core @capacitor/cli
+          npm install @capacitor/core@6 @capacitor/cli@6
 
       - name: Configure Capacitor Project
         run: |
@@ -40,9 +40,19 @@ jobs:
 
       - name: Inject Android Platform Dependencies
         run: |
-          npm install @capacitor/android
+          npm install @capacitor/android@6
           npx cap add android
           npx cap sync android
+
+      - name: Resolve Duplicate Kotlin Dependency Clashes
+        run: |
+          echo "configurations.all {
+              resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+                  if (details.requested.group == 'org.jetbrains.kotlin') {
+                      details.useVersion '1.9.20'
+                  }
+              }
+          }" >> android/build.gradle
 
       - name: Setup Java Development Kit (JDK)
         uses: actions/setup-java@v4
