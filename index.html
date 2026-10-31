@@ -1,14 +1,221 @@
-        <!-- BALANCED LUCKY WHEEL WITH STATUS CANVAS -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WhiskerPaws Mobile</title>
+    <!-- GOOGLE ADMOB H5 ADVANCED MONETIZATION SDK ENGINE -->
+    <script async src="https://googlesyndication.com" crossorigin="anonymous"></script>
+    <script>
+        window.adsbygoogle = window.adsbygoogle || [];
+        adsbygoogle.push({
+            params: {
+                google_ad_layout_key: "ca-app-pub-6655685917040449~5170056805"
+            }
+        });
+    </script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background-color: #f8fafc; 
+            color: #1e293b; 
+            width: 100%; 
+            min-height: 100vh;
+            display: flex; 
+            flex-direction: column; 
+            padding-bottom: 90px; 
+            overflow-x: hidden;
+        }
+        header { 
+            background-color: #ffffff; 
+            border-bottom: 1px solid #e2e8f0; 
+            padding: 14px 16px; 
+            position: sticky; 
+            top: 0; 
+            z-index: 50; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02); 
+        }
+        .header-brand { display: flex; align-items: center; gap: 8px; }
+        .header-title { font-size: 18px; font-weight: 700; color: #0f172a; letter-spacing: -0.5px; }
+        
+        .ticker-wrap { background-color: #f1f5f9; padding: 10px 0; overflow: hidden; position: sticky; top: 53px; z-index: 40; border-bottom: 1px solid #e2e8f0; width: 100%; }
+        .ticker { display: inline-block; white-space: nowrap; padding-left: 100%; font-size: 12px; font-weight: 600; color: #4f46e5; animation: marquee 25s linear infinite; }
+        @keyframes marquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+        
+        main { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 16px; width: 100%; }
+        .card { background-color: #ffffff; border-radius: 16px; padding: 16px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01); width: 100%; display: block; clear: both; }
+        .card-title { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+        
+        /* HARD-PROPIETARY MOBILE BUTTON MECHANICS */
+        .btn-primary { width: 100%; background-color: #4f46e5; color: #ffffff; border: none; padding: 14px; border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 4px; text-align: center; }
+        .btn-secondary { width: 100%; background-color: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; padding: 12px; border-radius: 12px; font-weight: 600; font-size: 13px; cursor: pointer; display: flex; justify-content: center; align-items: center; text-align: center; }
+        .btn-spin { width: 100%; background-color: #059669; color: #ffffff; border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 8px; display: block; text-align: center; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-top: 4px; }
+        .input-field { width: 100%; background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 12px; font-size: 14px; outline: none; margin-bottom: 8px; display: block; }
+        
+        .task-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 12px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 8px; width: 100%; clear: both; }
+        .task-left { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: #334155; }
+        .task-coin { font-size: 12px; font-weight: 700; color: #059669; white-space: nowrap; }
+        
+        .footer-ads { position: fixed; bottom: 0; left: 0; right: 0; background-color: #ffffff; border-top: 1px solid #e2e8f0; padding: 8px; display: grid; grid-template-columns: 1fr; z-index: 100; box-shadow: 0 -4px 6px rgba(0,0,0,0.02); text-align: center; }
+        .streak-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 12px; width: 100%; }
+        .streak-day { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px 4px; text-align: center; }
+        .streak-day-active { background-color: #ecfdf5; border-color: #10b981; color: #065f46; font-weight: 600; }
+        .streak-day-current { border: 2px dashed #4f46e5; background-color: #f5f3ff; }
+        .streak-lbl { font-size: 9px; color: #94a3b8; display: block; margin-bottom: 2px; }
+        .streak-val { font-size: 11px; font-weight: 700; }
+        .progress-bar { width: 100%; background-color: #f1f5f9; height: 10px; border-radius: 9999px; overflow: hidden; margin: 8px 0; }
+        .progress-fill { background-color: #4f46e5; height: 100%; width: 72%; border-radius: 9999px; }
+        
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.4); display: none; justify-content: center; align-items: center; z-index: 200; padding: 20px; }
+        .modal-box { background-color: #ffffff; border-radius: 16px; padding: 20px; width: 100%; max-width: 320px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
+        .modal-title { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
+        
+        .payment-method-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 8px; background-color: #fff; width: 100%; }
+        .payment-logo { font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+        .badge-uno { color: #1e3a8a; background-color: #dbeafe; padding: 8px 16px; border: 1px solid #bfdbfe; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .badge-gcash { color: #1e40af; background-color: #eff6ff; padding: 8px 16px; border: 1px solid #bfdbfe; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .badge-maya { color: #065f46; background-color: #ecfdf5; padding: 8px 16px; border: 1px solid #a7f3d0; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .ad-box { background: repeating-linear-stripes(-45deg, #e2e8f0, #e2e8f0 10px, #f1f5f9 10px, #f1f5f9 20px); border: 1px solid #cbd5e1; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 11px; font-weight: 500; text-align: center; width: 100%; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-brand">
+            <span style="font-size: 22px;">🐱</span>
+            <h1 class="header-title">WhiskerPaws</h1>
+        </div>
+        <div id="auth-ui-container" style="display: flex; gap: 6px;">
+            <button onclick="openAuthModal('login')" style="background-color:#f1f5f9; border:1px solid #e2e8f0; color:#334155; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:600; cursor:pointer;">Log In</button>
+            <button onclick="openAuthModal('signup')" style="background-color:#4f46e5; border:none; color:#ffffff; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:600; cursor:pointer;">Join</button>
+        </div>
+    </header>
+
+    <!-- ACCOUNT CREATION POPUP CARDS -->
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div id="modal-header-title" class="modal-title">Create Account</div>
+            <input type="text" id="auth-email-input" placeholder="Account Email" class="input-field">
+            <input type="password" id="auth-pass-input" placeholder="Password (min 6 chars)" class="input-field">
+            <div class="grid-2">
+                <button onclick="closeAuthModal()" class="btn-secondary">Cancel</button>
+                <button onclick="submitAuthForm()" class="btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WITHDRAW PHONE POPUP CARDS -->
+    <div id="cashout-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div id="cashout-modal-title" class="modal-title">Withdraw Balance</div>
+            <p style="font-size: 11px; color: #64748b; margin-bottom: 10px;">Enter your registered 11-digit local mobile account number:</p>
+            <input type="number" id="cashout-phone-input" placeholder="e.g. 0927XXXXXXX" class="input-field">
+            <div class="grid-2">
+                <button onclick="closeCashoutModal()" class="btn-secondary">Cancel</button>
+                <button onclick="submitCashoutForm()" class="btn-primary" style="background-color: #059669;">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="ticker-wrap">
+        <div class="ticker">
+            🐾 Welcome to WhiskerPaws Mobile! • 🎡 Spin the Lucky Wheel 5x daily for massive bonus rewards! • ⚡ Start Passive Mining to secure constant Pawcoins! • 💳 Payout threshold is 1,000 Coins ($1.00) via local GCash, Maya, or ONE Wallet standard economics. •
+        </div>
+    </div>
+
+    <div style="padding: 16px 16px 0 16px; width: 100%;">
+        <div class="ad-box" style="height: 50px;">[ AdMob Banner #1 - Native Mobile Header Unit ]</div>
+    </div>
+    <main>
+        <!-- NATIVE COMPONENT: 7-DAY LOGIN STREAK REWARDS -->
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-size: 14px; font-weight: 700; color: #1e293b;">🎁 Daily Check-in Streak</span>
+                <span style="font-size: 12px; font-weight: 700; color: #4f46e5;">Streak: <span id="streak-days-count">0</span> Days</span>
+            </div>
+            <div class="streak-grid">
+                <div id="streak-d1" class="streak-day"><span class="streak-lbl">D1</span><span class="streak-val">+10</span></div>
+                <div id="streak-d2" class="streak-day"><span class="streak-lbl">D2</span><span class="streak-val">+20</span></div>
+                <div id="streak-d3" class="streak-day"><span class="streak-lbl">D3</span><span class="streak-val">+30</span></div>
+                <div id="streak-d4" class="streak-day"><span class="streak-lbl">D4</span><span class="streak-val">+40</span></div>
+                <div id="streak-d5" class="streak-day"><span class="streak-lbl">D5</span><span class="streak-val">+50</span></div>
+                <div id="streak-d6" class="streak-day"><span class="streak-lbl">D6</span><span class="streak-val">+60</span></div>
+                <div id="streak-d7" class="streak-day" style="background-color: #fffbeb; border-color: #f59e0b;"><span class="streak-lbl" style="color: #b45309;">🔥</span><span class="streak-val" style="color: #b45309;">+100</span></div>
+            </div>
+            <div class="grid-2">
+                <button onclick="claimDailyStreak(false)" id="streak-claim-btn" class="btn-secondary">Claim Today</button>
+                <button onclick="claimDailyStreak(true)" id="streak-double-btn" class="btn-primary">🎬 Double Up</button>
+            </div>
+        </div>
+
+        <!-- ACCOUNT WALLET BALANCES CARD -->
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 12px; font-weight: 600; color: #64748b;">Wallet Account</span>
+                <span style="font-size: 11px; font-weight: 700; color: #b45309; background-color: #fffbeb; padding: 2px 6px; border-radius: 9999px;">1,000 Coins = $1.00</span>
+            </div>
+            <div style="font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 12px; display: flex; align-items: baseline; gap: 6px;">
+                🪙 <span id="coin-balance">120</span> <span style="font-size: 12px; font-weight: 600; color: #94a3b8;">Pawcoins (~₱<span id="php-balance">6.00</span>)</span>
+            </div>
+            <button onclick="triggerRewardedAd('Mining')" class="btn-primary">
+                ⚡ Start Passive Mining (Earn Coins)
+            </button>
+        </div>
+
+        <!-- LOCAL PAYOUT CONVERSION LEDGER -->
+        <div class="card" style="border: 1px solid #cbd5e1; background-color: #f8fafc;">
+            <span class="card-title" style="color: #0f172a; font-size: 15px;">💸 Local Cashout Conversion Hub</span>
+            <p style="font-size: 12px; color: #64748b; margin-bottom: 10px; line-height: 1.4;">Convert your gathered Pawcoins directly into real economics. Select tier options below to transfer balance:</p>
+            
+            <div style="margin-bottom: 12px; width: 100%;">
+                <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Choose Incentive Tier (PHP):</label>
+                <select id="cashout-tier" class="input-field" style="background-color: #fff; width: 100%;">
+                    <option value="10">₱10.00 Tier (Requires 171 Coins)</option>
+                    <option value="20">₱20.00 Tier (Requires 342 Coins)</option>
+                    <option value="50">₱50.00 Tier (Requires 855 Coins)</option>
+                    <option value="100">₱100.00 Tier (Requires 1,710 Coins)</option>
+                    <option value="500">₱500.00 Tier (Requires 8,550 Coins)</option>
+                    <option value="1000">₱1,000.00 Tier (Requires 17,100 Coins)</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 12px; width: 100%;">
+                <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Referral Requirement (If you have no ONE Wallet):</label>
+                <input type="text" id="referral-code-input" placeholder="Enter referral code (e.g. V98HAR)" class="input-field" style="background-color: #fff; width: 100%;">
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 6px; width: 100%;">
+                <div class="payment-method-row">
+                    <span class="payment-logo" style="color: #1e3a8a;"><span style="color:#2563eb;">ONE</span> Wallet</span>
+                    <button onclick="initiateCashout('ONE Wallet')" class="badge-uno">Withdraw</button>
+                </div>
+                <div class="payment-method-row">
+                    <span class="payment-logo" style="color: #1e40af;">🌐 GCash</span>
+                    <button onclick="initiateCashout('GCash')" class="badge-gcash">Withdraw</button>
+                </div>
+                <div class="payment-method-row">
+                    <span class="payment-logo" style="color: #065f46;">💚 Maya</span>
+                    <button onclick="initiateCashout('Maya')" class="badge-maya">Withdraw</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- BALANCED LUCKY WHEEL WITH VISUAL CANVAS BOX -->
         <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                 <span class="card-title">🎡 Lucky Paws Spin</span>
                 <span style="font-size: 10px; font-weight: 700; color: #64748b; background-color: #f1f5f9; padding: 2px 8px; border-radius: 9999px;">Spins Left: <span id="spins-count">5</span>/5</span>
             </div>
             
-            <!-- Virtual Roulette Display Graphic Asset -->
             <div id="wheel-visual-box" style="width: 100%; background: radial-gradient(circle, #312e81 0%, #1e1b4b 100%); border-radius: 12px; height: 90px; margin: 8px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; font-weight: 700; border: 2px solid #4f46e5; transition: all 1s ease-out;">
                 <div style="font-size: 24px;" id="wheel-display-icon">🎰</div>
-                <div style="font-size: 11px; color: #a5b4fc; text-transform: uppercase; tracking-wider; margin-top: 4px;" id="wheel-status-text">Ready to Spin</div>
+                <div style="font-size: 11px; color: #a5b4fc; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;" id="wheel-status-text">Ready to Spin</div>
             </div>
             
             <p style="font-size: 11px; color: #64748b; margin-bottom: 12px; line-height: 1.4;">Watch an ad break to spin the random roulette wheel. Drop rates are balanced to protect app economics!</p>
@@ -17,15 +224,14 @@
             </button>
         </div>
 
-        <!-- NEW HIGH-RETENTION RESOURCE: HIGHER OR LOWER MINI GAME -->
+        <!-- COMPONENT: HIGHER OR LOWER CARD MINI-GAME -->
         <div class="card" style="border: 1px solid #e2e8f0; background: #faf5ff;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span class="card-title" style="color: #6b21a8; margin-bottom:0;">🎮 Higher or Lower Card Game</span>
+                <span class="card-title" style="color: #6b21a8; margin-bottom: 0;">🎮 Higher or Lower Card Game</span>
                 <span style="font-size: 10px; font-weight: 700; color: #6b21a8; background: #f3e8ff; padding: 2px 8px; border-radius: 8px;">Cost: 1 Ad Break</span>
             </div>
             
-            <!-- Dynamic Mini Game Arena Container -->
-            <div style="background: white; border-radius: 12px; padding: 12px; text-align: center; border: 1px solid #e9d5ff; margin-bottom: 10px;">
+            <div style="background: white; border-radius: 12px; padding: 12px; text-align: center; border: 1px solid #e9d5ff; margin-bottom: 10px; width: 100%;">
                 <div style="font-size: 11px; color: #9333ea; font-weight: 600; margin-bottom: 4px;">Current Card Value:</div>
                 <div id="game-card-display" style="font-size: 28px; font-weight: 800; color: #581c87; margin-bottom: 8px;">7</div>
                 <div id="game-feedback-text" style="font-size: 11px; color: #6b7280; min-height: 16px;">Guess if the next hidden card is Higher or Lower!</div>
@@ -36,29 +242,171 @@
                 <button onclick="playMiniGame('lower')" class="btn-secondary" style="border-color: #d8b4fe; color: #6b21a8; background: #fdfafe;">🔻 Lower</button>
             </div>
         </div>
-
         <!-- DAILY CHECKLIST HUB -->
         <div class="card">
             <span class="card-title">📋 Daily Routine Tasks</span>
             <div class="task-row">
                 <div class="task-left">
-                    <input type="checkbox" onchange="completeTask(this, 10)" style="width: 16px; height: 16px; accent-color: #4f46e5;">
+                    <input type="checkbox" onchange="completeTask(this, 10)" style="width: 18px; height: 18px; accent-color: #4f46e5; margin-right: 6px;">
                     <span>Log a complete Pomodoro slot</span>
                 </div>
                 <span class="task-coin">+10 Coins</span>
             </div>
             <div class="task-row">
                 <div class="task-left">
-                    <input type="checkbox" onchange="completeTask(this, 5)" style="width: 16px; height: 16px; accent-color: #4f46e5;">
+                    <input type="checkbox" onchange="completeTask(this, 5)" style="width: 18px; height: 18px; accent-color: #4f46e5; margin-right: 6px;">
                     <span>Track current daily expenses</span>
                 </div>
                 <span class="task-coin">+5 Coins</span>
             </div>
             <div class="task-row">
                 <div class="task-left">
-                    <input type="checkbox" onchange="completeTask(this, 5)" style="width: 16px; height: 16px; accent-color: #4f46e5;">
+                    <input type="checkbox" onchange="completeTask(this, 5)" style="width: 18px; height: 18px; accent-color: #4f46e5; margin-right: 6px;">
                     <span>Record water intake (8 glasses)</span>
                 </div>
                 <span class="task-coin">+5 Coins</span>
             </div>
         </div>
+
+        <!-- PRODUCTION GOOGLE ADMOB BANNER #2: UTILITY BREAK -->
+        <div style="width: 100%; text-align: center; overflow: hidden; margin: 8px 0; clear: both;">
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:320px;height:50px"
+                 data-ad-client="ca-pub-6655685917040449"
+                 data-ad-slot="1985937373"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            <span onclick="triggerRewardedAd('Bonus Multiplier')" style="font-size: 11px; font-weight: 700; color: #4f46e5; text-decoration: underline; margin-top: 6px; display: block; cursor: pointer;">Watch video for +20 Instant Coins</span>
+        </div>
+
+        <!-- PASSIVE PASOMETER STEP COUNTER UNIT -->
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="card-title" style="margin-bottom: 0;">🚶 Daily Step Tracker</span>
+                <span style="font-size: 12px; font-weight: 700; color: #4f46e5;">Goal: 5,000</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 10px; color: #475569;">
+                <span>Current: <b>3,600 steps</b></span>
+                <span style="color: #059669; font-weight: 700;">+15 Coins Available</span>
+            </div>
+            <button onclick="triggerRewardedAd('Claim Step Bonus')" class="btn-secondary">
+                Claim Milestone Pawcoins
+            </button>
+        </div>
+
+        <!-- REVENUE GENERATING FINANCIAL UTILITY SUITE -->
+        <div class="card">
+            <span class="card-title">🧮 Fast Expense Tracker</span>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; width: 100%;">
+                <div class="grid-2">
+                    <input type="text" id="expense-name" placeholder="Item (e.g., Coffee)" class="input-field">
+                    <input type="number" id="expense-amount" placeholder="Amount (₱)" class="input-field">
+                </div>
+                <button onclick="addExpense()" class="btn-secondary" style="background-color: #1e293b; color: #ffffff; border: none; padding: 12px;">
+                    Add Expense Element
+                </button>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 700; padding-top: 8px; border-top: 1px solid #f1f5f9; color: #334155; width: 100%;">
+                <span>Total Outflow Today:</span>
+                <span style="color: #e11d48;">₱<span id="total-expenses">0.00</span></span>
+            </div>
+        </div>
+
+        <!-- REVENUE GENERATING HEALTH COMPONENT -->
+        <div class="card">
+            <span class="card-title">🍏 Vitals & Healthy Logging</span>
+            <div class="grid-2" style="margin-bottom: 10px;">
+                <div style="background-color: #f8fafc; border: 1px solid #f1f5f9; padding: 8px 12px; border-radius: 12px; width: 100%;">
+                    <span style="font-size: 10px; color: #94a3b8; font-weight: 500; display: block; margin-bottom: 2px;">Blood Sugar</span>
+                    <input type="text" placeholder="e.g., 95 mg/dL" style="width: 100%; border: none; background: transparent; font-size: 13px; font-weight: 700; outline: none; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px;">
+                </div>
+                <div style="background-color: #f8fafc; border: 1px solid #f1f5f9; padding: 8px 12px; border-radius: 12px; width: 100%;">
+                    <span style="font-size: 10px; color: #94a3b8; font-weight: 500; display: block; margin-bottom: 2px;">Cholesterol</span>
+                    <input type="text" placeholder="e.g., 180 mg/dL" style="width: 100%; border: none; background: transparent; font-size: 13px; font-weight: 700; outline: none; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px;">
+                </div>
+            </div>
+            <button onclick="triggerRewardedAd('Health Summary Unlock')" class="btn-secondary" style="border-style: dashed; border-color: #cbd5e1; color: #4f46e5; font-size: 12px; padding: 10px;">
+                🔒 Watch Ad to Calculate BMI Index
+            </button>
+        </div>
+
+        <!-- PRODUCTION GOOGLE ADMOB BANNER #3: MID CONTENT BREAK -->
+        <div style="width: 100%; text-align: center; overflow: hidden; margin-top: 8px; clear: both;">
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:320px;height:50px"
+                 data-ad-client="ca-pub-6655685917040449"
+                 data-ad-slot="1985937373"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+
+    </main>
+
+    <!-- PRODUCTION GOOGLE ADMOB BANNER #4: FIXED STICKY FOOTER -->
+    <div class="footer-ads">
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:320px;height:50px"
+             data-ad-client="ca-pub-6655685917040449"
+             data-ad-slot="1985937373"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- LINKING NATIVE STANDALONE SEPARATE JAVA ENGINE -->
+    <script src="app.js"></script>
+    
+    <script>
+        // Override standard placeholder simulation with true AdMob API hooks
+        const ORIGINAL_REWARD_AD_FUNCTION = triggerRewardedAd;
+        
+        // Hook into live Video Rewards Unit ID: ca-app-pub-6655685917040449/3704097744
+        triggerRewardedAd = function(featureName) {
+            console.log("Triggering live monetization container for: " + featureName);
+            
+            if (window.adsbygoogle && window.adsbygoogle.push) {
+                try {
+                    adsbygoogle.push({
+                        params: {
+                            google_ad_slot: "3704097744",
+                            google_ad_format: "rewarded",
+                            google_ad_callback: function(adResult) {
+                                if (adResult && adResult.status === 'completed') {
+                                    currentBalance += 20;
+                                    saveLocalData();
+                                    updateDisplay();
+                                    alert("✨ Reward Claimed! +20 Pawcoins added to your account for cashing the ad view slot.");
+                                }
+                            }
+                        }
+                    });
+                    return;
+                } catch(adError) {
+                    console.error("AdMob SDK execution fault, fallback triggered", adError);
+                }
+            }
+            ORIGINAL_REWARD_AD_FUNCTION(featureName);
+        };
+
+        // Override standard interstitial logic to call Unit ID: ca-app-pub-6655685917040449/6532163370
+        const ORIGINAL_SPIN_FUNCTION = playLuckySpin;
+        playLuckySpin = function() {
+            if (dailySpinsUsed >= 5) {
+                alert("🔒 You have reached your daily limit of 5 spins. Come back tomorrow!");
+                return;
+            }
+
+            if (window.adsbygoogle && window.adsbygoogle.push) {
+                try {
+                    adsbygoogle.push({
+                        params: {
+                            google_ad_slot: "6532163370",
+                            google_ad_format: "interstitial"
+                        }
+                    });
+                } catch(e) { console.warn("Interstitial display skipped", e); }
+            }
+            ORIGINAL_SPIN_FUNCTION();
+        };
+    </script>
+</body>
+</html>
