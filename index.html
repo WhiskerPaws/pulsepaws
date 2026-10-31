@@ -75,7 +75,7 @@
         .progress-bar { width: 100%; background-color: #f1f5f9; height: 10px; border-radius: 9999px; overflow: hidden; margin: 8px 0; }
         .progress-fill { background-color: #4f46e5; height: 100%; width: 72%; border-radius: 9999px; }
         
-        /* NATIVE INPUT OVERLAY WINDOW MODAL STYLES */
+        /* OVERLAY MODAL WINDOW STYLES */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.4); display: none; justify-content: center; align-items: center; z-index: 200; padding: 20px; }
         .modal-box { background-color: #ffffff; border-radius: 16px; padding: 20px; width: 100%; max-width: 320px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
         .modal-title { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
@@ -89,7 +89,7 @@
 </head>
 <body>
 
-    <!-- COMPACT MOBILE MAIN HEADER -->
+    <!-- COMPACT MOBILE HEADER -->
     <header>
         <div class="header-brand">
             <span style="font-size: 22px;">🐱</span>
@@ -101,28 +101,28 @@
         </div>
     </header>
 
-    <!-- AUTOMATED NATIVE OVERLAY FOR ACCOUNT LOGIN & SIGNUP -->
+    <!-- NATIVE POPUP FOR LOGIN & SIGNUP -->
     <div id="auth-modal" class="modal-overlay">
         <div class="modal-box">
             <div id="modal-header-title" class="modal-title">Create Account</div>
-            <input type="text" id="auth-email-input" placeholder="Account Email" class="input-field" style="background-color: #f8fafc;">
-            <input type="password" id="auth-pass-input" placeholder="Password (min 6 chars)" class="input-field" style="background-color: #f8fafc;">
+            <input type="text" id="auth-email-input" placeholder="Account Email" class="input-field">
+            <input type="password" id="auth-pass-input" placeholder="Password (min 6 chars)" class="input-field">
             <div class="grid-2" style="margin-top: 8px;">
-                <button onclick="closeAuthModal()" class="btn-secondary" style="padding: 10px;">Cancel</button>
-                <button onclick="submitAuthForm()" class="btn-primary" style="padding: 10px; font-size: 12px;">Submit</button>
+                <button onclick="closeAuthModal()" class="btn-secondary">Cancel</button>
+                <button onclick="submitAuthForm()" class="btn-primary">Submit</button>
             </div>
         </div>
     </div>
 
-    <!-- AUTOMATED NATIVE OVERLAY FOR MOBILE NUMBER CASHOUT INPUTS -->
+    <!-- NATIVE POPUP FOR CASHOUT INPUTS -->
     <div id="cashout-modal" class="modal-overlay">
         <div class="modal-box">
             <div id="cashout-modal-title" class="modal-title">Withdraw Balance</div>
-            <p style="font-size: 11px; color: #64748b; margin-bottom: 10px; line-height: 1.4;">Enter your registered 11-digit local mobile account number:</p>
-            <input type="number" id="cashout-phone-input" placeholder="e.g. 0927XXXXXXX" class="input-field" style="background-color: #f8fafc;">
+            <p style="font-size: 11px; color: #64748b; margin-bottom: 10px;">Enter your registered 11-digit local mobile account number:</p>
+            <input type="number" id="cashout-phone-input" placeholder="e.g. 0927XXXXXXX" class="input-field">
             <div class="grid-2" style="margin-top: 8px;">
-                <button onclick="closeCashoutModal()" class="btn-secondary" style="padding: 10px;">Cancel</button>
-                <button onclick="submitCashoutForm()" class="btn-primary" style="padding: 10px; font-size: 12px; background-color: #059669;">Confirm</button>
+                <button onclick="closeCashoutModal()" class="btn-secondary">Cancel</button>
+                <button onclick="submitCashoutForm()" class="btn-primary" style="background-color: #059669;">Confirm</button>
             </div>
         </div>
     </div>
@@ -266,7 +266,7 @@
                 <span>Current: <b>3,600 steps</b></span>
                 <span style="color: #059669; font-weight: 700;">+15 Coins Available</span>
             </div>
-            <button onclick="triggerRewardedAd('Claim Step Bonus')" class="btn-secondary" style="font-size: 12px; padding: 8px;">
+            <button onclick="triggerRewardedAd('Claim Step Bonus')" class="btn-secondary">
                 Claim Milestone Pawcoins
             </button>
         </div>
@@ -319,16 +319,18 @@
     </div>
     <!-- INTERACTIVE STANDALONE MOBILE LOGIC ENGINES -->
     <script>
-        // Persistent Memory Engine
+        // Stable Independent Offline Storage System
         let currentBalance = parseInt(localStorage.getItem('wp_balance')) || 120;
         let dailySpinsUsed = parseInt(localStorage.getItem('wp_spins_used')) || 0;
         let currentStreak = parseInt(localStorage.getItem('wp_streak')) || 0;
         let lastClaimDate = localStorage.getItem('wp_last_claim') || "";
         let runningExpenses = 0.00;
+        
+        // Track local mock session token
         let currentUser = localStorage.getItem('wp_user_logged') || null;
         let activeCashoutPlatform = "";
 
-        // Core Application Startup Sequence
+        // Initialize state on startup
         window.addEventListener('DOMContentLoaded', () => {
             const lastSpinDate = localStorage.getItem('wp_last_spin_date');
             const todayStr = new Date().toDateString();
@@ -341,6 +343,7 @@
             updateDisplay();
         });
 
+        // Sync local adjustments instantly to secure persistent database files
         function saveLocalData() {
             localStorage.setItem('wp_balance', currentBalance);
             localStorage.setItem('wp_streak', currentStreak);
@@ -351,10 +354,12 @@
         // Render dynamic dashboard metrics to user UI
         function updateDisplay() {
             document.getElementById('coin-balance').innerText = currentBalance;
+            // Native micro-economic math engine: 1 Pawcoin = 0.058 PHP
             document.getElementById('php-balance').innerText = (currentBalance * 0.058).toFixed(2);
             document.getElementById('spins-count').innerText = 5 - dailySpinsUsed;
             document.getElementById('streak-days-count').innerText = currentStreak;
 
+            // Handle Lucky Spin button state
             const spinBtn = document.getElementById('spin-btn');
             if (spinBtn) {
                 if (dailySpinsUsed >= 5) {
@@ -368,8 +373,9 @@
                 }
             }
 
+            // Update UI elements visually for active streak highlights
             for (let i = 1; i <= 7; i++) {
-                const dayEl = document.getElementById(`streak-d${i}`);
+                const dayEl = document.getElementById("streak-d" + i);
                 if (dayEl) {
                     if (i <= currentStreak) {
                         dayEl.className = "streak-day streak-day-active";
@@ -383,11 +389,11 @@
 
             const authContainer = document.getElementById('auth-ui-container');
             if (currentUser && authContainer) {
-                authContainer.innerHTML = `<span style="font-size:11px; font-weight:700; color:#4f46e5; background-color:#f5f3ff; border:1px solid #ddd6fe; padding:6px 10px; border-radius:8px;">✨ Active</span>`;
+                authContainer.innerHTML = '<span style="font-size:11px; font-weight:700; color:#4f46e5; background-color:#f5f3ff; border:1px solid #ddd6fe; padding:6px 10px; border-radius:8px;">✨ Active</span>';
             }
         }
 
-        // Account Modal Management
+        // NATIVE ACCOUNT OVERLAY INTERFACES MODAL MANAGER
         let activeAuthType = "signup";
         
         function openAuthModal(type) {
@@ -414,10 +420,10 @@
             currentUser = email;
             localStorage.setItem('wp_user_logged', email);
             closeAuthModal();
-            alert(`✨ Account Initialized!\nWelcome to WhiskerPaws. All app systems are now unfrozen!`);
+            alert("✨ Profile Session Initialized!\nWelcome to WhiskerPaws. All app systems are now unfrozen!");
             updateDisplay();
         }
-        // Native Payout Cashout Engine Handler
+        // NATIVE CASHOUT WITHDRAWAL CARDS INTERFACES MODAL MANAGER
         function initiateCashout(platformName) {
             if (!currentUser) {
                 alert("⚠️ Access Denied!\n\nPlease use the 'Join' or 'Log In' button in the upper header to register an active session first.");
@@ -426,20 +432,22 @@
 
             const chosenTierPhp = parseInt(document.getElementById('cashout-tier').value);
             const refCode = document.getElementById('referral-code-input').value.trim();
+
+            // Native coin metric validation check: 171 Coins = 10 PHP
             const coinsNeeded = Math.ceil(chosenTierPhp * 17.1);
 
             if (currentBalance < coinsNeeded) {
-                alert(`❌ Payout Failed!\n\nYou currently have ${currentBalance} Pawcoins. To withdraw the ₱${chosenTierPhp}.00 tier via ${platformName}, you need a minimum of ${coinsNeeded} Pawcoins.`);
+                alert("❌ Payout Failed!\n\nYou currently have " + currentBalance + " Pawcoins. To withdraw the ₱" + chosenTierPhp + ".00 tier via " + platformName + ", you need a minimum of " + coinsNeeded + " Pawcoins.");
                 return;
             }
 
             if (platformName !== 'ONE Wallet' && !refCode) {
-                alert(`🔑 Verification Needed!\n\nTo withdraw via ${platformName}, please enter your active promotional referral verification code first (e.g. V98HAR).`);
+                alert("🔑 Verification Needed!\n\nTo withdraw via " + platformName + ", please enter your active promotional referral verification code first (e.g. V98HAR).");
                 return;
             }
 
             activeCashoutPlatform = platformName;
-            document.getElementById('cashout-modal-title').innerText = `Withdraw via ${platformName}`;
+            document.getElementById('cashout-modal-title').innerText = "Withdraw via " + platformName;
             document.getElementById('cashout-modal').style.display = 'flex';
         }
 
@@ -463,7 +471,7 @@
             closeCashoutModal();
             updateDisplay();
 
-            alert(`🎉 Payout Requested Successfully!\n\nYour request for ₱${chosenTierPhp}.00 has been sent directly to the server ledger pipeline.\n\nFunds will arrive in your ${activeCashoutPlatform} account (${mobileNum}) within 24-48 verification hours!`);
+            alert("🎉 Payout Requested Successfully!\n\nYour request for ₱" + chosenTierPhp + ".00 has been sent directly to the server ledger pipeline.\n\nFunds will arrive in your " + activeCashoutPlatform + " account (" + mobileNum + ") within 24-48 verification hours!");
         }
 
         // Handle daily claim progressive checklist routines
@@ -474,9 +482,14 @@
                 return;
             }
 
-            // FIXED DATA MATRIX ARRAY
-            const rewardsMap =;
-            let rawReward = rewardsMap[currentStreak % 7];
+            // SAFE EMBEDDED CONVERSION MATRIX VALUE LOOPS
+            let rawReward = 10;
+            if (currentStreak === 1) rawReward = 20;
+            if (currentStreak === 2) rawReward = 30;
+            if (currentStreak === 3) rawReward = 40;
+            if (currentStreak === 4) rawReward = 50;
+            if (currentStreak === 5) rawReward = 60;
+            if (currentStreak === 6) rawReward = 100;
 
             if (isDoubleAd) {
                 alert("🎬 [AdMob SDK Call] Rendering rewarded interstitial break... High Margin Split active.");
@@ -487,7 +500,7 @@
             currentBalance += rawReward;
             lastClaimDate = todayStr;
 
-            alert(`🎉 Daily Claim Success! Added +${rawReward} Pawcoins to your account wallet.`);
+            alert("🎉 Daily Claim Success! Added +" + rawReward + " Pawcoins to your account wallet.");
             saveLocalData();
             updateDisplay();
         }
@@ -501,14 +514,17 @@
 
             alert("🎬 [AdMob SDK Call] Loading Rewarded Video ad prior to spinning standard mechanism...");
             
-            // FIXED DATA MATRIX ARRAY
-            const prizeTiers =;
-            const wonPrize = prizeTiers[Math.floor(Math.random() * prizeTiers.length)];
+            // SAFE EMBEDDED RANDOM VALUE LOGIC LOOPS
+            let randomRoll = Math.floor(Math.random() * 4);
+            let wonPrize = 10;
+            if (randomRoll === 1) wonPrize = 20;
+            if (randomRoll === 2) wonPrize = 50;
+            if (randomRoll === 3) wonPrize = 100;
             
             dailySpinsUsed++;
             currentBalance += wonPrize;
             
-            alert(`🎉 Congratulations! The wheel landed on +${wonPrize} Pawcoins!`);
+            alert("🎉 Congratulations! The wheel landed on +" + wonPrize + " Pawcoins!");
             saveLocalData();
             updateDisplay();
         }
@@ -517,7 +533,7 @@
         function completeTask(checkbox, rewardCoins) {
             if (checkbox.checked) {
                 currentBalance += rewardCoins;
-                alert(`✨ Task Completed! You collected +${rewardCoins} Pawcoins.`);
+                alert("✨ Task Completed! You collected +" + rewardCoins + " Pawcoins.");
             } else {
                 currentBalance -= rewardCoins;
             }
@@ -526,7 +542,6 @@
         }
 
         // Handle rapid budget expense metrics addition
-        width = "100%"; 
         function addExpense() {
             const nameEl = document.getElementById('expense-name');
             const amountEl = document.getElementById('expense-amount');
@@ -550,7 +565,7 @@
 
         // Handle structural programmatic ad component simulation prompts
         function triggerRewardedAd(featureName) {
-            alert(`🎬 [AdMob SDK Call Triggered]\nLoading a rewarded video ad to verify action for: "${featureName}".\n\nOnce finished, the application registers the 95% revenue split margin and releases 20 Pawcoins to the user wallet!`);
+            alert("🎬 [AdMob SDK Call Triggered]\nLoading a rewarded video ad to verify action for: \"" + featureName + "\".\n\nOnce finished, the application registers the 95% revenue split margin and releases 20 Pawcoins to the user wallet!");
             currentBalance += 20;
             saveLocalData();
             updateDisplay();
