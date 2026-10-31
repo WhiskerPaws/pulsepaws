@@ -23,11 +23,9 @@ jobs:
 
     - name: 3. Fetch Bulletproof Engine Scaffolding
       run: |
-        # Wipe any corrupted or half-written configuration structures
         rm -rf sandbox settings.gradle settings.gradle.kts build.gradle build.gradle.kts
         mkdir -p sandbox/app/src/main/java/com/example/textutility
         
-        # Download verified, syntax-safe structural templates directly from Github Gist raw storage
         curl -s https://github.com -o sandbox/settings.gradle.kts
         curl -s https://github.com -o sandbox/build.gradle.kts
         curl -s https://github.com -o sandbox/app/build.gradle.kts
@@ -42,8 +40,11 @@ jobs:
         build-root-directory: sandbox
 
     - name: 5. Execute Final Production APK Compilation
-      run: gradle :app:assembleDebug --stacktrace
+      run: gradle :app:assembleDebug --no-daemon
       working-directory: sandbox
+      env:
+        # Restricts memory usage to a safe 2GB ceiling with optimized garbage collection configuration parameters
+        GRADLE_OPTS: "-Xmx2048m -XX:MaxMetaspaceSize=512m -XX:+UseParallelGC"
 
     - name: 6. Output Signed Application Package Binary
       uses: actions/upload-artifact@v4
