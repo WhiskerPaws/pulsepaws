@@ -4,7 +4,7 @@
     <!-- INTERACTIVE SCRIPT LOGIC ENGINES -->
     <script>
         // Production Connection Keys
-        const SUPABASE_URL = "https://ddikgztnzuexjneaynup.supabase.co";
+        const SUPABASE_URL = "https://supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_AUHP-CPN4DsE8xhKDIkMvA_C80hCyLI";
         
         // Initialize Supabase Client Instance
@@ -47,3 +47,97 @@
             // Native micro-economic math engine: 1 Pawcoin = 0.05 PHP
             document.getElementById('php-balance').innerText = (currentBalance * 0.05).toFixed(2);
         }
+
+        // Handle automated account registration and login via email tracking
+        async function handleAuth(actionType) {
+            const email = prompt("Enter your account email:");
+            const password = prompt("Enter your password (min 6 characters):");
+
+            if (!email || !password) {
+                alert("Email and password fields are required.");
+                return;
+            }
+
+            let result;
+            if (actionType === 'signup') {
+                result = await supabase.auth.signUp({ email, password });
+                if (result.error) {
+                    alert(`Sign Up Failed: ${result.error.message}`);
+                    return;
+                }
+                alert("Registration submitted! If you turned on confirmation links, check your email inbox to verify.");
+            } else {
+                result = await supabase.auth.signInWithPassword({ email, password });
+                if (result.error) {
+                    alert(`Login Failed: ${result.error.message}`);
+                    return;
+                }
+                alert("Logged in successfully!");
+            }
+
+            if (result.data.user) {
+                currentUser = result.data.user;
+                await fetchCloudProfile();
+            }
+        }
+
+        // Live cloud saving engine to commit balances securely to Supabase profiles
+        async function syncBalanceToCloud() {
+            if (!currentUser) return; // Keep balances local if user is guest
+
+            const { error } = await supabase
+                .from('profiles')
+                .update({ pawcoin_balance: currentBalance })
+                .eq('id', currentUser.id);
+
+            if (error) {
+                console.error("Cloud synchronization failed:", error.message);
+            }
+        }
+
+        // Handle daily routine checklist rewards split
+        async function completeTask(checkbox, rewardCoins) {
+            if (checkbox.checked) {
+                currentBalance += rewardCoins;
+                alert(`✨ Task Completed! You collected +${rewardCoins} Pawcoins.`);
+            } else {
+                currentBalance -= rewardCoins;
+            }
+            updateDisplay();
+            await syncBalanceToCloud(); // Save instantly to user profile
+        }
+
+        // Handle fast mathematical expense addition
+        function addExpense() {
+            const nameEl = document.getElementById('expense-name');
+            const amountEl = document.getElementById('expense-amount');
+            const value = parseFloat(amountEl.value);
+
+            if (!nameEl.value || isNaN(value) || value <= 0) {
+                alert("Please input a valid product item name and budget weight.");
+                return;
+            }
+
+            runningExpenses += value;
+            document.getElementById('total-expenses').innerText = runningExpenses.toFixed(2);
+            
+            // Clean inputs
+            nameEl.value = '';
+            amountEl.value = '';
+            
+            // Interaction premium multiplier reward
+            currentBalance += 2;
+            updateDisplay();
+            syncBalanceToCloud();
+        }
+
+        // Handle structural AdMob rewarded SDK triggers
+        async function triggerRewardedAd(featureName) {
+            alert(`🎬 [AdMob SDK Call Triggered]\nLoading a rewarded video ad to verify action for: "${featureName}".\n\nOnce finished, the application registers the 95% revenue split margin and releases 20 Pawcoins to the user wallet!`);
+            currentBalance += 20;
+            updateDisplay();
+            await syncBalanceToCloud(); // Safely save ad rewards to database
+        }
+    </script>
+</body>
+</html>
