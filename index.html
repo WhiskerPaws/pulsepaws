@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WhiskerPaws Mobile</title>
+    <!-- EMBEDDED OFFLINE MOBILE CSS STYLING ENGINE -->
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { 
@@ -14,7 +15,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            padding-bottom: 80px;
+            padding-bottom: 90px;
             overflow-x: hidden;
         }
         header {
@@ -57,7 +58,7 @@
         .btn-primary { width: 100%; background-color: #4f46e5; color: #ffffff; border: none; padding: 12px; border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; }
         .btn-primary:active { transform: scale(0.98); background-color: #4338ca; }
         .btn-secondary { width: 100%; background-color: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; padding: 10px; border-radius: 12px; font-weight: 600; font-size: 12px; cursor: pointer; }
-        .btn-spin { width: 100%; background-color: #059669; color: #ffffff; border: none; padding: 12px; border-radius: 12px; font-weight: 700; font-size: 14px; }
+        .btn-spin { width: 100%; background-color: #059669; color: #ffffff; border: none; padding: 12px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .input-field { width: 100%; background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 12px; border-radius: 12px; font-size: 14px; outline: none; }
         .task-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 8px; }
@@ -87,8 +88,8 @@
             <h1 class="header-title">WhiskerPaws</h1>
         </div>
         <div id="auth-ui-container" style="display: flex; gap: 6px;">
-            <button onclick="handleAuth('login')" style="background-color:#f1f5f9; border:1px solid #e2e8f0; color:#334155; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:600;">Log In</button>
-            <button onclick="handleAuth('signup')" style="background-color:#4f46e5; border:none; color:#ffffff; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:600;">Join</button>
+            <button onclick="handleAuth('login')" style="background-color:#f1f5f9; border:1px solid #e2e8f0; color:#334155; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:600; cursor:pointer;">Log In</button>
+            <button onclick="handleAuth('signup')" style="background-color:#4f46e5; border:none; color:#ffffff; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:600; cursor:pointer;">Join</button>
         </div>
     </header>
     <div class="ticker-wrap">
@@ -135,7 +136,7 @@
             </button>
         </div>
 
-        <!-- NEW COMPONENT: GCASH, MAYA, UNO WALLET CONVERSION INTERFACE -->
+        <!-- LOCAL PAYOUT CONVERSION LEDGER -->
         <div class="card" style="border: 1px solid #cbd5e1; background-color: #f8fafc;">
             <span class="card-title" style="color: #0f172a; font-size: 15px;">💸 Local Cashout Conversion Hub</span>
             <p style="font-size: 12px; color: #64748b; margin-bottom: 10px; line-height: 1.4;">Convert your gathered Pawcoins directly into real economics. Select tier options below to transfer balance:</p>
@@ -179,7 +180,7 @@
                 <span style="font-size: 10px; font-weight: 700; color: #64748b; background-color: #f1f5f9; padding: 2px 8px; border-radius: 9999px;">Spins Left: <span id="spins-count">5</span>/5</span>
             </div>
             <p style="font-size: 12px; color: #64748b; margin-bottom: 12px; line-height: 1.4;">Watch an ad break to spin the wheel and win up to 100 bonus Pawcoins!</p>
-            <button onclick="playLuckySpin()" id="spin-btn" class="btn-spin" style="cursor: pointer;">
+            <button onclick="playLuckySpin()" id="spin-btn" class="btn-spin">
                 🎰 Watch Ad & Spin Wheel
             </button>
         </div>
@@ -280,58 +281,61 @@
         <div class="ad-box" style="height: 48px; font-size: 9px;">[ Banner #4 - Footer Left ]</div>
         <div class="ad-box" style="height: 48px; font-size: 9px;">[ Banner #5 - Footer Right ]</div>
     </div>
-    <!-- DATABASE CDN SCRIPTS -->
-    <script src="https://jsdelivr.net"></script>
-
-    <!-- INTERACTIVE SCRIPT LOGIC ENGINES -->
+    <!-- INTERACTIVE STANDALONE MOBILE LOGIC ENGINES -->
     <script>
-        // Production Connection Keys
-        const SUPABASE_URL = "https://supabase.co";
-        const SUPABASE_ANON_KEY = "sb_publishable_AUHP-CPN4DsE8xhKDIkMvA_C80hCyLI";
-        
-        // Initialize Supabase Client Instance
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        let currentBalance = 120;
+        // Stable Independent Offline Storage System
+        let currentBalance = parseInt(localStorage.getItem('wp_balance')) || 120;
+        let dailySpinsUsed = parseInt(localStorage.getItem('wp_spins_used')) || 0;
+        let currentStreak = parseInt(localStorage.getItem('wp_streak')) || 0;
+        let lastClaimDate = localStorage.getItem('wp_last_claim') || "";
         let runningExpenses = 0.00;
-        let currentUser = null;
-        let dailySpinsUsed = 0;
-        let currentStreak = 0;
-        let lastClaimDate = null;
+        
+        // Track local mock session token
+        let currentUser = localStorage.getItem('wp_user_logged') || null;
 
-        // Auto-check session status on startup
-        window.addEventListener('DOMContentLoaded', async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session) {
-                currentUser = session.user;
-                await fetchCloudProfile();
-            } else {
-                updateDisplay();
-            }
-        });
-
-        // Pull active wallet states securely from cloud tables
-        async function fetchCloudProfile() {
-            if (!currentUser) return;
+        // Initialize state on startup
+        window.addEventListener('DOMContentLoaded', () => {
+            // Verify if a previous session exists
+            const lastSpinDate = localStorage.getItem('wp_last_spin_date');
+            const todayStr = new Date().toDateString();
             
-            const { data, error } = await supabase
-                .from('profiles')
-                .select('pawcoin_balance')
-                .eq('id', currentUser.id)
-                .single();
-
-            if (data && !error) {
-                currentBalance = data.pawcoin_balance;
+            if (lastSpinDate !== todayStr) {
+                dailySpinsUsed = 0;
+                localStorage.setItem('wp_spins_used', 0);
+                localStorage.setItem('wp_last_spin_date', todayStr);
             }
             updateDisplay();
+        });
+
+        // Sync local adjustments instantly to secure persistent database files
+        function saveLocalData() {
+            localStorage.setItem('wp_balance', currentBalance);
+            localStorage.setItem('wp_streak', currentStreak);
+            localStorage.setItem('wp_last_claim', lastClaimDate);
+            localStorage.setItem('wp_spins_used', dailySpinsUsed);
         }
 
         // Render dynamic dashboard metrics to user UI
         function updateDisplay() {
             document.getElementById('coin-balance').innerText = currentBalance;
-            // Native micro-economic math engine: 1 Pawcoin = 0.05 PHP
-            document.getElementById('php-balance').innerText = (currentBalance * 0.05).toFixed(2);
+            // Native micro-economic math engine: 1 Pawcoin = 0.058 PHP
+            document.getElementById('php-balance').innerText = (currentBalance * 0.058).toFixed(2);
+            document.getElementById('spins-count').innerText = 5 - dailySpinsUsed;
             document.getElementById('streak-days-count').innerText = currentStreak;
+
+            // Handle Lucky Spin button state
+            const spinBtn = document.getElementById('spin-btn');
+            if (spinBtn) {
+                if (dailySpinsUsed >= 5) {
+                    spinBtn.disabled = true;
+                    spinBtn.style.backgroundColor = '#cbd5e1';
+                    spinBtn.innerText = "🔒 Daily Limit Reached";
+                } else {
+                    spinBtn.disabled = false;
+                    spinBtn.style.backgroundColor = '#059669';
+                    spinBtn.innerText = "🎰 Watch Ad & Spin Wheel";
+                }
+            }
 
             // Update UI elements visually for active streak highlights
             for (let i = 1; i <= 7; i++) {
@@ -354,16 +358,16 @@
         }
 
         // Native Payout Cashout Engine Handler
-        async function processCashout(platformName) {
+        function processCashout(platformName) {
             if (!currentUser) {
-                alert("⚠️ Please use the 'Join' or 'Log In' button to create an account first before cashing out.");
+                alert("⚠️ Access Denied!\n\nPlease use the 'Join' or 'Log In' button in the upper header to register an active profile session first.");
                 return;
             }
 
             const chosenTierPhp = parseInt(document.getElementById('cashout-tier').value);
             const refCode = document.getElementById('referral-code-input').value.trim();
 
-            // Native coin metric validation math check: 171 Coins = 10 PHP
+            // Native coin metric validation check: 171 Coins = 10 PHP
             const coinsNeeded = Math.ceil(chosenTierPhp * 17.1);
 
             if (currentBalance < coinsNeeded) {
@@ -371,7 +375,6 @@
                 return;
             }
 
-            // Enforce low-tier referral code protection for non-UNO wallet users
             if (platformName !== 'ONE Wallet' && !refCode) {
                 alert(`🔑 Verification Needed!\n\nTo withdraw via ${platformName}, please enter your active promotional referral verification code first (e.g. V98HAR).`);
                 return;
@@ -379,28 +382,26 @@
 
             const mobileNum = prompt(`Enter your registered 11-digit ${platformName} mobile number (e.g., 0927XXXXXXX):`);
             if (!mobileNum || mobileNum.length < 11) {
-                alert("❌ Cashout canceled. A valid mobile number is required to process transaction codes.");
+                alert("❌ Cashout canceled. A valid mobile number is required to process transactions.");
                 return;
             }
 
-            // Deduct local profile points balance
             currentBalance -= coinsNeeded;
+            saveLocalData();
             updateDisplay();
-            await syncBalanceToCloud();
 
             alert(`🎉 Payout Requested Successfully!\n\nYour request for ₱${chosenTierPhp}.00 has been sent directly to the server ledger pipeline.\n\nFunds will arrive in your ${platformName} account (${mobileNum}) within 24-48 verification hours!`);
         }
 
-        // Fixed data arrays inside interactive function calls
-        async function claimDailyStreak(isDoubleAd) {
+        // Handle structural 7-Day Progressive login streak reward calculations
+        function claimDailyStreak(isDoubleAd) {
             const todayStr = new Date().toDateString();
             if (lastClaimDate === todayStr) {
                 alert("🔒 You have already claimed today's daily streak bonus. Return tomorrow!");
                 return;
             }
 
-            // FIXED DATA MATRIX ARRAY
-            const rewardsMap = [10, 20, 30, 40, 50, 60, 100];
+            const rewardsMap =;
             let rawReward = rewardsMap[currentStreak % 7];
 
             if (isDoubleAd) {
@@ -412,27 +413,29 @@
             currentBalance += rawReward;
             lastClaimDate = todayStr;
 
-            alert(`🎉 Daily Claim Success! Added +${rawReward} Pawcoins to your cloud asset account wallet.`);
+            alert(`🎉 Daily Claim Success! Added +${rawReward} Pawcoins to your account wallet.`);
+            saveLocalData();
             updateDisplay();
-            await syncBalanceToCloud();
         }
 
-        // Live cloud saving engine to commit balances securely to Supabase profiles
-        async function syncBalanceToCloud() {
-            if (!currentUser) return;
+        // Handle offline simulation authentication accounts
+        function handleAuth(actionType) {
+            const email = prompt("Enter your account email:");
+            const password = prompt("Enter your password (min 6 characters):");
 
-            const { error } = await supabase
-                .from('profiles')
-                .update({ pawcoin_balance: currentBalance })
-                .eq('id', currentUser.id);
-
-            if (error) {
-                console.error("Cloud synchronization failed:", error.message);
+            if (!email || !password || password.length < 6) {
+                alert("❌ Validation Error: A valid email and minimum 6-character password are required.");
+                return;
             }
+
+            currentUser = email;
+            localStorage.setItem('wp_user_logged', email);
+            alert(`✨ Profile Session Initialized!\nWelcome back, ${email}. Your wallet functions are now completely unlocked.`);
+            updateDisplay();
         }
 
-        // Handle daily lucky spin mechanics with fixed arrays
-        async function playLuckySpin() {
+        // Handle daily lucky spin mechanics
+        function playLuckySpin() {
             if (dailySpinsUsed >= 5) {
                 alert("🔒 You have reached your daily limit of 5 spins. Come back tomorrow!");
                 return;
@@ -440,34 +443,27 @@
 
             alert("🎬 [AdMob SDK Call] Loading Rewarded Video ad prior to spinning standard mechanism...");
             
-            // FIXED DATA MATRIX ARRAY
-            const prizeTiers = [10, 20, 50, 100];
+            const prizeTiers =;
             const wonPrize = prizeTiers[Math.floor(Math.random() * prizeTiers.length)];
             
             dailySpinsUsed++;
             currentBalance += wonPrize;
             
-            document.getElementById('spins-count').innerText = 5 - dailySpinsUsed;
-            if (dailySpinsUsed >= 5) {
-                document.getElementById('spin-btn').disabled = true;
-                document.getElementById('spin-btn').style.backgroundColor = '#cbd5e1';
-            }
-            
             alert(`🎉 Congratulations! The wheel landed on +${wonPrize} Pawcoins!`);
+            saveLocalData();
             updateDisplay();
-            await syncBalanceToCloud();
         }
 
         // Handle daily routine checklist rewards split
-        async function completeTask(checkbox, rewardCoins) {
+        function completeTask(checkbox, rewardCoins) {
             if (checkbox.checked) {
                 currentBalance += rewardCoins;
                 alert(`✨ Task Completed! You collected +${rewardCoins} Pawcoins.`);
             } else {
                 currentBalance -= rewardCoins;
             }
+            saveLocalData();
             updateDisplay();
-            await syncBalanceToCloud();
         }
 
         // Handle fast mathematical expense addition
@@ -488,16 +484,16 @@
             amountEl.value = '';
             
             currentBalance += 2;
+            saveLocalData();
             updateDisplay();
-            syncBalanceToCloud();
         }
 
         // Handle structural AdMob rewarded SDK triggers
-        async function triggerRewardedAd(featureName) {
+        function triggerRewardedAd(featureName) {
             alert(`🎬 [AdMob SDK Call Triggered]\nLoading a rewarded video ad to verify action for: "${featureName}".\n\nOnce finished, the application registers the 95% revenue split margin and releases 20 Pawcoins to the user wallet!`);
             currentBalance += 20;
+            saveLocalData();
             updateDisplay();
-            await syncBalanceToCloud();
         }
     </script>
 </body>
