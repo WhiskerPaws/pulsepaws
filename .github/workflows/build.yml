@@ -6,7 +6,6 @@ on:
       - main
   workflow_dispatch:
 
-# Set up access permissions for GitHub Pages deployment
 permissions:
   contents: read
   pages: write
@@ -17,7 +16,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy-dashboard:
+  deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -25,9 +24,6 @@ jobs:
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
-
-      - name: Setup GitHub Pages Environment
-        uses: actions/configure-pages@v4
 
       - name: Upload Static Build Files
         uses: actions/upload-pages-artifact@v3
