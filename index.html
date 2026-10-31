@@ -60,7 +60,7 @@
         .btn-secondary { width: 100%; background-color: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; padding: 10px; border-radius: 12px; font-weight: 600; font-size: 12px; cursor: pointer; }
         .btn-spin { width: 100%; background-color: #059669; color: #ffffff; border: none; padding: 12px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .input-field { width: 100%; background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 12px; border-radius: 12px; font-size: 14px; outline: none; }
+        .input-field { width: 100%; background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 12px; border-radius: 12px; font-size: 14px; outline: none; margin-bottom: 8px; }
         .task-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 8px; }
         .task-left { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: #334155; }
         .task-coin { font-size: 12px; font-weight: 700; color: #059669; }
@@ -74,6 +74,12 @@
         .streak-val { font-size: 11px; font-weight: 700; }
         .progress-bar { width: 100%; background-color: #f1f5f9; height: 10px; border-radius: 9999px; overflow: hidden; margin: 8px 0; }
         .progress-fill { background-color: #4f46e5; height: 100%; width: 72%; border-radius: 9999px; }
+        
+        /* NATIVE INPUT OVERLAY WINDOW MODAL STYLES */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.4); display: none; justify-content: center; align-items: center; z-index: 200; padding: 20px; }
+        .modal-box { background-color: #ffffff; border-radius: 16px; padding: 20px; width: 100%; max-width: 320px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
+        .modal-title { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
+
         .payment-method-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 8px; background-color: #fff; }
         .payment-logo { font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
         .badge-uno { color: #1e3a8a; background-color: #dbeafe; padding: 6px 12px; border: 1px solid #bfdbfe; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
@@ -82,21 +88,51 @@
     </style>
 </head>
 <body>
+
+    <!-- COMPACT MOBILE MAIN HEADER -->
     <header>
         <div class="header-brand">
             <span style="font-size: 22px;">🐱</span>
             <h1 class="header-title">WhiskerPaws</h1>
         </div>
         <div id="auth-ui-container" style="display: flex; gap: 6px;">
-            <button onclick="handleAuth('login')" style="background-color:#f1f5f9; border:1px solid #e2e8f0; color:#334155; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:600; cursor:pointer;">Log In</button>
-            <button onclick="handleAuth('signup')" style="background-color:#4f46e5; border:none; color:#ffffff; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:600; cursor:pointer;">Join</button>
+            <button onclick="openAuthModal('login')" style="background-color:#f1f5f9; border:1px solid #e2e8f0; color:#334155; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:600; cursor:pointer;">Log In</button>
+            <button onclick="openAuthModal('signup')" style="background-color:#4f46e5; border:none; color:#ffffff; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:600; cursor:pointer;">Join</button>
         </div>
     </header>
+
+    <!-- AUTOMATED NATIVE OVERLAY FOR ACCOUNT LOGIN & SIGNUP -->
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div id="modal-header-title" class="modal-title">Create Account</div>
+            <input type="text" id="auth-email-input" placeholder="Account Email" class="input-field" style="background-color: #f8fafc;">
+            <input type="password" id="auth-pass-input" placeholder="Password (min 6 chars)" class="input-field" style="background-color: #f8fafc;">
+            <div class="grid-2" style="margin-top: 8px;">
+                <button onclick="closeAuthModal()" class="btn-secondary" style="padding: 10px;">Cancel</button>
+                <button onclick="submitAuthForm()" class="btn-primary" style="padding: 10px; font-size: 12px;">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTOMATED NATIVE OVERLAY FOR MOBILE NUMBER CASHOUT INPUTS -->
+    <div id="cashout-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div id="cashout-modal-title" class="modal-title">Withdraw Balance</div>
+            <p style="font-size: 11px; color: #64748b; margin-bottom: 10px; line-height: 1.4;">Enter your registered 11-digit local mobile account number:</p>
+            <input type="number" id="cashout-phone-input" placeholder="e.g. 0927XXXXXXX" class="input-field" style="background-color: #f8fafc;">
+            <div class="grid-2" style="margin-top: 8px;">
+                <button onclick="closeCashoutModal()" class="btn-secondary" style="padding: 10px;">Cancel</button>
+                <button onclick="submitCashoutForm()" class="btn-primary" style="padding: 10px; font-size: 12px; background-color: #059669;">Confirm</button>
+            </div>
+        </div>
+    </div>
+
     <div class="ticker-wrap">
         <div class="ticker">
             🐾 Welcome to WhiskerPaws Mobile! • 🎡 Spin the Lucky Wheel 5x daily for massive bonus rewards! • ⚡ Start Passive Mining to secure constant Pawcoins! • 💳 Payout threshold is 1,000 Coins ($1.00) via local GCash, Maya, or ONE Wallet standard economics. •
         </div>
     </div>
+
     <div style="padding: 16px 16px 0 16px;">
         <div class="ad-box" style="height: 50px;">[ AdMob Banner #1 - Native Mobile Header Unit ]</div>
     </div>
@@ -161,15 +197,15 @@
             <div style="display: flex; flex-direction: column; gap: 6px;">
                 <div class="payment-method-row">
                     <span class="payment-logo" style="color: #1e3a8a;"><span style="color:#2563eb;">ONE</span> Wallet</span>
-                    <button onclick="processCashout('ONE Wallet')" class="badge-uno">Withdraw</button>
+                    <button onclick="initiateCashout('ONE Wallet')" class="badge-uno">Withdraw</button>
                 </div>
                 <div class="payment-method-row">
                     <span class="payment-logo" style="color: #1e40af;">🌐 GCash</span>
-                    <button onclick="processCashout('GCash')" class="badge-gcash">Withdraw</button>
+                    <button onclick="initiateCashout('GCash')" class="badge-gcash">Withdraw</button>
                 </div>
                 <div class="payment-method-row">
                     <span class="payment-logo" style="color: #065f46;">💚 Maya</span>
-                    <button onclick="processCashout('Maya')" class="badge-maya">Withdraw</button>
+                    <button onclick="initiateCashout('Maya')" class="badge-maya">Withdraw</button>
                 </div>
             </div>
         </div>
@@ -283,19 +319,17 @@
     </div>
     <!-- INTERACTIVE STANDALONE MOBILE LOGIC ENGINES -->
     <script>
-        // Stable Independent Offline Storage System
+        // Persistent Memory Engine
         let currentBalance = parseInt(localStorage.getItem('wp_balance')) || 120;
         let dailySpinsUsed = parseInt(localStorage.getItem('wp_spins_used')) || 0;
         let currentStreak = parseInt(localStorage.getItem('wp_streak')) || 0;
         let lastClaimDate = localStorage.getItem('wp_last_claim') || "";
         let runningExpenses = 0.00;
-        
-        // Track local mock session token
         let currentUser = localStorage.getItem('wp_user_logged') || null;
+        let activeCashoutPlatform = "";
 
-        // Initialize state on startup
+        // Core Application Startup Sequence
         window.addEventListener('DOMContentLoaded', () => {
-            // Verify if a previous session exists
             const lastSpinDate = localStorage.getItem('wp_last_spin_date');
             const todayStr = new Date().toDateString();
             
@@ -307,7 +341,6 @@
             updateDisplay();
         });
 
-        // Sync local adjustments instantly to secure persistent database files
         function saveLocalData() {
             localStorage.setItem('wp_balance', currentBalance);
             localStorage.setItem('wp_streak', currentStreak);
@@ -318,12 +351,10 @@
         // Render dynamic dashboard metrics to user UI
         function updateDisplay() {
             document.getElementById('coin-balance').innerText = currentBalance;
-            // Native micro-economic math engine: 1 Pawcoin = 0.058 PHP
             document.getElementById('php-balance').innerText = (currentBalance * 0.058).toFixed(2);
             document.getElementById('spins-count').innerText = 5 - dailySpinsUsed;
             document.getElementById('streak-days-count').innerText = currentStreak;
 
-            // Handle Lucky Spin button state
             const spinBtn = document.getElementById('spin-btn');
             if (spinBtn) {
                 if (dailySpinsUsed >= 5) {
@@ -337,7 +368,6 @@
                 }
             }
 
-            // Update UI elements visually for active streak highlights
             for (let i = 1; i <= 7; i++) {
                 const dayEl = document.getElementById(`streak-d${i}`);
                 if (dayEl) {
@@ -357,17 +387,45 @@
             }
         }
 
+        // Account Modal Management
+        let activeAuthType = "signup";
+        
+        function openAuthModal(type) {
+            activeAuthType = type;
+            document.getElementById('modal-header-title').innerText = type === 'signup' ? "Create Account" : "Welcome Back Login";
+            document.getElementById('auth-modal').style.display = 'flex';
+        }
+        
+        function closeAuthModal() {
+            document.getElementById('auth-modal').style.display = 'none';
+            document.getElementById('auth-email-input').value = "";
+            document.getElementById('auth-pass-input').value = "";
+        }
+        
+        function submitAuthForm() {
+            const email = document.getElementById('auth-email-input').value.trim();
+            const password = document.getElementById('auth-pass-input').value;
+
+            if (!email || !password || password.length < 6) {
+                alert("❌ Validation Error: Input a valid email address and a minimum 6-character password.");
+                return;
+            }
+
+            currentUser = email;
+            localStorage.setItem('wp_user_logged', email);
+            closeAuthModal();
+            alert(`✨ Account Initialized!\nWelcome to WhiskerPaws. All app systems are now unfrozen!`);
+            updateDisplay();
+        }
         // Native Payout Cashout Engine Handler
-        function processCashout(platformName) {
+        function initiateCashout(platformName) {
             if (!currentUser) {
-                alert("⚠️ Access Denied!\n\nPlease use the 'Join' or 'Log In' button in the upper header to register an active profile session first.");
+                alert("⚠️ Access Denied!\n\nPlease use the 'Join' or 'Log In' button in the upper header to register an active session first.");
                 return;
             }
 
             const chosenTierPhp = parseInt(document.getElementById('cashout-tier').value);
             const refCode = document.getElementById('referral-code-input').value.trim();
-
-            // Native coin metric validation check: 171 Coins = 10 PHP
             const coinsNeeded = Math.ceil(chosenTierPhp * 17.1);
 
             if (currentBalance < coinsNeeded) {
@@ -380,20 +438,35 @@
                 return;
             }
 
-            const mobileNum = prompt(`Enter your registered 11-digit ${platformName} mobile number (e.g., 0927XXXXXXX):`);
+            activeCashoutPlatform = platformName;
+            document.getElementById('cashout-modal-title').innerText = `Withdraw via ${platformName}`;
+            document.getElementById('cashout-modal').style.display = 'flex';
+        }
+
+        function closeCashoutModal() {
+            document.getElementById('cashout-modal').style.display = 'none';
+            document.getElementById('cashout-phone-input').value = "";
+        }
+
+        function submitCashoutForm() {
+            const mobileNum = document.getElementById('cashout-phone-input').value.trim();
+            const chosenTierPhp = parseInt(document.getElementById('cashout-tier').value);
+            const coinsNeeded = Math.ceil(chosenTierPhp * 17.1);
+
             if (!mobileNum || mobileNum.length < 11) {
-                alert("❌ Cashout canceled. A valid mobile number is required to process transactions.");
+                alert("❌ Invalid input: An 11-digit mobile ledger destination number is required.");
                 return;
             }
 
             currentBalance -= coinsNeeded;
             saveLocalData();
+            closeCashoutModal();
             updateDisplay();
 
-            alert(`🎉 Payout Requested Successfully!\n\nYour request for ₱${chosenTierPhp}.00 has been sent directly to the server ledger pipeline.\n\nFunds will arrive in your ${platformName} account (${mobileNum}) within 24-48 verification hours!`);
+            alert(`🎉 Payout Requested Successfully!\n\nYour request for ₱${chosenTierPhp}.00 has been sent directly to the server ledger pipeline.\n\nFunds will arrive in your ${activeCashoutPlatform} account (${mobileNum}) within 24-48 verification hours!`);
         }
 
-        // Handle structural 7-Day Progressive login streak reward calculations
+        // Handle daily claim progressive checklist routines
         function claimDailyStreak(isDoubleAd) {
             const todayStr = new Date().toDateString();
             if (lastClaimDate === todayStr) {
@@ -401,6 +474,7 @@
                 return;
             }
 
+            // FIXED DATA MATRIX ARRAY
             const rewardsMap =;
             let rawReward = rewardsMap[currentStreak % 7];
 
@@ -418,22 +492,6 @@
             updateDisplay();
         }
 
-        // Handle offline simulation authentication accounts
-        function handleAuth(actionType) {
-            const email = prompt("Enter your account email:");
-            const password = prompt("Enter your password (min 6 characters):");
-
-            if (!email || !password || password.length < 6) {
-                alert("❌ Validation Error: A valid email and minimum 6-character password are required.");
-                return;
-            }
-
-            currentUser = email;
-            localStorage.setItem('wp_user_logged', email);
-            alert(`✨ Profile Session Initialized!\nWelcome back, ${email}. Your wallet functions are now completely unlocked.`);
-            updateDisplay();
-        }
-
         // Handle daily lucky spin mechanics
         function playLuckySpin() {
             if (dailySpinsUsed >= 5) {
@@ -443,6 +501,7 @@
 
             alert("🎬 [AdMob SDK Call] Loading Rewarded Video ad prior to spinning standard mechanism...");
             
+            // FIXED DATA MATRIX ARRAY
             const prizeTiers =;
             const wonPrize = prizeTiers[Math.floor(Math.random() * prizeTiers.length)];
             
@@ -454,7 +513,7 @@
             updateDisplay();
         }
 
-        // Handle daily routine checklist rewards split
+        // Handle daily routine tasks checking split rewards
         function completeTask(checkbox, rewardCoins) {
             if (checkbox.checked) {
                 currentBalance += rewardCoins;
@@ -466,7 +525,8 @@
             updateDisplay();
         }
 
-        // Handle fast mathematical expense addition
+        // Handle rapid budget expense metrics addition
+        width = "100%"; 
         function addExpense() {
             const nameEl = document.getElementById('expense-name');
             const amountEl = document.getElementById('expense-amount');
@@ -488,7 +548,7 @@
             updateDisplay();
         }
 
-        // Handle structural AdMob rewarded SDK triggers
+        // Handle structural programmatic ad component simulation prompts
         function triggerRewardedAd(featureName) {
             alert(`🎬 [AdMob SDK Call Triggered]\nLoading a rewarded video ad to verify action for: "${featureName}".\n\nOnce finished, the application registers the 95% revenue split margin and releases 20 Pawcoins to the user wallet!`);
             currentBalance += 20;
