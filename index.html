@@ -12,61 +12,79 @@
             background-color: #f8fafc; 
             color: #1e293b;
             max-width: 100%;
-            min-h: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            padding-bottom: 70px;
+            padding-bottom: 80px;
             overflow-x: hidden;
         }
         /* Mobile Header Mechanics */
         header {
             background-color: #ffffff;
-            border-b: 1px solid #f1f5f9;
-            padding: 12px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 14px 16px;
             position: sticky;
             top: 0;
             z-index: 50;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
         }
-        .header-brand { display: flex; items-center: center; gap: 8px; }
+        .header-brand { display: flex; align-items: center; gap: 8px; }
         .header-title { font-size: 18px; font-weight: 700; color: #0f172a; letter-spacing: -0.5px; }
-        /* Ticker Animation Engines */
-        .ticker-wrap { background-color: #312e81; color: #e0e7ff; font-size: 12px; padding: 6px 0; overflow: hidden; position: sticky; top: 45px; z-index: 40; }
-        .ticker { inline-block; padding-left: 100%; animation: marquee 25s linear infinite; }
+        
+        /* CLEAN TEXT TICKER - FIXED VIOLET ACCIDENT */
+        .ticker-wrap { 
+            background-color: #f1f5f9; 
+            color: #4f46e5; 
+            font-size: 11px; 
+            font-weight: 600;
+            padding: 8px 0; 
+            overflow: hidden; 
+            position: sticky; 
+            top: 53px; 
+            z-index: 40; 
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .ticker { display: inline-block; padding-left: 100%; animation: marquee 25s linear infinite; }
         @keyframes marquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+        
         /* Layout Card Containers */
         main { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
-        .card { background-color: #ffffff; border-radius: 16px; padding: 16px; border: 1px solid #f1f5f9; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02); }
-        .card-title { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 12px; display: flex; items-center: center; gap: 6px; }
+        .card { background-color: #ffffff; border-radius: 16px; padding: 16px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01); }
+        .card-title { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+        
         /* Buttons Components */
-        .btn-primary { width: 100%; background-color: #4f46e5; color: #ffffff; border: none; padding: 12px; border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; transition: transform 0.1s; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.1); }
+        .btn-primary { width: 100%; background-color: #4f46e5; color: #ffffff; border: none; padding: 12px; border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; }
         .btn-primary:active { transform: scale(0.98); background-color: #4338ca; }
         .btn-secondary { width: 100%; background-color: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; padding: 10px; border-radius: 12px; font-weight: 600; font-size: 12px; cursor: pointer; }
-        .btn-spin { width: 100%; background-color: #059669; color: #ffffff; border: none; padding: 12px; border-radius: 12px; font-weight: 700; font-size: 14px; box-shadow: 0 4px 6px -1px rgba(5, 95, 105, 0.1); }
+        .btn-spin { width: 100%; background-color: #059669; color: #ffffff; border: none; padding: 12px; border-radius: 12px; font-weight: 700; font-size: 14px; }
+        
         /* Form Components */
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .input-field { width: 100%; background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 12px; border-radius: 12px; font-size: 14px; outline: none; }
-        .input-field:focus { border-color: #4f46e5; background-color: #ffffff; }
+        
         /* Checkbox Task Rows */
-        .task-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; background-color: #f8fafc; border: 1px solid #f1f5f9; border-radius: 12px; margin-bottom: 8px; }
+        .task-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 8px; }
         .task-left { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: #334155; }
         .task-coin { font-size: 12px; font-weight: 700; color: #059669; }
+        
         /* Fixed Ad Blocks Style */
-        .ad-box { background: repeating-linear-stripes(-45deg, #e2e8f0, #e2e8f0 10px, #f1f5f9 10px, #f1f5f9 20px); border: 2px dashed #cbd5e1; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 11px; font-weight: 500; text-align: center; }
-        .footer-ads { position: fixed; bottom: 0; left: 0; right: 0; background-color: #ffffff; border-top: 1px solid #f1f5f9; padding: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; z-index: 100; box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.03); }
+        .ad-box { background: repeating-linear-stripes(-45deg, #e2e8f0, #e2e8f0 10px, #f1f5f9 10px, #f1f5f9 20px); border: 1px solid #cbd5e1; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 11px; font-weight: 500; text-align: center; }
+        .footer-ads { position: fixed; bottom: 0; left: 0; right: 0; background-color: #ffffff; border-top: 1px solid #e2e8f0; padding: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; z-index: 100; }
+        
         /* Streak Grid Map */
         .streak-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 12px; }
         .streak-day { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 6px 4px; text-align: center; }
-        .streak-day-active { background-color: #ecfdf5; border-color: #10b981; color: #065f46; font-weight: 600; box-shadow: 0 2px 4px rgba(16,185,129,0.05); }
-        .streak-day-current { border: 2px dashed #6366f1; background-color: #f5f3ff; }
+        .streak-day-active { background-color: #ecfdf5; border-color: #10b981; color: #065f46; font-weight: 600; }
+        .streak-day-current { border: 2px dashed #4f46e5; background-color: #f5f3ff; }
         .streak-lbl { font-size: 9px; color: #94a3b8; display: block; margin-bottom: 2px; }
         .streak-val { font-size: 11px; font-weight: 700; }
+        
         /* Step Tracker Metrics */
-        .progress-bar { width: 100%; background-color: #f1f5f9; h: 10px; border-radius: 9999px; overflow: hidden; margin: 8px 0; }
-        .progress-fill { background-color: #4f46e5; h: 100%; width: 72%; border-radius: 9999px; }
+        .progress-bar { width: 100%; background-color: #f1f5f9; height: 10px; border-radius: 9999px; overflow: hidden; margin: 8px 0; }
+        .progress-fill { background-color: #4f46e5; height: 100%; width: 72%; border-radius: 9999px; }
     </style>
 </head>
 <body>
@@ -90,7 +108,7 @@
         </div>
     </div>
 
-    <!-- NATIVE AD CONTAINER #1: TOP DISPATCH BANNER -->
+    <!-- NATIVE AD CONTAINER #1 -->
     <div style="padding: 16px 16px 0 16px;">
         <div class="ad-box" style="height: 50px;">[ AdMob Banner #1 - Native Mobile Header Unit ]</div>
     </div>
@@ -149,21 +167,21 @@
             <span class="card-title">📋 Daily Routine Tasks</span>
             <div class="task-row">
                 <div class="task-left">
-                    <input type="checkbox" onchange="completeTask(this, 10)" style="width: 16px; h: 16px; accent-color: #4f46e5;">
+                    <input type="checkbox" onchange="completeTask(this, 10)" style="width: 16px; height: 16px; accent-color: #4f46e5;">
                     <span>Log a complete Pomodoro slot</span>
                 </div>
                 <span class="task-coin">+10 Coins</span>
             </div>
             <div class="task-row">
                 <div class="task-left">
-                    <input type="checkbox" onchange="completeTask(this, 5)" style="width: 16px; h: 16px; accent-color: #4f46e5;">
+                    <input type="checkbox" onchange="completeTask(this, 5)" style="width: 16px; height: 16px; accent-color: #4f46e5;">
                     <span>Track current daily expenses</span>
                 </div>
                 <span class="task-coin">+5 Coins</span>
             </div>
             <div class="task-row">
                 <div class="task-left">
-                    <input type="checkbox" onchange="completeTask(this, 5)" style="width: 16px; h: 16px; accent-color: #4f46e5;">
+                    <input type="checkbox" onchange="completeTask(this, 5)" style="width: 16px; height: 16px; accent-color: #4f46e5;">
                     <span>Record water intake (8 glasses)</span>
                 </div>
                 <span class="task-coin">+5 Coins</span>
@@ -171,7 +189,7 @@
         </div>
 
         <!-- NATIVE AD CONTAINER #2: INTERSTITIAL BANNER OVERLAY -->
-        <div class="ad-box" style="height: 75px; flex-direction: column; p: 8px;">
+        <div class="ad-box" style="height: 75px; flex-direction: column; padding: 8px;">
             <span>[ AdMob Banner #2 - Utility Interstitial Break ]</span>
             <span onclick="triggerRewardedAd('Bonus Multiplier')" style="font-size: 11px; font-weight: 700; color: #4f46e5; text-decoration: underline; margin-top: 4px; cursor: pointer;">Watch video for +20 Instant Coins</span>
         </div>
@@ -230,7 +248,7 @@
             </button>
         </div>
 
-        <!-- NATIVE AD CONTAINER #3: MID CONTENT BANNER BLOCK -->
+        <!-- NATIVE AD CONTAINER #3 -->
         <div class="ad-box" style="height: 60px; margin-bottom: 16px;">[ AdMob Banner #3 - Mid Content Block ]</div>
 
     </main>
@@ -246,7 +264,7 @@
     <!-- INTERACTIVE SCRIPT LOGIC ENGINES -->
     <script>
         // Production Connection Keys
-        const SUPABASE_URL = "https://ddikgztnzuexjneaynup.supabase.co";
+        const SUPABASE_URL = "https://supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_AUHP-CPN4DsE8xhKDIkMvA_C80hCyLI";
         
         // Initialize Supabase Client Instance
@@ -448,7 +466,7 @@
 
         // Handle structural AdMob rewarded SDK triggers
         async function triggerRewardedAd(featureName) {
-            alert(`🎬 [AdMob SDK Call Triggered]\nLoading a rewarded video ad to verify action for: "${featureName}".\n\nOnce finished, the application registers the 95% revenue split margin and releases 20 Pawcoins to the user wallet!`);
+            alert("🎬 [AdMob SDK Call Triggered]\nLoading a rewarded video ad to verify action for: \"" + featureName + "\".\n\nOnce finished, the application registers the 95% revenue split margin and releases 20 Pawcoins to the user wallet!");
             currentBalance += 20;
             updateDisplay();
             await syncBalanceToCloud();
