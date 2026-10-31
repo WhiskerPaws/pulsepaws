@@ -21,127 +21,135 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: 3. Generate Pristine Android Structural Files via Python
+    - name: 3. Generate Lightweight Android WebView Project via Python
       shell: python
       run: |
         import os
         
-        # Create standard directory trees
+        # Create all necessary structural paths
+        os.makedirs("sandbox/app/src/main/assets", exist_ok=True)
         os.makedirs("sandbox/app/src/main/java/com/example/textutility", exist_ok=True)
         
-        # 1. Write settings.gradle.kts (Minimalist & Clean)
+        # 1. Write settings.gradle.kts
         with open("sandbox/settings.gradle.kts", "w") as f:
-            f.write(
-                'pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }\n'
-                'dependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS); repositories { google(); mavenCentral() } }\n'
-                'rootProject.name = "TextUtility"\n'
-                'include(":app")\n'
-            )
+            f.write('pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }\n'
+                    'dependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS); repositories { google(); mavenCentral() } }\n'
+                    'rootProject.name = "TextUtility"\n'
+                    'include(":app")\n')
             
         # 2. Write root build.gradle.kts
         with open("sandbox/build.gradle.kts", "w") as f:
-            f.write(
-                'plugins { id("com.android.application") version "8.2.2" apply false; id("org.jetbrains.kotlin.android") version "1.9.22" apply false }\n'
-            )
+            f.write('plugins { id("com.android.application") version "8.2.2" apply false }\n')
             
-        # 3. Write app/build.gradle.kts (Optimized for low-RAM compilation profiles)
+        # 3. Write app/build.gradle.kts (Zero heavy Compose dependencies)
         with open("sandbox/app/build.gradle.kts", "w") as f:
             f.write(
-                'plugins { id("com.android.application"); id("org.jetbrains.kotlin.android") }\n'
+                'plugins { id("com.android.application") }\n'
                 'android {\n'
                 '    namespace = "com.example.textutility"\n'
                 '    compileSdk = 34\n'
                 '    defaultConfig { applicationId = "com.example.textutility"; minSdk = 24; targetSdk = 34; versionCode = 1; versionName = "1.0" }\n'
-                '    buildTypes { release { isMinifyEnabled = false } }\n'
+                '    buildTypes { release { minifyEnabled = false } }\n'
                 '    compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }\n'
-                '    kotlinOptions { jvmTarget = "17" }\n'
-                '    buildFeatures { compose = true }\n'
-                '    composeOptions { kotlinCompilerExtensionVersion = "1.5.8" }\n'
                 '}\n'
                 'dependencies {\n'
-                '    implementation("androidx.core:core-ktx:1.12.0")\n'
-                '    implementation("androidx.activity:activity-compose:1.8.2")\n'
-                '    implementation("androidx.compose.ui:ui:1.6.1")\n'
-                '    implementation("androidx.compose.material3:material3:1.2.0")\n'
+                '    implementation("androidx.appcompat:appcompat:1.6.1")\n'
                 '}\n'
             )
 
-        # 4. Write Manifest Schema
+        # 4. Write your HTML Text Utility App directly into Assets
+        with open("sandbox/app/src/main/assets/index.html", "w") as f:
+            f.write('''<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UtilityApp</title>
+    <style>
+        body { background: #0d1117; color: #c9d1d9; font-family: sans-serif; padding: 15px; margin: 0; }
+        h2 { color: #fff; margin-top: 0; }
+        textarea { width: 100%; height: 120px; background: #161b22; color: #fff; border: 1px solid #30363d; border-radius: 6px; padding: 10px; box-sizing: border-box; resize: none; margin-bottom: 10px; font-family: monospace; outline: none; }
+        .btn-group { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
+        button { flex: 1; min-width: 80px; background: #21262d; border: 1px solid #30363d; color: #58a6ff; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        button.copy { background: #238636; color: white; width: 100%; min-width: 100%; margin-top: 5px; }
+        .metrics { font-size: 0.85rem; color: #8b949e; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h2>TextUtility Engine</h2>
+    <div class="metrics" id="m">Chars: 0</div>
+    <textarea id="i" placeholder="Type or paste text..." oninput="document.getElementById('m').innerText='Chars: '+this.value.length"></textarea>
+    <div class="btn-group">
+        <button onclick="run('up')">UPPER</button>
+        <button onclick="run('lo')">LOWER</button>
+        <button onclick="run('cl')">CLEAN</button>
+    </div>
+    <textarea id="o" readonly placeholder="Result displays here..."></textarea>
+    <button class="copy" onclick="cpy()">Copy Result Data</button>
+
+    <script>
+        function run(a) {
+            let v = document.getElementById('i').value;
+            if(a=='up') document.getElementById('o').value = v.toUpperCase();
+            if(a=='lo') document.getElementById('o').value = v.toLowerCase();
+            if(a=='cl') document.getElementById('o').value = v.replace(/\\s+/g, ' ').trim();
+        }
+        function cpy() {
+            let txt = document.getElementById('o').value;
+            if(!txt) return;
+            navigator.clipboard.writeText(txt);
+            alert('Copied to clipboard!');
+        }
+    </script>
+</body>
+</html>''')
+
+        # 5. Write AndroidManifest.xml
         with open("sandbox/app/src/main/AndroidManifest.xml", "w") as f:
             f.write(
                 '<manifest xmlns:android="http://android.com">\n'
-                '    <application android:allowBackup="true" android:label="TextUtility" android:supportsRtl="true" android:theme="@android:style/Theme.DeviceDefault.NoActionBar">\n'
+                '    <application android:allowBackup="true" android:label="TextUtility" android:supportsRtl="true" android:theme="@style/Theme.AppCompat.NoActionBar">\n'
                 '        <activity android:name="com.example.textutility.MainActivity" android:exported="true">\n'
                 '            <intent-filter>\n'
                 '                <action android:name="android.intent.action.MAIN" />\n'
                 '                <category android:name="android.intent.category.LAUNCHER" />\n'
                 '            </intent-filter>\n'
                 '        </activity>\n'
-            '    </application>\n'
-            '</manifest>\n'
+                '    </application>\n'
+                '</manifest>\n'
             )
 
-        # 5. Write pure MainActivity.kt Core Engine
-        with open("sandbox/app/src/main/java/com/example/textutility/MainActivity.kt", "w") as f:
+        # 6. Write simple Android MainActivity.java (Bypasses Kotlin compiler entirely)
+        with open("sandbox/app/src/main/java/com/example/textutility/MainActivity.java", "w") as f:
             f.write(
-                'package com.example.textutility\n'
-                'import android.content.ClipData\n'
-                'import android.content.ClipboardManager\n'
-                'import android.content.Context\n'
-                'import android.os.Bundle\n'
-                'import android.widget.Toast\n'
-                'import androidx.activity.ComponentActivity\n'
-                'import androidx.activity.compose.setContent\n'
-                'import androidx.compose.foundation.layout.*\n'
-                'import androidx.compose.material3.*\n'
-                'import androidx.compose.runtime.*\n'
-                'import androidx.compose.ui.Modifier\n'
-                'import androidx.compose.ui.platform.LocalContext\n'
-                'import androidx.compose.ui.unit.dp\n'
-                'class MainActivity : ComponentActivity() {\n'
-                '    override fun onCreate(savedInstanceState: Bundle?) {\n'
-                '        super.onCreate(savedInstanceState)\n'
-                '        setContent {\n'
-                '            MaterialTheme(colorScheme = darkColorScheme()) {\n'
-                '                Surface(modifier = Modifier.fillMaxSize()) {\n'
-                '                    var text by remember { mutableStateOf("") }\n'
-                '                    var out by remember { mutableStateOf("") }\n'
-                '                    val ctx = LocalContext.current\n'
-                '                    Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {\n'
-                '                        Text("TextUtility Engine", style = MaterialTheme.typography.headlineMedium)\n'
-                '                        Text("Chars: " + text.length)\n'
-                '                        OutlinedTextField(value = text, onValueChange = { text = it }, label = { Text("Input") }, modifier = Modifier.fillMaxWidth().height(120.dp))\n'
-                '                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {\n'
-                '                            Button(onClick = { out = text.uppercase() }) { Text("UPPER") }\n'
-                '                            Button(onClick = { out = text.lowercase() }) { Text("LOWER") }\n'
-                '                            Button(onClick = { out = text.replace("\\\\s+".toRegex(), " ").trim() }) { Text("CLEAN") }\n'
-                '                        }\n'
-                '                        OutlinedTextField(value = out, onValueChange = {}, readOnly = true, label = { Text("Result") }, modifier = Modifier.fillMaxWidth().height(120.dp))\n'
-                '                        Button(onClick = {\n'
-                '                            if(out.isNotEmpty()) {\n'
-                '                                val cb = ctx.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager\n'
-                '                                cb.setPrimaryClip(ClipData.newPlainText("out", out))\n'
-                '                                Toast.makeText(ctx, "Copied!", Toast.LENGTH_SHORT).show()\n'
-                '                            }\n'
-                '                        }, modifier = Modifier.fillMaxWidth()) { Text("Copy Data") }\n'
-                '                    }\n'
-                '                }\n'
-                '            }\n'
-                '        }\n'
+                'package com.example.textutility;\n'
+                'import android.os.Bundle;\n'
+                'import android.webkit.WebSettings;\n'
+                'import android.webkit.WebView;\n'
+                'import android.webkit.WebViewClient;\n'
+                'import androidx.appcompat.app.AppCompatActivity;\n'
+                'public class MainActivity extends AppCompatActivity {\n'
+                '    @Override\n'
+                '    protected void onCreate(Bundle savedInstanceState) {\n'
+                '        super.onCreate(savedInstanceState);\n'
+                '        WebView webView = new WebView(this);\n'
+                '        WebSettings settings = webView.getSettings();\n'
+                '        settings.setJavaScriptEnabled(true);\n'
+                '        settings.setDomStorageEnabled(true);\n'
+                '        webView.setWebViewClient(new WebViewClient());\n'
+                '        webView.loadUrl("file:///android_asset/index.html");\n'
+                '        setContentView(webView);\n'
                 '    }\n'
                 '}\n'
             )
 
-    - name: 4. Setup Gradle Build Automation Environment
+    - name: 4. Setup Gradle Build Environment
       uses: gradle/actions/setup-gradle@v4
       with:
         build-root-directory: sandbox
 
-    - name: 5. Compile Low-Memory Production Debug APK
+    - name: 5. Compile Light Android Package
       run: gradle :app:assembleDebug --no-daemon
       working-directory: sandbox
-      env:
-        GRADLE_OPTS: "-Xmx2560m -XX:MaxMetaspaceSize=512m -XX:+UseParallelGC"
 
     - name: 6. Output Signed Application Package Binary
       uses: actions/upload-artifact@v4
