@@ -4,53 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WhiskerPaws Mobile</title>
-    <!-- EMBEDDED OFFLINE MOBILE CSS STYLING ENGINE -->
+    <!-- GOOGLE ADMOB H5 ADVANCED MONETIZATION SDK ENGINE -->
+    <script async src="https://googlesyndication.com" crossorigin="anonymous"></script>
+    <script>
+        window.adsbygoogle = window.adsbygoogle || [];
+        // Initialize AdMob H5 runtime configuration mapping parameters
+        adsbygoogle.push({
+            params: {
+                google_ad_layout_key: "ca-app-pub-6655685917040449~5170056805"
+            }
+        });
+    </script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background-color: #f8fafc; 
-            color: #1e293b;
-            max-width: 100%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding-bottom: 90px;
-            overflow-x: hidden;
+            background-color: #f8fafc; color: #1e293b; max-width: 100%; min-height: 100vh;
+            display: flex; flex-direction: column; padding-bottom: 90px; overflow-x: hidden;
         }
-        header {
-            background-color: #ffffff;
-            border-bottom: 1px solid #e2e8f0;
-            padding: 14px 16px;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
-        }
+        header { background-color: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 14px 16px; position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02); }
         .header-brand { display: flex; align-items: center; gap: 8px; }
         .header-title { font-size: 18px; font-weight: 700; color: #0f172a; letter-spacing: -0.5px; }
-        .ticker-wrap { 
-            background-color: #f1f5f9; 
-            padding: 10px 0; 
-            overflow: hidden; 
-            position: sticky; 
-            top: 53px; 
-            z-index: 40; 
-            border-bottom: 1px solid #e2e8f0;
-            width: 100%;
-        }
-        .ticker { 
-            display: inline-block; 
-            white-space: nowrap;
-            padding-left: 100%; 
-            font-size: 12px; 
-            font-weight: 600;
-            color: #4f46e5;
-            animation: marquee 25s linear infinite; 
-        }
+        .ticker-wrap { background-color: #f1f5f9; padding: 10px 0; overflow: hidden; position: sticky; top: 53px; z-index: 40; border-bottom: 1px solid #e2e8f0; width: 100%; }
+        .ticker { display: inline-block; white-space: nowrap; padding-left: 100%; font-size: 12px; font-weight: 600; color: #4f46e5; animation: marquee 25s linear infinite; }
         @keyframes marquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
         main { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
         .card { background-color: #ffffff; border-radius: 16px; padding: 16px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01); }
@@ -64,8 +40,7 @@
         .task-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 8px; }
         .task-left { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: #334155; }
         .task-coin { font-size: 12px; font-weight: 700; color: #059669; }
-        .ad-box { background: repeating-linear-stripes(-45deg, #e2e8f0, #e2e8f0 10px, #f1f5f9 10px, #f1f5f9 20px); border: 1px solid #cbd5e1; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 11px; font-weight: 500; text-align: center; }
-        .footer-ads { position: fixed; bottom: 0; left: 0; right: 0; background-color: #ffffff; border-top: 1px solid #e2e8f0; padding: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; z-index: 100; }
+        .footer-ads { position: fixed; bottom: 0; left: 0; right: 0; background-color: #ffffff; border-top: 1px solid #e2e8f0; padding: 8px; display: grid; grid-template-columns: 1fr; z-index: 100; box-shadow: 0 -4px 6px rgba(0,0,0,0.02); }
         .streak-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 12px; }
         .streak-day { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 6px 4px; text-align: center; }
         .streak-day-active { background-color: #ecfdf5; border-color: #10b981; color: #065f46; font-weight: 600; }
@@ -74,12 +49,9 @@
         .streak-val { font-size: 11px; font-weight: 700; }
         .progress-bar { width: 100%; background-color: #f1f5f9; height: 10px; border-radius: 9999px; overflow: hidden; margin: 8px 0; }
         .progress-fill { background-color: #4f46e5; height: 100%; width: 72%; border-radius: 9999px; }
-        
-        /* OVERLAY MODAL WINDOW STYLES */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.4); display: none; justify-content: center; align-items: center; z-index: 200; padding: 20px; }
         .modal-box { background-color: #ffffff; border-radius: 16px; padding: 20px; width: 100%; max-width: 320px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
         .modal-title { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
-
         .payment-method-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 8px; background-color: #fff; }
         .payment-logo { font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
         .badge-uno { color: #1e3a8a; background-color: #dbeafe; padding: 6px 12px; border: 1px solid #bfdbfe; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
@@ -88,8 +60,6 @@
     </style>
 </head>
 <body>
-
-    <!-- COMPACT MOBILE HEADER -->
     <header>
         <div class="header-brand">
             <span style="font-size: 22px;">🐱</span>
@@ -101,7 +71,6 @@
         </div>
     </header>
 
-    <!-- NATIVE POPUP FOR LOGIN & SIGNUP -->
     <div id="auth-modal" class="modal-overlay">
         <div class="modal-box">
             <div id="modal-header-title" class="modal-title">Create Account</div>
@@ -114,7 +83,6 @@
         </div>
     </div>
 
-    <!-- NATIVE POPUP FOR CASHOUT INPUTS -->
     <div id="cashout-modal" class="modal-overlay">
         <div class="modal-box">
             <div id="cashout-modal-title" class="modal-title">Withdraw Balance</div>
@@ -131,10 +99,6 @@
         <div class="ticker">
             🐾 Welcome to WhiskerPaws Mobile! • 🎡 Spin the Lucky Wheel 5x daily for massive bonus rewards! • ⚡ Start Passive Mining to secure constant Pawcoins! • 💳 Payout threshold is 1,000 Coins ($1.00) via local GCash, Maya, or ONE Wallet standard economics. •
         </div>
-    </div>
-
-    <div style="padding: 16px 16px 0 16px;">
-        <div class="ad-box" style="height: 50px;">[ AdMob Banner #1 - Native Mobile Header Unit ]</div>
     </div>
     <main>
         <!-- NATIVE COMPONENT: 7-DAY LOGIN STREAK REWARDS -->
@@ -247,10 +211,14 @@
             </div>
         </div>
 
-        <!-- NATIVE AD CONTAINER #2: INTERSTITIAL BANNER OVERLAY -->
-        <div class="ad-box" style="height: 75px; flex-direction: column; padding: 8px;">
-            <span>[ AdMob Banner #2 - Utility Interstitial Break ]</span>
-            <span onclick="triggerRewardedAd('Bonus Multiplier')" style="font-size: 11px; font-weight: 700; color: #4f46e5; text-decoration: underline; margin-top: 4px; cursor: pointer;">Watch video for +20 Instant Coins</span>
+        <!-- PRODUCTION GOOGLE ADMOB BANNER #2: UTILITY BREAK -->
+        <div style="width: 100%; text-align: center; overflow: hidden; margin: 8px 0;">
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:320px;height:50px"
+                 data-ad-client="ca-pub-6655685917040449"
+                 data-ad-slot="1985937373"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            <span onclick="triggerRewardedAd('Bonus Multiplier')" style="font-size: 11px; font-weight: 700; color: #4f46e5; text-decoration: underline; margin-top: 4px; display: block; cursor: pointer;">Watch video for +20 Instant Coins</span>
         </div>
 
         <!-- PASSIVE PASOMETER STEP COUNTER UNIT -->
@@ -266,7 +234,7 @@
                 <span>Current: <b>3,600 steps</b></span>
                 <span style="color: #059669; font-weight: 700;">+15 Coins Available</span>
             </div>
-            <button onclick="triggerRewardedAd('Claim Step Bonus')" class="btn-secondary">
+            <button onclick="triggerRewardedAd('Claim Step Bonus')" class="btn-secondary" style="font-size: 12px; padding: 8px;">
                 Claim Milestone Pawcoins
             </button>
         </div>
@@ -307,269 +275,84 @@
             </button>
         </div>
 
-        <!-- NATIVE AD CONTAINER #3 -->
-        <div class="ad-box" style="height: 60px; margin-bottom: 16px;">[ AdMob Banner #3 - Mid Content Block ]</div>
+        <!-- PRODUCTION GOOGLE ADMOB BANNER #3: MID CONTENT BREAK -->
+        <div style="width: 100%; text-align: center; overflow: hidden; margin-top: 8px;">
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:320px;height:50px"
+                 data-ad-client="ca-pub-6655685917040449"
+                 data-ad-slot="1985937373"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
 
     </main>
 
-    <!-- FIXED NATIVE STICKY FOOTER AD UNITS -->
-    <div class="footer-ads">
-        <div class="ad-box" style="height: 48px; font-size: 9px;">[ Banner #4 - Footer Left ]</div>
-        <div class="ad-box" style="height: 48px; font-size: 9px;">[ Banner #5 - Footer Right ]</div>
+    <!-- PRODUCTION GOOGLE ADMOB BANNER #4: FIXED STICKY FOOTER -->
+    <div class="footer-ads" style="text-align: center;">
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:320px;height:50px"
+             data-ad-client="ca-pub-6655685917040449"
+             data-ad-slot="1985937373"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
-    <!-- INTERACTIVE STANDALONE MOBILE LOGIC ENGINES -->
+    <!-- LINKING SEPARATE NATIVE JAVA LOGIC ENGINES -->
+    <script src="app.js"></script>
+    
     <script>
-        // Stable Independent Offline Storage System
-        let currentBalance = parseInt(localStorage.getItem('wp_balance')) || 120;
-        let dailySpinsUsed = parseInt(localStorage.getItem('wp_spins_used')) || 0;
-        let currentStreak = parseInt(localStorage.getItem('wp_streak')) || 0;
-        let lastClaimDate = localStorage.getItem('wp_last_claim') || "";
-        let runningExpenses = 0.00;
+        // Override standard placeholder simulation with true AdMob API hooks
+        const ORIGINAL_REWARD_AD_FUNCTION = triggerRewardedAd;
         
-        // Track local mock session token
-        let currentUser = localStorage.getItem('wp_user_logged') || null;
-        let activeCashoutPlatform = "";
-
-        // Initialize state on startup
-        window.addEventListener('DOMContentLoaded', () => {
-            const lastSpinDate = localStorage.getItem('wp_last_spin_date');
-            const todayStr = new Date().toDateString();
+        // Hook into live Video Rewards Unit ID: ca-app-pub-6655685917040449/3704097744
+        triggerRewardedAd = function(featureName) {
+            console.log("Triggering live monetization container for: " + featureName);
             
-            if (lastSpinDate !== todayStr) {
-                dailySpinsUsed = 0;
-                localStorage.setItem('wp_spins_used', 0);
-                localStorage.setItem('wp_last_spin_date', todayStr);
-            }
-            updateDisplay();
-        });
-
-        // Sync local adjustments instantly to secure persistent database files
-        function saveLocalData() {
-            localStorage.setItem('wp_balance', currentBalance);
-            localStorage.setItem('wp_streak', currentStreak);
-            localStorage.setItem('wp_last_claim', lastClaimDate);
-            localStorage.setItem('wp_spins_used', dailySpinsUsed);
-        }
-
-        // Render dynamic dashboard metrics to user UI
-        function updateDisplay() {
-            document.getElementById('coin-balance').innerText = currentBalance;
-            // Native micro-economic math engine: 1 Pawcoin = 0.058 PHP
-            document.getElementById('php-balance').innerText = (currentBalance * 0.058).toFixed(2);
-            document.getElementById('spins-count').innerText = 5 - dailySpinsUsed;
-            document.getElementById('streak-days-count').innerText = currentStreak;
-
-            // Handle Lucky Spin button state
-            const spinBtn = document.getElementById('spin-btn');
-            if (spinBtn) {
-                if (dailySpinsUsed >= 5) {
-                    spinBtn.disabled = true;
-                    spinBtn.style.backgroundColor = '#cbd5e1';
-                    spinBtn.innerText = "🔒 Daily Limit Reached";
-                } else {
-                    spinBtn.disabled = false;
-                    spinBtn.style.backgroundColor = '#059669';
-                    spinBtn.innerText = "🎰 Watch Ad & Spin Wheel";
+            // Execute programmatic check against AdMob Web Interstitial/Rewarded SDK
+            if (window.adsbygoogle && window.adsbygoogle.push) {
+                try {
+                    adsbygoogle.push({
+                        params: {
+                            google_ad_slot: "3704097744",
+                            google_ad_format: "rewarded",
+                            google_ad_callback: function(adResult) {
+                                // Grant user currency when video successfully completes
+                                if (adResult && adResult.status === 'completed') {
+                                    currentBalance += 20;
+                                    saveLocalData();
+                                    updateDisplay();
+                                    alert("✨ Reward Claimed! +20 Pawcoins added to your account for completing the ad session.");
+                                }
+                            }
+                        }
+                    });
+                    return; // Live ad successfully handled
+                } catch(adError) {
+                    console.error("AdMob SDK execution fault, fallback triggered", adError);
                 }
             }
+            
+            // Safe fallback if device is currently launching completely offline
+            ORIGINAL_REWARD_AD_FUNCTION(featureName);
+        };
 
-            // Update UI elements visually for active streak highlights
-            for (let i = 1; i <= 7; i++) {
-                const dayEl = document.getElementById("streak-d" + i);
-                if (dayEl) {
-                    if (i <= currentStreak) {
-                        dayEl.className = "streak-day streak-day-active";
-                    } else if (i === currentStreak + 1) {
-                        dayEl.className = "streak-day streak-day-current";
-                    } else {
-                        dayEl.className = "streak-day";
-                    }
-                }
-            }
-
-            const authContainer = document.getElementById('auth-ui-container');
-            if (currentUser && authContainer) {
-                authContainer.innerHTML = '<span style="font-size:11px; font-weight:700; color:#4f46e5; background-color:#f5f3ff; border:1px solid #ddd6fe; padding:6px 10px; border-radius:8px;">✨ Active</span>';
-            }
-        }
-
-        // NATIVE ACCOUNT OVERLAY INTERFACES MODAL MANAGER
-        let activeAuthType = "signup";
-        
-        function openAuthModal(type) {
-            activeAuthType = type;
-            document.getElementById('modal-header-title').innerText = type === 'signup' ? "Create Account" : "Welcome Back Login";
-            document.getElementById('auth-modal').style.display = 'flex';
-        }
-        
-        function closeAuthModal() {
-            document.getElementById('auth-modal').style.display = 'none';
-            document.getElementById('auth-email-input').value = "";
-            document.getElementById('auth-pass-input').value = "";
-        }
-        
-        function submitAuthForm() {
-            const email = document.getElementById('auth-email-input').value.trim();
-            const password = document.getElementById('auth-pass-input').value;
-
-            if (!email || !password || password.length < 6) {
-                alert("❌ Validation Error: Input a valid email address and a minimum 6-character password.");
-                return;
-            }
-
-            currentUser = email;
-            localStorage.setItem('wp_user_logged', email);
-            closeAuthModal();
-            alert("✨ Profile Session Initialized!\nWelcome to WhiskerPaws. All app systems are now unfrozen!");
-            updateDisplay();
-        }
-        // NATIVE CASHOUT WITHDRAWAL CARDS INTERFACES MODAL MANAGER
-        function initiateCashout(platformName) {
-            if (!currentUser) {
-                alert("⚠️ Access Denied!\n\nPlease use the 'Join' or 'Log In' button in the upper header to register an active session first.");
-                return;
-            }
-
-            const chosenTierPhp = parseInt(document.getElementById('cashout-tier').value);
-            const refCode = document.getElementById('referral-code-input').value.trim();
-
-            // Native coin metric validation check: 171 Coins = 10 PHP
-            const coinsNeeded = Math.ceil(chosenTierPhp * 17.1);
-
-            if (currentBalance < coinsNeeded) {
-                alert("❌ Payout Failed!\n\nYou currently have " + currentBalance + " Pawcoins. To withdraw the ₱" + chosenTierPhp + ".00 tier via " + platformName + ", you need a minimum of " + coinsNeeded + " Pawcoins.");
-                return;
-            }
-
-            if (platformName !== 'ONE Wallet' && !refCode) {
-                alert("🔑 Verification Needed!\n\nTo withdraw via " + platformName + ", please enter your active promotional referral verification code first (e.g. V98HAR).");
-                return;
-            }
-
-            activeCashoutPlatform = platformName;
-            document.getElementById('cashout-modal-title').innerText = "Withdraw via " + platformName;
-            document.getElementById('cashout-modal').style.display = 'flex';
-        }
-
-        function closeCashoutModal() {
-            document.getElementById('cashout-modal').style.display = 'none';
-            document.getElementById('cashout-phone-input').value = "";
-        }
-
-        function submitCashoutForm() {
-            const mobileNum = document.getElementById('cashout-phone-input').value.trim();
-            const chosenTierPhp = parseInt(document.getElementById('cashout-tier').value);
-            const coinsNeeded = Math.ceil(chosenTierPhp * 17.1);
-
-            if (!mobileNum || mobileNum.length < 11) {
-                alert("❌ Invalid input: An 11-digit mobile ledger destination number is required.");
-                return;
-            }
-
-            currentBalance -= coinsNeeded;
-            saveLocalData();
-            closeCashoutModal();
-            updateDisplay();
-
-            alert("🎉 Payout Requested Successfully!\n\nYour request for ₱" + chosenTierPhp + ".00 has been sent directly to the server ledger pipeline.\n\nFunds will arrive in your " + activeCashoutPlatform + " account (" + mobileNum + ") within 24-48 verification hours!");
-        }
-
-        // Handle daily claim progressive checklist routines
-        function claimDailyStreak(isDoubleAd) {
-            const todayStr = new Date().toDateString();
-            if (lastClaimDate === todayStr) {
-                alert("🔒 You have already claimed today's daily streak bonus. Return tomorrow!");
-                return;
-            }
-
-            // SAFE EMBEDDED CONVERSION MATRIX VALUE LOOPS
-            let rawReward = 10;
-            if (currentStreak === 1) rawReward = 20;
-            if (currentStreak === 2) rawReward = 30;
-            if (currentStreak === 3) rawReward = 40;
-            if (currentStreak === 4) rawReward = 50;
-            if (currentStreak === 5) rawReward = 60;
-            if (currentStreak === 6) rawReward = 100;
-
-            if (isDoubleAd) {
-                alert("🎬 [AdMob SDK Call] Rendering rewarded interstitial break... High Margin Split active.");
-                rawReward = rawReward * 2;
-            }
-
-            currentStreak = (currentStreak % 7) + 1;
-            currentBalance += rawReward;
-            lastClaimDate = todayStr;
-
-            alert("🎉 Daily Claim Success! Added +" + rawReward + " Pawcoins to your account wallet.");
-            saveLocalData();
-            updateDisplay();
-        }
-
-        // Handle daily lucky spin mechanics
-        function playLuckySpin() {
+        // Override standard interstitial logic to call Unit ID: ca-app-pub-6655685917040449/6532163370
+        const ORIGINAL_SPIN_FUNCTION = playLuckySpin;
+        playLuckySpin = function() {
             if (dailySpinsUsed >= 5) {
                 alert("🔒 You have reached your daily limit of 5 spins. Come back tomorrow!");
                 return;
             }
 
-            alert("🎬 [AdMob SDK Call] Loading Rewarded Video ad prior to spinning standard mechanism...");
-            
-            // SAFE EMBEDDED RANDOM VALUE LOGIC LOOPS
-            let randomRoll = Math.floor(Math.random() * 4);
-            let wonPrize = 10;
-            if (randomRoll === 1) wonPrize = 20;
-            if (randomRoll === 2) wonPrize = 50;
-            if (randomRoll === 3) wonPrize = 100;
-            
-            dailySpinsUsed++;
-            currentBalance += wonPrize;
-            
-            alert("🎉 Congratulations! The wheel landed on +" + wonPrize + " Pawcoins!");
-            saveLocalData();
-            updateDisplay();
-        }
-
-        // Handle daily routine tasks checking split rewards
-        function completeTask(checkbox, rewardCoins) {
-            if (checkbox.checked) {
-                currentBalance += rewardCoins;
-                alert("✨ Task Completed! You collected +" + rewardCoins + " Pawcoins.");
-            } else {
-                currentBalance -= rewardCoins;
+            if (window.adsbygoogle && window.adsbygoogle.push) {
+                try {
+                    adsbygoogle.push({
+                        params: {
+                            google_ad_slot: "6532163370",
+                            google_ad_format: "interstitial"
+                        }
+                    });
+                } catch(e) { console.warn("Interstitial display skipped", e); }
             }
-            saveLocalData();
-            updateDisplay();
-        }
-
-        // Handle rapid budget expense metrics addition
-        function addExpense() {
-            const nameEl = document.getElementById('expense-name');
-            const amountEl = document.getElementById('expense-amount');
-            const value = parseFloat(amountEl.value);
-
-            if (!nameEl.value || isNaN(value) || value <= 0) {
-                alert("Please input a valid product item name and budget weight.");
-                return;
-            }
-
-            runningExpenses += value;
-            document.getElementById('total-expenses').innerText = runningExpenses.toFixed(2);
-            
-            nameEl.value = '';
-            amountEl.value = '';
-            
-            currentBalance += 2;
-            saveLocalData();
-            updateDisplay();
-        }
-
-        // Handle structural programmatic ad component simulation prompts
-        function triggerRewardedAd(featureName) {
-            alert("🎬 [AdMob SDK Call Triggered]\nLoading a rewarded video ad to verify action for: \"" + featureName + "\".\n\nOnce finished, the application registers the 95% revenue split margin and releases 20 Pawcoins to the user wallet!");
-            currentBalance += 20;
-            saveLocalData();
-            updateDisplay();
-        }
+            ORIGINAL_SPIN_FUNCTION();
+        };
     </script>
 </body>
 </html>
