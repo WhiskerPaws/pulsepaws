@@ -329,3 +329,22 @@
             alert("✨ Verification Complete! Profile account successfully verified and sync pipes open.");
             updateDisplay();
         }
+    <script>
+        function handleLogin(event) {
+            event.preventDefault();
+            localStorage.setItem('paws_auth_session', 'active');
+            document.getElementById('login-overlay').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('paws_auth_session');
+            document.getElementById('login-overlay').classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (localStorage.getItem('paws_auth_session') === 'active') {
+                document.getElementById('login-overlay').classList.add('opacity-0', 'pointer-events-none');
+            }
+        });
+    </script>
+    <script src="app.js"></script>
