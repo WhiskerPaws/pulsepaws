@@ -1,72 +1,39 @@
-name: Compile Android App
+name: Deploy WhiskerPaws Dashboard
 
 on:
   push:
-    branches: [ "main", "master" ]
-  pull_request:
-    branches: [ "main", "master" ]
+    branches:
+      - main
   workflow_dispatch:
 
+# Set up access permissions for GitHub Pages deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
-  build:
+  deploy-dashboard:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-
     steps:
-    - name: 1. Checkout Repository Source Code
-      uses: actions/checkout@v4
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
 
-    - name: 2. Initialize Java Development Kit 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
+      - name: Setup GitHub Pages Environment
+        uses: actions/configure-pages@v4
 
-    - name: 3. Generate Lightweight Android WebView Project via Python
-      shell: python
-      run: |
-        import os
-        
-        os.makedirs("sandbox/app/src/main/assets", exist_ok=True)
-        os.makedirs("sandbox/app/src/main/java/com/example/textutility", exist_ok=True)
-        
-        # 1. Write settings.gradle.kts
-        with open("sandbox/settings.gradle.kts", "w") as f:
-            f.write('pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }\ndependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS); repositories { google(); mavenCentral() } }\nrootProject.name = "TextUtility"\ninclude(":app")\n')
-            
-        # 2. Write root build.gradle.kts
-        with open("sandbox/build.gradle.kts", "w") as f:
-            f.write('plugins { id("com.android.application") version "8.2.2" apply false }\n')
-            
-        # 3. Write app/build.gradle.kts
-        with open("sandbox/app/build.gradle.kts", "w") as f:
-            f.write('plugins { id("com.android.application") }\nandroid {\n    namespace = "com.example.textutility"\n    compileSdk = 34\n    defaultConfig { applicationId = "com.example.textutility"; minSdk = 24; targetSdk = 34; versionCode = 1; versionName = "1.0" }\n    buildTypes { release { minifyEnabled = false } }\n    compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }\n}\ndependencies {\n    implementation("androidx.appcompat:appcompat:1.6.1")\n}\n')
+      - name: Upload Static Build Files
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
 
-        # 4. Write pure flat index.html code payload to avoid indentation issues
-        html_content = '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>UtilityApp</title><style>body { background: #0d1117; color: #c9d1d9; font-family: sans-serif; padding: 15px; margin: 0; } h2 { color: #fff; margin-top: 0; } textarea { width: 100%; height: 120px; background: #161b22; color: #fff; border: 1px solid #30363d; border-radius: 6px; padding: 10px; box-sizing: border-box; resize: none; margin-bottom: 10px; font-family: monospace; outline: none; } .btn-group { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; } button { flex: 1; min-width: 80px; background: #21262d; border: 1px solid #30363d; color: #58a6ff; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; } button.copy { background: #238636; color: white; width: 100%; min-width: 100%; margin-top: 5px; } .metrics { font-size: 0.85rem; color: #8b949e; margin-bottom: 10px; }</style></head><body><h2>TextUtility Engine</h2><div class="metrics" id="m">Chars: 0</div><textarea id="i" placeholder="Type or paste text..." oninput="document.getElementById(\'m\').innerText=\'Chars: \'+this.value.length"></textarea><div class="btn-group"><button onclick="run(\'up\')">UPPER</button><button onclick="run(\'lo\')">LOWER</button><button onclick="run(\'cl\')">CLEAN</button></div><textarea id="o" readonly placeholder="Result displays here..."></textarea><button class="copy" onclick="cpy()">Copy Result Data</button><script>function run(a) { let v = document.getElementById(\'i\').value; if(a==\'up\') document.getElementById(\'o\').value = v.toUpperCase(); if(a==\'lo\') document.getElementById(\'o\').value = v.toLowerCase(); if(a==\'cl\') document.getElementById(\'o\').value = v.replace(/\\s+/g, \' \').trim(); } function cpy() { let txt = document.getElementById(\'o\').value; if(!txt) return; navigator.clipboard.writeText(txt); alert(\'Copied to clipboard!\'); }</script></body></html>'
-        with open("sandbox/app/src/main/assets/index.html", "w") as f:
-            f.write(html_content)
-
-        # 5. Write AndroidManifest.xml
-        with open("sandbox/app/src/main/AndroidManifest.xml", "w") as f:
-            f.write('<manifest xmlns:android="http://android.com">\n    <application android:allowBackup="true" android:label="TextUtility" android:supportsRtl="true" android:theme="@style/Theme.AppCompat.NoActionBar">\n        <activity android:name="com.example.textutility.MainActivity" android:exported="true">\n            <intent-filter>\n                <action android:name="android.intent.action.MAIN" />\n                <category android:name="android.intent.category.LAUNCHER" />\n            </intent-filter>\n        </activity>\n    </application>\n</manifest>\n')
-
-        # 6. Write simple Android MainActivity.java
-        with open("sandbox/app/src/main/java/com/example/textutility/MainActivity.java", "w") as f:
-            f.write('package com.example.textutility;\nimport android.os.Bundle;\nimport android.webkit.WebSettings;\nimport android.webkit.WebView;\nimport android.webkit.WebViewClient;\nimport androidx.appcompat.app.AppCompatActivity;\npublic class MainActivity extends AppCompatActivity {\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        WebView webView = new WebView(this);\n        WebSettings settings = webView.getSettings();\n        settings.setJavaScriptEnabled(true);\n        settings.setDomStorageEnabled(true);\n        webView.setWebViewClient(new WebViewClient());\n        webView.loadUrl("file:///android_asset/index.html");\n        setContentView(webView);\n    }\n}\n')
-
-    - name: 4. Setup Gradle Build Environment
-      uses: gradle/actions/setup-gradle@v4
-      with:
-        build-root-directory: sandbox
-
-    - name: 5. Compile Light Android Package
-      run: gradle :app:assembleDebug --no-daemon
-      working-directory: sandbox
-
-    - name: 6. Output Signed Application Package Binary
-      uses: actions/upload-artifact@v4
-      with:
-        name: UtilityApp-Installer
-        path: sandbox/app/build/outputs/apk/debug/*.apk
-        if-no-files-found: error
-        retention-days: 7
+      - name: Deploy Live Production URL
+        id: deployment
+        uses: actions/deploy-pages@v4
