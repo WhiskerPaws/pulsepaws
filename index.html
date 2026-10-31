@@ -141,6 +141,8 @@
         <!-- LOCAL PAYOUT CONVERSION LEDGER -->
         <div class="card" style="border: 1px solid #cbd5e1; background-color: #f8fafc;">
             <span class="card-title" style="color: #0f172a; font-size: 15px;">💸 Local Cashout Conversion Hub</span>
+            <p style="font-size: 12px; color: #64748b; margin-bottom: 10px; line-height: 1.4;">Convert your gathered Pawcoins directly into real economics. Select tier options below to transfer balance:</p>
+            
             <div style="margin-bottom: 12px; width: 100%;">
                 <select id="cashout-tier" class="input-field" style="background-color: #fff; width: 100%;">
                     <option value="10">₱10.00 Tier (Requires 171 Coins)</option>
@@ -151,9 +153,11 @@
                     <option value="1000">₱1,000.00 Tier (Requires 17,100 Coins)</option>
                 </select>
             </div>
+
             <div style="margin-bottom: 12px; width: 100%;">
                 <input type="text" id="referral-code-input" placeholder="Enter referral code (e.g. V98HAR)" class="input-field" style="background-color: #fff; width: 100%;">
             </div>
+
             <div style="display: flex; flex-direction: column; gap: 6px; width: 100%;">
                 <div class="payment-method-row">
                     <span class="payment-logo" style="color: #1e3a8a;"><span style="color:#2563eb;">ONE</span> Wallet</span>
@@ -196,94 +200,132 @@
                 <button onclick="playMiniGame('lower')" class="btn-secondary" style="border-color: #d8b4fe; color: #6b21a8;">🔻 Lower</button>
             </div>
         </div>
-        <!-- DAILY CHECKLIST HUB -->
-        <div class="card">
-            <span class="card-title">📋 Daily Routine Tasks</span>
-            <div class="task-row">
-                <div class="task-left">
-                    <input type="checkbox" onchange="completeTask(this, 10)" style="width: 16px; height: 16px; accent-color: #4f46e5; margin-right: 4px;">
-                    <span>Log a complete Pomodoro slot</span>
-                </div>
-                <span class="task-coin">+10 Coins</span>
-            </div>
-            <div class="task-row">
-                <div class="task-left">
-                    <input type="checkbox" onchange="completeTask(this, 5)" style="width: 16px; height: 16px; accent-color: #4f46e5; margin-right: 4px;">
-                    <span>Track current daily expenses</span>
-                </div>
-                <span class="task-coin">+5 Coins</span>
-            </div>
-            <div class="task-row">
-                <div class="task-left">
-                    <input type="checkbox" onchange="completeTask(this, 5)" style="width: 16px; height: 16px; accent-color: #4f46e5; margin-right: 4px;">
-                    <span>Record water intake (8 glasses)</span>
-                </div>
-                <span class="task-coin">+5 Coins</span>
-            </div>
-        </div>
-    </main>
-
-    <!-- FIXED NATIVE STICKY FOOTER AD BLOCK -->
-    <div class="footer-ads" style="text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:inline-block;width:320px;height:50px"
-             data-ad-client="ca-pub-6655685917040449"
-             data-ad-slot="1985937373"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    <!-- NATIVE STICKY FOOTER AD UNITS -->
+    <div class="footer-ads">
+        <div class="ad-box" style="height: 48px; font-size: 9px; width:100%;">[ AdMob Banner Slot - Sticky Footer Frame ]</div>
     </div>
 
-    <!-- LINKING NATIVE STANDALONE SEPARATE JAVA ENGINE -->
-    <script src="app.js"></script>
-    
+    <!-- FULLY CONSOLIDATED OFFLINE SYSTEM SCRIPTS -->
     <script>
-        // Override standard simulation function placeholders with live Google AdMob API triggers
-        const ORIGINAL_REWARD_AD_FUNCTION = triggerRewardedAd;
-        
-        // Video Rewards Code: ca-app-pub-6655685917040449/3704097744
-        triggerRewardedAd = function(featureName) {
-            console.log("Initializing production ad session for: " + featureName);
+        // Stable Independent Offline Storage System
+        let currentBalance = parseInt(localStorage.getItem('wp_balance')) || 120;
+        let dailySpinsUsed = parseInt(localStorage.getItem('wp_spins_used')) || 0;
+        let currentStreak = parseInt(localStorage.getItem('wp_streak')) || 0;
+        let lastClaimDate = localStorage.getItem('wp_last_claim') || "";
+        let runningExpenses = 0.00;
+        let currentUser = localStorage.getItem('wp_user_logged') || null;
+        let activeCashoutPlatform = "";
+        let currentCardValue = 7;
+
+        // Auto-check local database maps on application launch
+        window.addEventListener('DOMContentLoaded', () => {
+            const lastSpinDate = localStorage.getItem('wp_last_spin_date');
+            const todayStr = new Date().toDateString();
             
-            if (window.adsbygoogle && window.adsbygoogle.push) {
-                try {
-                    adsbygoogle.push({
-                        params: {
-                            google_ad_slot: "3704097744",
-                            google_ad_format: "rewarded",
-                            google_ad_callback: function(adResult) {
-                                if (adResult && adResult.status === 'completed') {
-                                    currentBalance += 20;
-                                    saveLocalData();
-                                    updateDisplay();
-                                    alert("✨ Reward Claimed! +20 Pawcoins added for completing the video session.");
-                                }
-                            }
-                        }
-                    });
-                    return;
-                } catch(adError) {
-                    console.error("AdMob H5 SDK exception caught, launching fallback loop", adError);
+            if (lastSpinDate !== todayStr) {
+                dailySpinsUsed = 0;
+                localStorage.setItem('wp_spins_used', 0);
+                localStorage.setItem('wp_last_spin_date', todayStr);
+            }
+            resetCardGame();
+            updateDisplay();
+        });
+
+        // Sync token allocations to local persistent layers instantly
+        function saveLocalData() {
+            localStorage.setItem('wp_balance', currentBalance);
+            localStorage.setItem('wp_streak', currentStreak);
+            localStorage.setItem('wp_last_claim', lastClaimDate);
+            localStorage.setItem('wp_spins_used', dailySpinsUsed);
+        }
+
+        // Render dynamic text metrics across viewports
+        function updateDisplay() {
+            document.getElementById('coin-balance').innerText = currentBalance;
+            // Native conversion value tracking: 1 Coin = ₱0.058 PHP
+            document.getElementById('php-balance').innerText = (currentBalance * 0.058).toFixed(2);
+            document.getElementById('spins-count').innerText = 5 - dailySpinsUsed;
+            document.getElementById('streak-days-count').innerText = currentStreak;
+
+            const spinBtn = document.getElementById('spin-btn');
+            if (spinBtn) {
+                if (dailySpinsUsed >= 5) {
+                    spinBtn.disabled = true;
+                    spinBtn.style.backgroundColor = '#cbd5e1';
+                    spinBtn.innerText = "🔒 Daily Limit Reached";
+                } else {
+                    spinBtn.disabled = false;
+                    spinBtn.style.backgroundColor = '#059669';
+                    spinBtn.innerText = "🎰 Watch Ad & Spin Wheel";
                 }
             }
-            ORIGINAL_REWARD_AD_FUNCTION(featureName);
-        };
 
-        // Interstitial Code: ca-app-pub-6655685917040449/6532163370
-        const ORIGINAL_SPIN_FUNCTION = playLuckySpin;
-        playLuckySpin = function() {
-            if (dailySpinsUsed >= 5) return;
-
-            if (window.adsbygoogle && window.adsbygoogle.push) {
-                try {
-                    adsbygoogle.push({
-                        params: {
-                            google_ad_slot: "6532163370",
-                            google_ad_format: "interstitial"
-                        }
-                    });
-                } catch(e) { console.warn("Interstitial injection block bypassed", e); }
+            for (let i = 1; i <= 7; i++) {
+                const dayEl = document.getElementById("streak-d" + i);
+                if (dayEl) {
+                    if (i <= currentStreak) {
+                        dayEl.className = "streak-day streak-day-active";
+                    } else if (i === currentStreak + 1) {
+                        dayEl.className = "streak-day streak-day-current";
+                    } else {
+                        dayEl.className = "streak-day";
+                    }
+                }
             }
-            ORIGINAL_SPIN_FUNCTION();
-        };
-    </script>
-</body>
-</html>
+
+            const authContainer = document.getElementById('auth-ui-container');
+            if (currentUser && authContainer) {
+                authContainer.innerHTML = '<span style="font-size:11px; font-weight:700; color:#4f46e5; background-color:#f5f3ff; border:1px solid #ddd6fe; padding:6px 10px; border-radius:8px;">✨ Active</span>';
+            }
+        }
+
+        // PASSWORD DISPLAY TOGGLES
+        function togglePasswordView() {
+            const passInput = document.getElementById('auth-pass-input');
+            const eyeIcon = document.getElementById('password-eye');
+            if (passInput.type === "password") {
+                passInput.type = "text";
+                eyeIcon.innerText = "🔒";
+            } else {
+                passInput.type = "password";
+                eyeIcon.innerText = "👁️";
+            }
+        }
+
+        // PASSWORD RECOVERY SIMULATION 
+        function triggerPasswordReset() {
+            const email = document.getElementById('auth-email-input').value.trim();
+            if (!email) {
+                alert("⚠️ Please type your profile email address into the form element field first to compile a reset link.");
+                return;
+            }
+            alert("✉️ Recovery link processed! Check your email address inbox folder (" + email + ") to finalize account updates.");
+        }
+
+        // FORM MODAL CONTROLLERS
+        function openAuthModal(type) {
+            document.getElementById('modal-header-title').innerText = type === 'signup' ? "Create Account" : "Welcome Back Login";
+            document.getElementById('auth-modal').style.display = 'flex';
+        }
+        function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
+
+        function submitAuthForm() {
+            const email = document.getElementById('auth-email-input').value.trim();
+            const password = document.getElementById('auth-pass-input').value;
+            const legalConsent = document.getElementById('legal-consent-check').checked;
+
+            if (!email || !password || password.length < 6) {
+                alert("❌ Input a valid, correctly structured account email address and 6+ character verification password.");
+                return;
+            }
+            if (!legalConsent) {
+                alert("⚠️ Mandatory Regulation:\nYou must explicitly check the 18+ policy confirmation box to verify deployment logs.");
+                return;
+            }
+
+            currentUser = email;
+            localStorage.setItem('wp_user_logged', email);
+            closeAuthModal();
+            alert("✨ Verification Complete! Profile account successfully verified and sync pipes open.");
+            updateDisplay();
+        }
