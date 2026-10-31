@@ -1,6 +1,0 @@
-{
-  "appId": "com.mycompany.whiskerpaws",
-  "appName": "WhiskerPaws",
-  "webDir": "public",
-  "bundledWebRuntime": false
-}
