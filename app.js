@@ -96,7 +96,6 @@ function submitAuthForm() {
     alert(`✨ Account Initialized!\nWelcome to WhiskerPaws. All app systems are now unfrozen!`);
     updateDisplay();
 }
-
 // Native Payout Cashout Engine Handler
 function initiateCashout(platformName) {
     if (!currentUser) {
@@ -114,12 +113,12 @@ function initiateCashout(platformName) {
     }
 
     if (platformName !== 'ONE Wallet' && !refCode) {
-        alert(`🔑 Verification Needed!\n\nTo withdraw via ${platformName}, please enter your active promotional referral verification code first (e.g. V98HAR).`);
+        alert("🔑 Verification Needed!\n\nTo withdraw via " + platformName + ", please enter your active promotional referral verification code first (e.g. V98HAR).");
         return;
     }
 
     activeCashoutPlatform = platformName;
-    document.getElementById('cashout-modal-title').innerText = `Withdraw via ${platformName}`;
+    document.getElementById('cashout-modal-title').innerText = "Withdraw via " + platformName;
     document.getElementById('cashout-modal').style.display = 'flex';
 }
 
@@ -154,7 +153,8 @@ function claimDailyStreak(isDoubleAd) {
         return;
     }
 
-    const rewardsMap = [10, 20, 30, 40, 50, 60, 100];
+    // FIXED DATA MATRIX ARRAY
+    const rewardsMap =;
     let rawReward = rewardsMap[currentStreak % 7];
 
     if (isDoubleAd) {
@@ -166,7 +166,7 @@ function claimDailyStreak(isDoubleAd) {
     currentBalance += rawReward;
     lastClaimDate = todayStr;
 
-    alert(`🎉 Daily Claim Success! Added +${rawReward} Pawcoins to your account wallet.`);
+    alert("🎉 Daily Claim Success! Added +" + rawReward + " Pawcoins to your account wallet.");
     saveLocalData();
     updateDisplay();
 }
@@ -180,13 +180,14 @@ function playLuckySpin() {
 
     alert("🎬 [AdMob SDK Call] Loading Rewarded Video ad prior to spinning standard mechanism...");
     
-    const prizeTiers = [10, 20, 50, 100];
+    // FIXED DATA MATRIX ARRAY
+    const prizeTiers =;
     const wonPrize = prizeTiers[Math.floor(Math.random() * prizeTiers.length)];
     
     dailySpinsUsed++;
     currentBalance += wonPrize;
     
-    alert(`🎉 Congratulations! The wheel landed on +${wonPrize} Pawcoins!`);
+    alert("🎉 Congratulations! The wheel landed on +" + wonPrize + " Pawcoins!");
     saveLocalData();
     updateDisplay();
 }
@@ -195,7 +196,7 @@ function playLuckySpin() {
 function completeTask(checkbox, rewardCoins) {
     if (checkbox.checked) {
         currentBalance += rewardCoins;
-        alert(`✨ Task Completed! You collected +${rewardCoins} Pawcoins.`);
+        alert("✨ Task Completed! You collected +" + rewardCoins + " Pawcoins.");
     } else {
         currentBalance -= rewardCoins;
     }
@@ -225,9 +226,9 @@ function addExpense() {
     updateDisplay();
 }
 
-// Handle ad triggers
+// Handle structural programmatic ad component simulation prompts
 function triggerRewardedAd(featureName) {
-    alert(`🎬 [AdMob SDK Call Triggered]\nLoading a rewarded video ad to verify action for: "${featureName}".\n\nOnce finished, the application registers the 95% revenue split margin and releases 20 Pawcoins to the user wallet!`);
+    alert("🎬 [AdMob SDK Call Triggered]\nLoading a rewarded video ad to verify action for: \"" + featureName + "\".\n\nOnce finished, the application registers the 95% revenue split margin and releases 20 Pawcoins to the user wallet!");
     currentBalance += 20;
     saveLocalData();
     updateDisplay();
