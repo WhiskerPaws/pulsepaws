@@ -6,6 +6,15 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
   build-apk:
     runs-on: ubuntu-latest
@@ -16,17 +25,22 @@ jobs:
       - name: Setup Node.js Environment
         uses: actions/setup-node@v4
         with:
-          node-level: '20'
+          node-version: '20'
 
-      - name: Install Mobile Wrapper Tools
+      - name: Initialize Web Directory Environment
         run: |
+          mkdir -p public
+          cp index.html public/
           npm init -y
           npm install @capacitor/core @capacitor/cli
-          npm install @capacitor/android
-          npx cap init WhiskerPaws com.mycompany.whiskerpaws --web-dir=.
+
+      - name: Configure Capacitor Project
+        run: |
+          npx cap init WhiskerPaws com.mycompany.whiskerpaws --web-dir=public
 
       - name: Inject Android Platform Dependencies
         run: |
+          npm install @capacitor/android
           npx cap add android
           npx cap sync android
 
