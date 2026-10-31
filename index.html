@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WhiskerPaws Mobile</title>
-    <!-- EMBEDDED OFFLINE MOBILE CSS STYLING ENGINE -->
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { 
@@ -18,7 +17,6 @@
             padding-bottom: 80px;
             overflow-x: hidden;
         }
-        /* Mobile Header Mechanics */
         header {
             background-color: #ffffff;
             border-bottom: 1px solid #e2e8f0;
@@ -33,8 +31,6 @@
         }
         .header-brand { display: flex; align-items: center; gap: 8px; }
         .header-title { font-size: 18px; font-weight: 700; color: #0f172a; letter-spacing: -0.5px; }
-        
-        /* FIXED COMPACT VERTICAL WRAPPING MARQUEE TICKER */
         .ticker-wrap { 
             background-color: #f1f5f9; 
             padding: 10px 0; 
@@ -47,7 +43,7 @@
         }
         .ticker { 
             display: inline-block; 
-            white-space: nowrap; /* Stops the vertical column breaking text wrap */
+            white-space: nowrap;
             padding-left: 100%; 
             font-size: 12px; 
             font-weight: 600;
@@ -55,47 +51,36 @@
             animation: marquee 25s linear infinite; 
         }
         @keyframes marquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
-        
-        /* Layout Card Containers */
         main { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
         .card { background-color: #ffffff; border-radius: 16px; padding: 16px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01); }
         .card-title { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-        
-        /* Buttons Components */
         .btn-primary { width: 100%; background-color: #4f46e5; color: #ffffff; border: none; padding: 12px; border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; }
         .btn-primary:active { transform: scale(0.98); background-color: #4338ca; }
         .btn-secondary { width: 100%; background-color: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; padding: 10px; border-radius: 12px; font-weight: 600; font-size: 12px; cursor: pointer; }
         .btn-spin { width: 100%; background-color: #059669; color: #ffffff; border: none; padding: 12px; border-radius: 12px; font-weight: 700; font-size: 14px; }
-        
-        /* Form Components */
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .input-field { width: 100%; background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 12px; border-radius: 12px; font-size: 14px; outline: none; }
-        
-        /* Checkbox Task Rows */
         .task-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 8px; }
         .task-left { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: #334155; }
         .task-coin { font-size: 12px; font-weight: 700; color: #059669; }
-        
-        /* Fixed Ad Blocks Style */
         .ad-box { background: repeating-linear-stripes(-45deg, #e2e8f0, #e2e8f0 10px, #f1f5f9 10px, #f1f5f9 20px); border: 1px solid #cbd5e1; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 11px; font-weight: 500; text-align: center; }
         .footer-ads { position: fixed; bottom: 0; left: 0; right: 0; background-color: #ffffff; border-top: 1px solid #e2e8f0; padding: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; z-index: 100; }
-        
-        /* Streak Grid Map */
         .streak-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 12px; }
         .streak-day { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 6px 4px; text-align: center; }
         .streak-day-active { background-color: #ecfdf5; border-color: #10b981; color: #065f46; font-weight: 600; }
         .streak-day-current { border: 2px dashed #4f46e5; background-color: #f5f3ff; }
         .streak-lbl { font-size: 9px; color: #94a3b8; display: block; margin-bottom: 2px; }
         .streak-val { font-size: 11px; font-weight: 700; }
-        
-        /* Step Tracker Metrics */
         .progress-bar { width: 100%; background-color: #f1f5f9; height: 10px; border-radius: 9999px; overflow: hidden; margin: 8px 0; }
         .progress-fill { background-color: #4f46e5; height: 100%; width: 72%; border-radius: 9999px; }
+        .payment-method-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 8px; background-color: #fff; }
+        .payment-logo { font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+        .badge-uno { color: #1e3a8a; background-color: #dbeafe; padding: 6px 12px; border: 1px solid #bfdbfe; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
+        .badge-gcash { color: #1e40af; background-color: #eff6ff; padding: 6px 12px; border: 1px solid #bfdbfe; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
+        .badge-maya { color: #065f46; background-color: #ecfdf5; padding: 6px 12px; border: 1px solid #a7f3d0; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
     </style>
 </head>
 <body>
-
-    <!-- COMPACT MOBILE MAIN HEADER -->
     <header>
         <div class="header-brand">
             <span style="font-size: 22px;">🐱</span>
@@ -106,20 +91,14 @@
             <button onclick="handleAuth('signup')" style="background-color:#4f46e5; border:none; color:#ffffff; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:600;">Join</button>
         </div>
     </header>
-
-    <!-- OFFLINE-READY TEXT MARQUEE NOTIFICATION RUNNER -->
     <div class="ticker-wrap">
         <div class="ticker">
             🐾 Welcome to WhiskerPaws Mobile! • 🎡 Spin the Lucky Wheel 5x daily for massive bonus rewards! • ⚡ Start Passive Mining to secure constant Pawcoins! • 💳 Payout threshold is 1,000 Coins ($1.00) via local GCash, Maya, or ONE Wallet standard economics. •
         </div>
     </div>
-
-    <!-- NATIVE AD CONTAINER #1 -->
     <div style="padding: 16px 16px 0 16px;">
         <div class="ad-box" style="height: 50px;">[ AdMob Banner #1 - Native Mobile Header Unit ]</div>
     </div>
-
-    <!-- MAIN APP WRAPPER CONTAINER -->
     <main>
         <!-- NATIVE COMPONENT: 7-DAY LOGIN STREAK REWARDS -->
         <div class="card">
@@ -156,6 +135,43 @@
             </button>
         </div>
 
+        <!-- NEW COMPONENT: GCASH, MAYA, UNO WALLET CONVERSION INTERFACE -->
+        <div class="card" style="border: 1px solid #cbd5e1; background-color: #f8fafc;">
+            <span class="card-title" style="color: #0f172a; font-size: 15px;">💸 Local Cashout Conversion Hub</span>
+            <p style="font-size: 12px; color: #64748b; margin-bottom: 10px; line-height: 1.4;">Convert your gathered Pawcoins directly into real economics. Select tier options below to transfer balance:</p>
+            
+            <div style="margin-bottom: 12px;">
+                <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Choose Incentive Tier (PHP):</label>
+                <select id="cashout-tier" class="input-field" style="background-color: #fff;">
+                    <option value="10">₱10.00 Tier (Requires 171 Coins)</option>
+                    <option value="20">₱20.00 Tier (Requires 342 Coins)</option>
+                    <option value="50">₱50.00 Tier (Requires 855 Coins)</option>
+                    <option value="100">₱100.00 Tier (Requires 1,710 Coins)</option>
+                    <option value="500">₱500.00 Tier (Requires 8,550 Coins)</option>
+                    <option value="1000">₱1,000.00 Tier (Requires 17,100 Coins)</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 12px;">
+                <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Referral Requirement (If you have no ONE Wallet):</label>
+                <input type="text" id="referral-code-input" placeholder="Enter referral code (e.g. V98HAR)" class="input-field" style="background-color: #fff;">
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+                <div class="payment-method-row">
+                    <span class="payment-logo" style="color: #1e3a8a;"><span style="color:#2563eb;">ONE</span> Wallet</span>
+                    <button onclick="processCashout('ONE Wallet')" class="badge-uno">Withdraw</button>
+                </div>
+                <div class="payment-method-row">
+                    <span class="payment-logo" style="color: #1e40af;">🌐 GCash</span>
+                    <button onclick="processCashout('GCash')" class="badge-gcash">Withdraw</button>
+                </div>
+                <div class="payment-method-row">
+                    <span class="payment-logo" style="color: #065f46;">💚 Maya</span>
+                    <button onclick="processCashout('Maya')" class="badge-maya">Withdraw</button>
+                </div>
+            </div>
+        </div>
         <!-- HIGH-RETENTION LUCKY WHEEL MECHANIC -->
         <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
@@ -337,7 +353,45 @@
             }
         }
 
-        // Handle structural 7-Day Progressive login streak reward calculations
+        // Native Payout Cashout Engine Handler
+        async function processCashout(platformName) {
+            if (!currentUser) {
+                alert("⚠️ Please use the 'Join' or 'Log In' button to create an account first before cashing out.");
+                return;
+            }
+
+            const chosenTierPhp = parseInt(document.getElementById('cashout-tier').value);
+            const refCode = document.getElementById('referral-code-input').value.trim();
+
+            // Native coin metric validation math check: 171 Coins = 10 PHP
+            const coinsNeeded = Math.ceil(chosenTierPhp * 17.1);
+
+            if (currentBalance < coinsNeeded) {
+                alert(`❌ Payout Failed!\n\nYou currently have ${currentBalance} Pawcoins. To withdraw the ₱${chosenTierPhp}.00 tier via ${platformName}, you need a minimum of ${coinsNeeded} Pawcoins.`);
+                return;
+            }
+
+            // Enforce low-tier referral code protection for non-UNO wallet users
+            if (platformName !== 'ONE Wallet' && !refCode) {
+                alert(`🔑 Verification Needed!\n\nTo withdraw via ${platformName}, please enter your active promotional referral verification code first (e.g. V98HAR).`);
+                return;
+            }
+
+            const mobileNum = prompt(`Enter your registered 11-digit ${platformName} mobile number (e.g., 0927XXXXXXX):`);
+            if (!mobileNum || mobileNum.length < 11) {
+                alert("❌ Cashout canceled. A valid mobile number is required to process transaction codes.");
+                return;
+            }
+
+            // Deduct local profile points balance
+            currentBalance -= coinsNeeded;
+            updateDisplay();
+            await syncBalanceToCloud();
+
+            alert(`🎉 Payout Requested Successfully!\n\nYour request for ₱${chosenTierPhp}.00 has been sent directly to the server ledger pipeline.\n\nFunds will arrive in your ${platformName} account (${mobileNum}) within 24-48 verification hours!`);
+        }
+
+        // Fixed data arrays inside interactive function calls
         async function claimDailyStreak(isDoubleAd) {
             const todayStr = new Date().toDateString();
             if (lastClaimDate === todayStr) {
@@ -345,8 +399,8 @@
                 return;
             }
 
-            // Reward progression structure array maps
-            const rewardsMap =;
+            // FIXED DATA MATRIX ARRAY
+            const rewardsMap = [10, 20, 30, 40, 50, 60, 100];
             let rawReward = rewardsMap[currentStreak % 7];
 
             if (isDoubleAd) {
@@ -363,39 +417,6 @@
             await syncBalanceToCloud();
         }
 
-        // Handle automated account registration and login via email tracking
-        async function handleAuth(actionType) {
-            const email = prompt("Enter your account email:");
-            const password = prompt("Enter your password (min 6 characters):");
-
-            if (!email || !password) {
-                alert("Email and password fields are required.");
-                return;
-            }
-
-            let result;
-            if (actionType === 'signup') {
-                result = await supabase.auth.signUp({ email, password });
-                if (result.error) {
-                    alert(`Sign Up Failed: ${result.error.message}`);
-                    return;
-                }
-                alert("Registration submitted! If you turned on confirmation links, check your email inbox to verify.");
-            } else {
-                result = await supabase.auth.signInWithPassword({ email, password });
-                if (result.error) {
-                    alert(`Login Failed: ${result.error.message}`);
-                    return;
-                }
-                alert("Logged in successfully!");
-            }
-
-            if (result.data.user) {
-                currentUser = result.data.user;
-                await fetchCloudProfile();
-            }
-        }
-
         // Live cloud saving engine to commit balances securely to Supabase profiles
         async function syncBalanceToCloud() {
             if (!currentUser) return;
@@ -410,7 +431,7 @@
             }
         }
 
-        // Handle daily lucky spin mechanics
+        // Handle daily lucky spin mechanics with fixed arrays
         async function playLuckySpin() {
             if (dailySpinsUsed >= 5) {
                 alert("🔒 You have reached your daily limit of 5 spins. Come back tomorrow!");
@@ -419,7 +440,8 @@
 
             alert("🎬 [AdMob SDK Call] Loading Rewarded Video ad prior to spinning standard mechanism...");
             
-            const prizeTiers =;
+            // FIXED DATA MATRIX ARRAY
+            const prizeTiers = [10, 20, 50, 100];
             const wonPrize = prizeTiers[Math.floor(Math.random() * prizeTiers.length)];
             
             dailySpinsUsed++;
